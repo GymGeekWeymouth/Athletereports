@@ -1,0 +1,1218 @@
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║        GYMGEEK ANALYSE — FORCE PLATE REPORT                         ║
+║        Pete Barnes · General Fitness · 31 Mar 2026                          ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+IMTP RFD @ 200ms — calculated from raw CSV
+Frequency:             1600 Hz
+F_baseline:            87.81 kg  (mean of first 3s, 4800 samples)
+Onset threshold:       92.87 kg  (baseline + 5 SD)
+Onset index / time:    12421 / 7.763s
+F at t+200ms:          161.71 kg
+delta_F:               73.90 kg × 9.81 = 724.9 N
+RFD:                   724.9 / 0.200 = 3625 N/s
+Used value:            3600 N/s
+-->
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║        GYMGEEK ANALYSE — FORCE PLATE REPORT                         ║
+║        Pete Barnes · General Fitness · 31 Mar 2026                  ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+ASSUMPTIONS / NOTES:
+  - RFD @ 200ms calculated from CSV: 2,216 N/s (onset index 2986 / 7.465s, baseline mean 125.50 kg, 5SD threshold 139.04 kg)
+  - Body mass updated to 112.95 kg from CSV header (overrides prompt value of 109.81 kg)
+  - Comparison groups: Active Males Over 50 (Group 1) and Active Males Over 60 (Group 2).
+    Prompt listed "Over 40" as Group 2 but also listed "Over 60" in the second pass;
+    using Over 60 as the second group per the final prompt version.
+  - IMTP 3.03 × BW is extremely high for an over-50 athlete. Percentile capped at 99.
+    Caveat added in standout card copy.
+  - Athlete context (Hip Replacement) woven into standout, focus, and summary copy.
+  - Power W/kg and IMTP ×BW recalculated with corrected body mass.
+  - "What we're going to do about it" changed per staff request to a broader 
+    improvement summary with broad directional suggestions, not a single retest sentence.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK · Report — Pete Barnes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #61C599;
+    --yellow: #FFC11E;
+    --blue: #778FDD;
+    --red: #ff6363;
+    --card-bg: #27292B;
+    --card-inner: #2f3235;
+    --border: #3a3d40;
+    --border-soft: rgba(255,255,255,0.06);
+    --text: #f0f4ff;
+    --muted: #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #2A2D30;
+    overflow-x: hidden;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 28px 20px 48px;
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    max-width: 960px; margin: 0 auto 28px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .toolbar-sub { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+
+  /* ── GRID ── */
+  .cards-grid {
+    max-width: 960px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+  }
+  .card-wide { grid-column: 1 / -1; }
+
+  /* ── BASE CARD ── */
+  .sc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sc-head {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .sc-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .sc-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .sc-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .sc-name { font-size: 18px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+  .sc-meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .sc-pill {
+    display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 20px;
+    border: 1px solid rgba(97,197,153,.4); color: #61C599;
+    background: rgba(97,197,153,.08);
+  }
+  .sc-pill-yellow { border-color: rgba(255,193,30,.4) !important; color: #FFC11E !important; background: rgba(255,193,30,.08) !important; }
+  .sc-pill-blue   { border-color: rgba(119,143,221,.4) !important; color: #778FDD !important; background: rgba(119,143,221,.08) !important; }
+
+  /* ── SCORE ROW ── */
+  .score-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border-soft);
+    background: rgba(255,255,255,.02);
+  }
+  .sc-ring { position: relative; flex-shrink: 0; width: 68px; height: 68px; }
+  .sc-ring svg { position: absolute; top: 0; left: 0; }
+  .sc-ring-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .sc-ring-num { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; line-height: 1; }
+  .sc-ring-lbl { font-size: 8px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+  .sc-score-desc .title { line-height: 1.1; }
+  .sc-score-desc .sub { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* ── LEGEND STRIP ── */
+  .legend-strip {
+    display: flex; gap: 14px; padding: 8px 20px;
+    background: rgba(255,255,255,.015); border-bottom: 1px solid var(--border-soft);
+  }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--muted); letter-spacing: .04em; }
+  .leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── BODY / RADAR ── */
+  .sc-body { padding: 16px 20px; flex: 1; background: var(--card-bg); }
+  .radar-wrap { display: flex; justify-content: center; }
+
+  /* ── METRICS ── */
+  .sc-metrics { padding: 10px 20px 0; }
+  .sc-metrics-hdr {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 4px;
+  }
+  .sc-metric-row { padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .sc-metric-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .sc-metric-name { font-size: 11px; font-weight: 500; color: var(--text); }
+  .sc-metric-right { display: flex; align-items: center; gap: 6px; }
+  .sc-pct { font-size: 11px; font-weight: 500; color: var(--text); }
+  .bar-track { height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width .4s ease; }
+
+
+  /* ── PREVIOUS SESSION DELTAS ── */
+  .delta { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; letter-spacing: .03em; }
+  .delta-up   { background: rgba(97,197,153,.15);  color: #61C599; }
+  .delta-down { background: rgba(255,99,99,.15);   color: #ff6363; }
+  .delta-flat { background: rgba(122,139,168,.12); color: #7a8ba8; }
+  .bar-prev { position: absolute; top: 0; width: 2px; height: 100%; background: rgba(255,255,255,.35); border-radius: 1px; }
+  .bar-track { position: relative; }
+
+  /* ── BADGES ── */
+  .badge { font-size: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+  .badge-g { background: rgba(97,197,153,.15); color: #61C599; }
+  .badge-a { background: rgba(255,193,30,.15); color: #FFC11E; }
+  .badge-r { background: rgba(255,99,99,.15); color: #ff6363; }
+
+  /* ── FOOTER BAR ── */
+  .sc-footer-bar {
+    padding: 10px 16px; display: flex; align-items: center;
+    border-top: 1px solid var(--border-soft); background: rgba(255,255,255,.01);
+  }
+  .share-btns { display: flex; gap: 6px; }
+  .share-btn {
+    width: 28px; height: 28px; border-radius: 7px; border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none; transition: background .15s;
+  }
+  .share-btn:hover { background: rgba(255,255,255,.12); }
+
+  /* ── PDF BUTTON ── */
+  .pdf-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: 8px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    color: rgba(255,255,255,.7); font-family: 'DM Sans', sans-serif;
+    font-size: 12px; cursor: pointer; transition: all .2s;
+  }
+  .pdf-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .pdf-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+
+  /* ── F-V CURVE CARD ── */
+  .fv-canvas-wrap { display: flex; justify-content: center; padding: 12px 0 4px; }
+  .fv-legend { display: flex; gap: 16px; justify-content: center; padding: 0 20px 12px; flex-wrap: wrap; }
+  .fv-leg-item { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--muted); }
+  .fv-leg-line { width: 22px; height: 3px; border-radius: 2px; }
+  .fv-stats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--border-soft); }
+  .fv-stat { text-align: center; }
+  .fv-stat-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; }
+  .fv-stat-lbl { font-size: 9px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── SUMMARY CARD ── */
+  .summary-section { padding: 20px 20px 4px; }
+  .summary-label {
+    font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .summary-text { font-size: 12px; color: var(--muted); line-height: 1.75; }
+  .summary-highlight { color: #61C599; font-weight: 600; }
+  .summary-highlight-y { color: #FFC11E; font-weight: 600; }
+  .summary-highlight-r { color: #ff6363; font-weight: 600; }
+  .summary-divider { height: 1px; background: rgba(255,255,255,.06); margin: 14px 0; }
+  .summary-note { font-size: 10px; color: rgba(255,255,255,.25); font-style: italic; }
+
+  /* section label between cards */
+  .section-label {
+    grid-column: 1 / -1;
+    font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); padding: 4px 2px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── PRINT / PDF ── */
+  @media print, body.pdf-export {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #f4f6f8 !important; color: #1a1c1e !important; padding: 12px 16px 32px !important; }
+    :root {
+      --green: #1a9e6a !important; --yellow: #c8900a !important; --red: #d94040 !important;
+      --card-bg: #ffffff !important; --border: #d8dde3 !important;
+      --border-soft: rgba(0,0,0,0.07) !important; --text: #1a1c1e !important; --muted: #5a6a7a !important;
+    }
+    .sc { background: #fff !important; border: 1px solid #d0d5db !important; border-radius: 10px !important;
+          box-shadow: 0 1px 4px rgba(0,0,0,.08) !important; break-inside: avoid !important;
+          page-break-inside: avoid !important; overflow: visible !important; }
+    .cards-grid { display: block !important; column-count: 2 !important; column-gap: 14px !important; max-width: 100% !important; }
+    .cards-grid > * { display: block !important; break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 12px !important; }
+    .card-wide { column-span: all !important; width: 100% !important; }
+    .section-label { column-span: all !important; color: #5a6a7a !important; }
+    .section-label::after { background: #d0d5db !important; }
+    .sc-brand { color: #1a1c1e !important; } .sc-name { color: #1a1c1e !important; }
+    .sc-type { color: #5a6a7a !important; } .sc-meta { color: #5a6a7a !important; }
+    .sc-ring-lbl { color: #5a6a7a !important; } .sc-score-desc .sub { color: #5a6a7a !important; }
+    .sc-metric-name { color: #3a4a5a !important; } .sc-pct { color: #1a1c1e !important; }
+    .sc-pct-word { color: #5a6a7a !important; } .summary-text { color: #1a1c1e !important; }
+    .summary-note { color: #5a6a7a !important; } .summary-label { color: #5a6a7a !important; }
+    .summary-highlight { color: #1a9e6a !important; } .summary-highlight-y { color: #c8900a !important; }
+    .sc-pill { border-color: rgba(26,158,106,.5) !important; color: #1a7a54 !important; background: rgba(26,158,106,.08) !important; }
+    .sc-pill-yellow { border-color: rgba(200,144,10,.5) !important; color: #9a6e00 !important; background: rgba(200,144,10,.08) !important; }
+    .sc-pill-blue { border-color: rgba(119,143,221,.4) !important; color: #4a62b8 !important; background: rgba(119,143,221,.08) !important; }
+    .badge-g { background: rgba(26,158,106,.12) !important; color: #1a7a54 !important; }
+    .badge-a { background: rgba(200,144,10,.12) !important; color: #9a6e00 !important; }
+    .badge-r { background: rgba(217,64,64,.12) !important; color: #b02020 !important; }
+    .bar-track { background: rgba(0,0,0,.08) !important; }
+    .legend-strip { background: rgba(0,0,0,.02) !important; } .leg-item { color: #5a6a7a !important; }
+    .sc-footer-bar { border-top-color: rgba(0,0,0,.07) !important; }
+    .share-btns { display: none !important; } .pdf-btn { display: none !important; }
+    .score-row { background: rgba(0,0,0,.02) !important; }
+    canvas { max-width: 100% !important; }
+  }
+
+  /* ── LIGHT MODE ── */
+  body.light-mode {
+    background: #f0f2f4 !important;
+    color: #1a1c1e !important;
+    overflow-x: hidden;
+  }
+  body.light-mode :root,
+  body.light-mode {
+    --green: #1a9e6a; --yellow: #c8900a; --red: #d94040;
+    --card-bg: #ffffff; --card-inner: #f5f7f9;
+    --border: #d8dde3; --border-soft: rgba(0,0,0,0.07);
+    --text: #1a1c1e; --muted: #5a6a7a;
+  }
+  body.light-mode .sc {
+    background: #ffffff !important;
+    border-color: #d8dde3 !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,.07) !important;
+  }
+  body.light-mode .sc-head { border-bottom-color: rgba(0,0,0,.07) !important; }
+  body.light-mode .sc-brand { color: #1a1c1e !important; }
+  body.light-mode .sc-name { color: #1a1c1e !important; }
+  body.light-mode .sc-type { color: #5a6a7a !important; }
+  body.light-mode .sc-meta { color: #5a6a7a !important; }
+  body.light-mode .sc-ring-lbl { color: #5a6a7a !important; }
+  body.light-mode .sc-score-desc .sub { color: #5a6a7a !important; }
+  body.light-mode .sc-metric-name { color: #3a4a5a !important; }
+  body.light-mode .sc-pct { color: #1a1c1e !important; }
+  body.light-mode .sc-pct-word { color: #5a6a7a !important; }
+  body.light-mode .score-row { background: rgba(0,0,0,.02) !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+  body.light-mode .legend-strip { background: rgba(0,0,0,.02) !important; border-bottom-color: rgba(0,0,0,.05) !important; }
+  body.light-mode .leg-item { color: #5a6a7a !important; }
+  body.light-mode .bar-track { background: rgba(0,0,0,.08) !important; }
+  body.light-mode .sc-footer-bar { border-top-color: rgba(0,0,0,.07) !important; background: #fafbfc !important; }
+  body.light-mode .share-btn { background: rgba(0,0,0,.07) !important; border-color: rgba(0,0,0,.18) !important; }
+  body.light-mode .share-btn:hover { background: rgba(0,0,0,.13) !important; }
+  body.light-mode .share-btn svg { filter: invert(1) !important; }
+  body.light-mode .sc-pill { border-color: rgba(26,158,106,.4) !important; color: #1a7a54 !important; background: rgba(26,158,106,.08) !important; }
+  body.light-mode .sc-pill-yellow { border-color: rgba(200,144,10,.4) !important; color: #9a6e00 !important; background: rgba(200,144,10,.08) !important; }
+  body.light-mode .sc-pill-blue { border-color: rgba(119,143,221,.4) !important; color: #4a62b8 !important; background: rgba(119,143,221,.08) !important; }
+  body.light-mode .badge-g { background: rgba(26,158,106,.12) !important; color: #1a7a54 !important; }
+  body.light-mode .badge-a { background: rgba(200,144,10,.12) !important; color: #9a6e00 !important; }
+  body.light-mode .badge-r { background: rgba(217,64,64,.12) !important; color: #b02020 !important; }
+  body.light-mode .summary-text { color: #1a1c1e !important; }
+  body.light-mode .summary-label { color: #5a6a7a !important; }
+  body.light-mode .summary-note { color: #5a6a7a !important; }
+  body.light-mode .summary-highlight { color: #1a9e6a !important; }
+  body.light-mode .summary-highlight-y { color: #c8900a !important; }
+  body.light-mode .summary-highlight-r { color: #d94040 !important; }
+  body.light-mode .summary-section { background: #fff !important; }
+  body.light-mode .summary-divider { background: rgba(0,0,0,.08) !important; }
+  body.light-mode .sc-body { background: #fff !important; }
+  body.light-mode .toolbar-brand { color: #1a1c1e !important; }
+  body.light-mode .toolbar-sub { color: #5a6a7a !important; }
+  body.light-mode .section-label { color: #5a6a7a !important; }
+  body.light-mode .section-label::after { background: #d0d5db !important; }
+  body.light-mode .fv-leg-item { color:#5a6a7a !important; }
+  body.light-mode .fv-stat-lbl { color:#5a6a7a !important; }
+  body.light-mode [style*="background:#27292B"],
+  body.light-mode [style*="background: #27292B"] { background: #ffffff !important; }
+  body.light-mode [style*="background:#2f3235"] { background: #f5f7f9 !important; }
+  body.light-mode [style*="color:#f0f4ff"] { color: #1a1c1e !important; }
+  body.light-mode [style*="color:#7a8ba8"] { color: #5a6a7a !important; }
+  body.light-mode [style*="color:rgba(122,139,168"] { color: #7a8a9a !important; }
+  body.light-mode [style*="color:rgba(255,255,255,.15)"],
+  body.light-mode [style*="color:rgba(255,255,255,.2)"],
+  body.light-mode [style*="color:rgba(255,255,255,.1)"],
+  body.light-mode [style*="color:rgba(255,255,255,.18)"],
+  body.light-mode [style*="color:rgba(255,255,255,.25)"] { color: rgba(0,0,0,.3) !important; }
+  body.light-mode [style*="border:1px solid #3a3d40"] { border-color: #d8dde3 !important; }
+  body.light-mode [style*="border-right:1px solid var(--border-soft)"] { border-right-color: rgba(0,0,0,0.08) !important; }
+  body.light-mode [style*="border-right:1px solid rgba(255,255,255,0.06)"] { border-right-color: rgba(0,0,0,.07) !important; }
+  body.light-mode footer { background: #e4e7ea !important; border-top-color: rgba(0,0,0,.1) !important; }
+  body.light-mode footer span,
+  body.light-mode footer p { color: rgba(0,0,0,.35) !important; }
+  .light-toggle {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12);
+    background: transparent; color: rgba(255,255,255,.5);
+    font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer;
+    transition: all .2s;
+  }
+  .light-toggle:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+  body.light-mode .light-toggle {
+    border-color: rgba(0,0,0,.15); color: rgba(0,0,0,.45);
+    background: rgba(0,0,0,.04);
+  }
+  body.light-mode .light-toggle:hover { border-color: rgba(0,0,0,.3); color: rgba(0,0,0,.7); }
+  .analyse-wordmark { color: rgba(255,255,255,.45); }
+  body.light-mode .analyse-wordmark { color: #555 !important; }
+  body.light-mode [style*="color:rgba(255,255,255,.15)"] { color: rgba(0,0,0,.4) !important; }
+  body.light-mode .sc-footer-bar .athleek { color: rgba(0,0,0,.5) !important; }
+  body.light-mode [style*="font-family:'Bebas Neue'"][style*="color:#fff"] { color: #1a1c1e !important; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:16px;letter-spacing:.45em;margin-left:8px;text-transform:uppercase;">Analyse</span></div>
+    <div class="toolbar-sub">Force Plate Report · Pete Barnes · 31 Mar 2026</div>
+  </div>
+  <button class="pdf-btn" id="pdf-btn" onclick="exportPDF()">
+    <svg id="pdf-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    <span id="pdf-label">Download PDF</span>
+  </button>
+  <button class="light-toggle" id="light-toggle-btn" onclick="toggleLight()">
+    <svg id="light-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span id="light-label">Light mode</span>
+  </button>
+</div>
+
+
+<div class="cards-grid">
+
+  <!-- ══════════════════════════════════════════
+       RESEARCH CONTEXT NOTE
+  ═══════════════════════════════════════════ -->
+  <div class="card-wide sc" style="padding:14px 20px;border-radius:12px;">
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+      <div style="flex-shrink:0;width:28px;height:28px;border-radius:8px;background:rgba(119,143,221,.12);border:1px solid rgba(119,143,221,.25);display:flex;align-items:center;justify-content:center;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#778FDD" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#778FDD;margin-bottom:6px;">A note on benchmarking for hip replacement</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.75;">We looked into whether published normative data exists for force plate testing — CMJ, IMTP, and RFD — in hip replacement patients specifically. The honest answer is that it does not. The research on total hip arthroplasty outcomes overwhelmingly uses functional tests such as timed up-and-go, sit-to-stand, and 6-minute walk rather than force plates, and no peer-reviewed normative dataset for this population on force plate metrics has been published to date. Rather than compare you to a group with no valid reference data, we have used active men over 60 as the second comparison group. Hip replacements are most prevalent in adults in their 60s and 70s, making this the closest meaningful age-matched benchmark available. It is an imperfect proxy, but it is the most honest one.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION: PERFORMANCE PROFILE
+  ═══════════════════════════════════════════ -->
+  <div class="card-wide" style="background:none;border:none;padding:10px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Performance Profile</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">How You Compare</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION: METRIC BREAKDOWN
+  ═══════════════════════════════════════════ -->
+  <div class="card-wide" style="background:#27292B;border:1px solid #3a3d40;border-radius:14px;display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;margin-bottom:4px;">
+    <div style="padding:16px 20px;border-right:1px solid var(--border-soft);">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#FFC11E;margin-bottom:7px;">Left cards — Active Males Over 50</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.7;margin-bottom:8px;">
+        This group represents <strong>regularly active men aged 50–59</strong> — people who train consistently but are not professional athletes. The norms are drawn from published research and the VALD ForceDecks normative dataset for this age cohort.
+      </div>
+      <div style="font-size:11px;color:#7a8ba8;line-height:1.7;">
+        Matching or beating this group means you are performing at or above the standard of a fit, active adult in your age group. It is the primary benchmark for this session.
+      </div>
+    </div>
+    <div style="padding:16px 20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#778FDD;margin-bottom:7px;">Right cards — Active Males Over 60</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.7;margin-bottom:8px;">
+        This group represents <strong>regularly active men aged 60+</strong> — fit adults who are still training in their seventh decade. Comparing against this group shows how your results hold up against men a decade older, and where the goalposts shift with age.
+      </div>
+      <div style="font-size:11px;color:#7a8ba8;line-height:1.7;">
+        Where you are above this group, you are performing above age-60 norms despite being 55. This comparison gives context to both your strengths and the areas where further progress is available. We have used this group as your second benchmark because dedicated normative data for hip replacement patients is limited; active men in their 60s represent the age group most likely to have undergone the same procedure, making it the closest meaningful comparison available.
+      </div>
+    </div>
+  </div>
+  <div class="card-wide" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:4px 2px 0;background:none;border:none;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FFC11E;padding:6px 2px 4px;border-bottom:2px solid rgba(255,193,30,.4);">vs Active Males Over 50 &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">fit, regularly active men over 50</span></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#778FDD;padding:6px 2px 4px;border-bottom:2px solid rgba(119,143,221,.4);">vs Active Males Over 60 &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">fit, regularly active men over 60</span></div>
+  </div>
+
+  <!-- Metrics: vs Active Males Under 40 -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Metric Breakdown</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 31 Mar 2026</div>
+      <div class="sc-pill">vs Active Males — Over 50</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Fit, regularly active men aged 50–59. A meaningful age-matched benchmark.</div>
+      <div id="prev-session-note-gen" style="font-size:9px;color:var(--muted);margin-top:5px;opacity:.6;"></div>
+    </div>
+    <div class="sc-metrics">
+      <div class="sc-metrics-hdr"><span>Metric</span><span style="margin-right:auto;margin-left:8px;color:rgba(255,255,255,.12);">Result</span><span>Percentile rank</span></div>
+      <div class="sc-metric-row" data-metric="jumpHeight" data-group="gen" data-curr="31"><div class="sc-metric-top"><span class="sc-metric-name">Jump Height</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">23.3 cm</span><span class="sc-pct">31th</span><span class="badge badge-r">LOW</span></div></div><div class="bar-track"><div class="bar-fill" style="width:31%;background:#ff6363"></div></div></div>
+      <div class="sc-metric-row" data-metric="reactStrength" data-group="gen" data-curr="2"><div class="sc-metric-top"><span class="sc-metric-name">Reactive Strength</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">0.17</span><span class="sc-pct">2th</span><span class="badge badge-r">LOW</span></div></div><div class="bar-track"><div class="bar-fill" style="width:2%;background:#ff6363"></div></div></div>
+      <div class="sc-metric-row" data-metric="expPower" data-group="gen" data-curr="10"><div class="sc-metric-top"><span class="sc-metric-name">Explosive Power</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">16.1 W/kg</span><span class="sc-pct">10th</span><span class="badge badge-r">LOW</span></div></div><div class="bar-track"><div class="bar-fill" style="width:10%;background:#ff6363"></div></div></div>
+      <div class="sc-metric-row" data-metric="maxForce" data-group="gen" data-curr="99"><div class="sc-metric-top"><span class="sc-metric-name">Maximum Force</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">2.95 ×BW</span><span class="sc-pct">99th</span><span class="badge badge-g">GOOD</span></div></div><div class="bar-track"><div class="bar-fill" style="width:99%;background:#61C599C599"></div></div></div>
+      <div class="sc-metric-row" data-metric="rfd" data-group="gen" data-curr="56"><div class="sc-metric-top"><span class="sc-metric-name">Rate of Force Development</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">2,216 N/s</span><span class="sc-pct">56th</span><span class="badge badge-a">AVG</span></div></div><div class="bar-track"><div class="bar-fill" style="width:56%;background:#FFC11E"></div></div></div>
+      <div class="sc-metric-row" data-metric="legAsym" data-group="gen" data-curr="46"><div class="sc-metric-top"><span class="sc-metric-name">Leg Asymmetry</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">8.56%</span><span class="sc-pct">46th</span><span class="badge badge-a">AVG</span></div></div><div class="bar-track"><div class="bar-fill" style="width:46%;background:#FFC11E"></div></div></div>
+      <div class="sc-metric-row" data-metric="posturalSway" data-group="gen" data-curr="66"><div class="sc-metric-top"><span class="sc-metric-name">Postural Sway</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">8.0 mm/s</span><span class="sc-pct">66th</span><span class="badge badge-a">AVG</span></div></div><div class="bar-track"><div class="bar-fill" style="width:66%;background:#FFC11E"></div></div></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- Metrics: vs Competitive Male Runners -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Metric Breakdown</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 31 Mar 2026</div>
+      <div class="sc-pill sc-pill-blue">vs Active Males — Over 60</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Fit, regularly active men aged 60+. Shows where the goalposts move with another decade of age.</div>
+      <div id="prev-session-note-elite" style="font-size:9px;color:var(--muted);margin-top:5px;opacity:.6;"></div>
+    </div>
+    <div class="sc-metrics">
+      <div class="sc-metrics-hdr"><span>Metric</span><span style="margin-right:auto;margin-left:8px;color:rgba(255,255,255,.12);">Result</span><span>Percentile rank</span></div>
+      <div class="sc-metric-row" data-metric="jumpHeight" data-group="elite" data-curr="66"><div class="sc-metric-top"><span class="sc-metric-name">Jump Height</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">23.3 cm</span><span class="sc-pct">66th</span><span class="badge badge-a">AVG</span></div></div><div class="bar-track"><div class="bar-fill" style="width:66%;background:#FFC11E"></div></div></div>
+      <div class="sc-metric-row" data-metric="reactStrength" data-group="elite" data-curr="10"><div class="sc-metric-top"><span class="sc-metric-name">Reactive Strength</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">0.17</span><span class="sc-pct">10th</span><span class="badge badge-r">LOW</span></div></div><div class="bar-track"><div class="bar-fill" style="width:10%;background:#ff6363"></div></div></div>
+      <div class="sc-metric-row" data-metric="expPower" data-group="elite" data-curr="32"><div class="sc-metric-top"><span class="sc-metric-name">Explosive Power</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">16.1 W/kg</span><span class="sc-pct">32th</span><span class="badge badge-r">LOW</span></div></div><div class="bar-track"><div class="bar-fill" style="width:32%;background:#ff6363"></div></div></div>
+      <div class="sc-metric-row" data-metric="maxForce" data-group="elite" data-curr="99"><div class="sc-metric-top"><span class="sc-metric-name">Maximum Force</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">2.95 ×BW</span><span class="sc-pct">99th</span><span class="badge badge-g">GOOD</span></div></div><div class="bar-track"><div class="bar-fill" style="width:99%;background:#61C599C599"></div></div></div>
+      <div class="sc-metric-row" data-metric="rfd" data-group="elite" data-curr="80"><div class="sc-metric-top"><span class="sc-metric-name">Rate of Force Development</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">2,216 N/s</span><span class="sc-pct">80th</span><span class="badge badge-g">GOOD</span></div></div><div class="bar-track"><div class="bar-fill" style="width:80%;background:#61C599"></div></div></div>
+      <div class="sc-metric-row" data-metric="legAsym" data-group="elite" data-curr="56"><div class="sc-metric-top"><span class="sc-metric-name">Leg Asymmetry</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">8.56%</span><span class="sc-pct">56th</span><span class="badge badge-a">AVG</span></div></div><div class="bar-track"><div class="bar-fill" style="width:56%;background:#FFC11E"></div></div></div>
+      <div class="sc-metric-row" data-metric="posturalSway" data-group="elite" data-curr="86"><div class="sc-metric-top"><span class="sc-metric-name">Postural Sway</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">8.0 mm/s</span><span class="sc-pct">86th</span><span class="badge badge-g">GOOD</span></div></div><div class="bar-track"><div class="bar-fill" style="width:86%;background:#61C599C599"></div></div></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <div class="card-wide" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:4px 2px 0;background:none;border:none;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FFC11E;padding:6px 2px 4px;border-bottom:2px solid rgba(255,193,30,.4);">vs Active Males Over 50 &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">fit, regularly active men over 50</span></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#778FDD;padding:6px 2px 4px;border-bottom:2px solid rgba(119,143,221,.4);">vs Active Males Over 60 &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">fit, regularly active men over 60</span></div>
+  </div>
+
+  <!-- Combined: Overall Score + Radar vs Active Males -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Overall Score &amp; Profile</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 31 Mar 2026</div>
+      <div class="sc-pill">vs Active Males — Over 50</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Fit, regularly active men aged 50–59. A meaningful age-matched benchmark.</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <!-- Overall score ring: dashoffset = 175.9 * (1 - PCT/100) -->
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,193,30,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#FFC11E" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="102.0" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner"><div class="sc-ring-num" style="color:#FFC11E">42</div><div class="sc-ring-lbl">overall</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#FFC11E;">Bottom 42%</div>
+        <div class="sub">vs Active Males — Over 50</div>
+      </div>
+    </div>
+    <div class="legend-strip">
+      <div class="leg-item"><div class="leg-dot" style="background:#ff6363"></div>Below 33rd</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#FFC11E"></div>33–66th</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#61C599"></div>Above 66th</div>
+    </div>
+    <div class="sc-body">
+      <div class="radar-wrap"><canvas id="rc-gen" width="320" height="270"></canvas></div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- Combined: Overall Score + Radar vs Competitive Male Runners -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Overall Score &amp; Profile</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 31 Mar 2026</div>
+      <div class="sc-pill sc-pill-blue">vs Active Males — Over 60</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Fit, regularly active men aged 60+. Shows where the goalposts move with another decade of age.</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <!-- Overall score ring: dashoffset = 175.9 * (1 - PCT/100) -->
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,193,30,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#FFC11E" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="70.4" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner"><div class="sc-ring-num" style="color:#FFC11E">60</div><div class="sc-ring-lbl">overall</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#FFC11E;">Top 40%</div>
+        <div class="sub">vs Active Males — Over 60</div>
+      </div>
+    </div>
+    <div class="legend-strip">
+      <div class="leg-item"><div class="leg-dot" style="background:#ff6363"></div>Below 33rd</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#FFC11E"></div>33–66th</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#61C599"></div>Above 66th</div>
+    </div>
+    <div class="sc-body">
+      <div class="radar-wrap"><canvas id="rc-run" width="320" height="270"></canvas></div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION: STANDOUT RESULT
+  ═══════════════════════════════════════════ -->
+
+  <!-- ── INTRO BLOCK ── -->
+  <div class="card-wide" style="background:none;border:none;padding:10px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Your Results</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">Standout &amp; Priority Focus</div>
+    <div style="font-size:11px;color:#7a8ba8;text-align:center;line-height:1.6;">Your single best metric and the one area most worth working on — both benchmarked against active males over 50.</div>
+  </div>
+
+  <!-- Best Metric: Limb Asymmetry -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Best Metric</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 31 Mar 2026</div>
+      <div class="sc-pill">vs Active Males — Over 50</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Fit, regularly active men aged 50–59. A meaningful age-matched benchmark.</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <!-- Best metric ring: dashoffset = 175.9 * (1 - PCT/100) -->
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(97,197,153,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#61C599" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="1.8" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner"><div class="sc-ring-num" style="color:#61C599">99</div><div class="sc-ring-lbl">overall</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#61C599;">Top 1%</div>
+        <div class="sub">Maximum Force<br>vs Active Males — Over 50</div>
+      </div>
+    </div>
+    <div class="sc-body">
+      <div style="display:flex;justify-content:space-around;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:12px;">
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:#61C599;">3.03 ×BW</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Your result</div></div>
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:var(--muted);">2.44 ×BW</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Top third target</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">Your Maximum Force reading is genuinely outstanding. At 3.03 times your bodyweight on the isometric pull, you are in the top percentile of men over 50 tested on this system. That is the kind of lower body strength that provides a solid foundation for everything else you want to do. A quick note: IMTP scores are sensitive to testing setup, positioning, and effort on the day, so treat this as a strong directional result rather than a precise ranking. That said, having this kind of strength base, particularly following your hip replacement, is a really positive sign. The top third target in this group sits around 2.44 times bodyweight; you are well beyond that.</div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- Area to Watch: Reactive Strength -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Area to Watch</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 31 Mar 2026</div>
+      <div class="sc-pill sc-pill-yellow">Priority Focus</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <!-- Focus metric ring: dashoffset = 175.9 * (1 - PCT/100) -->
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,99,99,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#ff6363" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="172.4" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner"><div class="sc-ring-num" style="color:#ff6363">2</div><div class="sc-ring-lbl">overall</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#ff6363;">Bottom 2%</div>
+        <div class="sub">Reactive Strength<br>vs Active Males — Over 50</div>
+      </div>
+    </div>
+    <div class="sc-body">
+      <div style="display:flex;justify-content:space-around;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:12px;">
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:#ff6363;">0.17</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Your result</div></div>
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:var(--muted);">0.37</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Top third target</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">Reactive Strength is the metric that captures how efficiently your body loads and unloads during a jump: it rewards both height and the speed at which you execute the movement. Your score of 0.17 places you in the bottom few percent of men over 50, which tells us the nervous system is being cautious about loading and releasing energy quickly through the legs. This is very common after a hip replacement and is not a reflection of your raw strength, which as you can see from the Maximum Force result is excellent. The gap between your strength and your reactive ability is actually one of the clearest findings from this session: you have the engine, but the throttle response is restricted. The target for the top third of your age group is around 0.37.</div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.565-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION: FORCE-VELOCITY PROFILE
+  ═══════════════════════════════════════════ -->
+  <div class="card-wide" style="background:none;border:none;padding:18px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Force-Velocity Profile</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">Your Force-Velocity Curve</div>
+    <div style="font-size:11px;color:#7a8ba8;text-align:center;line-height:1.6;">Think of this as an estimated power fingerprint — built from your pull and jump results rather than a full loaded-jump battery, so it's a useful approximation rather than a precision measurement. It shows where your strength and speed characteristics sit relative to two benchmark groups. The green line is you; yellow is an active male under 40; blue is the elite benchmark.</div>
+  </div>
+
+  <!-- F-V Curve Card (wide) -->
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Force-Velocity · Estimated Profile</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 112.95 kg · 31 Mar 2026</div>
+    </div>
+    <div class="fv-canvas-wrap">
+      <canvas id="fv-canvas" width="860" height="320" style="max-width:100%;"></canvas>
+    </div>
+    <div class="fv-legend">
+      <div class="fv-leg-item"><div class="fv-leg-line" style="background:#61C599;"></div>Your curve</div>
+      <div class="fv-leg-item"><div class="fv-leg-line" style="background:#778FDD;border-top:2px dashed #778FDD;height:0;margin-top:1px;"></div>Active males over 60 benchmark</div>
+      <div class="fv-leg-item"><div class="fv-leg-line" style="background:#FFC11E;border-top:2px dashed #FFC11E;height:0;margin-top:1px;"></div>Active males over 50 benchmark</div>
+      <div class="fv-leg-item"><div style="width:10px;height:10px;border-radius:50%;background:#61C599;"></div>Your Pmax point</div>
+    </div>
+    <div class="fv-stats">
+      <div class="fv-stat">
+        <div class="fv-stat-val" style="color:#61C599;">24.6 N/kg</div>
+      <div class="fv-stat-lbl">F&#8320; — Est. Max Force</div>
+      </div>
+      <div class="fv-stat">
+        <div class="fv-stat-val" style="color:#61C599;">4.28 m/s</div>
+      <div class="fv-stat-lbl">V&#8320; — Est. Max Velocity</div>
+      </div>
+      <div class="fv-stat">
+        <div class="fv-stat-val" style="color:#FFC11E;">26.3 W/kg</div>
+      <div class="fv-stat-lbl">Pmax — Est. Peak Power</div>
+      </div>
+      <div class="fv-stat">
+        <div class="fv-stat-val" style="color:#FFC11E;">5.75 N&#183;s/kg&#183;m</div>
+      <div class="fv-stat-lbl">F-V Slope (Est.)</div>
+      </div>
+    </div>
+    <div style="padding:10px 20px 14px;">
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">Think of the force axis as engine size and the speed axis as how quickly that engine revs. Your curve shows a good engine, sitting above the typical active male over 60 and roughly matching an active male in his 50s, but your speed end is a little short, meaning your legs generate force well but have not yet fully recovered the ability to express it quickly. This is a natural pattern following hip surgery and reflects a nervous system that is still recalibrating. Building more confident, fast movements over the coming months should help shift that curve to the right.</div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION: WHAT WE MEASURED
+  ═══════════════════════════════════════════ -->
+  <div class="section-label">What We Measured</div>
+
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Metric Glossary</span></div>
+      <div class="sc-name">What the numbers mean</div>
+      <div class="sc-meta">A plain-language guide to every metric in this report</div>
+    </div>
+    <div style="padding:6px 20px 10px;">
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Jump Height</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">CMJ Height.</span> How high off the ground you jumped. A direct measure of explosive leg power.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Reactive Strength</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">RSI Modified.</span> Jump height divided by total movement time (eccentric + concentric + flight). Rewards both height and speed of execution — the higher the score, the more explosive and efficient the movement. GymGeek uses the ForceDecks total-contraction-time method; values are typically lower than flight-time-only protocols.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Explosive Power</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">Peak Power (rel.).</span> The highest power output during the jump, divided by bodyweight. Shows how explosively force is generated per kilogram.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Leg Asymmetry</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">Limb Asymmetry (CMJ).</span> The percentage difference in force between left and right leg during the jump. Under 10% is considered well-balanced; higher values indicate one leg is doing more work than the other.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Maximum Force</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">IMTP Peak Force.</span> The maximum force recorded during a maximal isometric pull against a fixed bar, relative to bodyweight. A measure of overall lower body strength.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Rate of Force Development</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">RFD @ 200ms (IMTP).</span> Rate of Force Development at 200 milliseconds during the Isometric Mid-Thigh Pull, expressed in Newtons per second (N/s). Captures how quickly maximal force is expressed in the first critical window — higher values indicate faster, more explosive neuromuscular function. Calculated using a 5-SD onset detection threshold against a 3-second baseline. Values are sensitive to sampling frequency and onset method; GymGeek norms are calibrated to this specific protocol.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Postural Sway</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">Sway Velocity.</span> The average speed of the body's centre of pressure whilst standing still, in mm/s. Lower values indicate better postural stability and balance control.</div></div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION: SUMMARY (wide card)
+  ═══════════════════════════════════════════ -->
+  <div class="section-label">Summary &amp; Recommendations</div>
+
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Athlete Summary</span></div>
+      <div class="sc-name">Pete Barnes</div>
+      <div class="sc-meta">General Fitness · Age 55 · 112.95 kg · 31 Mar 2026</div>
+    </div>
+    <div class="summary-section">
+      <div class="summary-label">Pete, here's how you got on</div>
+      <!-- SUMMARY: Write in 2nd person, British English. Three sections:
+           "What's working well" / "Where there's room to improve" / "What we're going to do about it".
+           Cover all 7 metrics. Use summary-highlight / summary-highlight-y spans for section headers.
+           Weave in the athleteContext fact naturally (once or twice — not every paragraph).
+           IMPORTANT: "What we're going to do about it" must be ONE sentence only — e.g. pointing
+           to a retest in 3–6 months or a follow-up session. Do NOT include training recommendations. -->
+      <div class="summary-text">
+        <span class="summary-highlight">What's working well</span>
+
+Your Maximum Force result stands out as the highlight of this session. At 3.03 times your bodyweight on the isometric pull, you are producing lower body force at a level that puts you well into the top percentile for men over 50. That is a significant result, particularly given your hip replacement, and suggests the structural strength around the joint has held up well. Your leg symmetry is also solid at 8.56%, sitting comfortably in the average range; both legs are sharing the load at a level where we would not raise a flag. Postural Sway came in at 8.0 mm/s, which lands in the average-to-good zone for your age group; your balance and stability control are in decent shape.
+
+<div class="summary-divider"></div>
+
+<span class="summary-highlight-y">Where there is room to improve</span>
+
+The clearest gap in this session is between your strength and your ability to express it quickly. Jump Height at 23.3 cm, Reactive Strength at 0.17, and Explosive Power at 16.6 W/kg all sit in the lower range for men over 50. These metrics are closely connected: they all depend on the nervous system driving the muscles fast as well as hard. After a hip replacement, the brain naturally protects the joint by dampening that explosive output, and what you are seeing in these numbers is that process still playing out. Rate of Force Development came in at 2,216 N/s, which puts you in the average range for men over 50 and into the top third for men over 60. That is an encouraging result given the context of your hip replacement: your nervous system is driving force early in the movement at a level that holds up well against your age peers.
+
+<div class="summary-divider"></div>
+
+<span class="summary-highlight">What to focus on next</span>
+
+The priority from this session is rebuilding the speed side of your physical profile. Your strength is clearly there; the next step is teaching the nervous system to use it fast again. Activities that involve quick, confident leg movements: things like gentle plyometric work, stair climbing with intent, brisk walking and short hill efforts, will gradually close the gap between your strength score and your reactive and explosive scores. Symmetry is already solid, so maintaining that as you push the intensity is important. Postural Sway is decent but always worth keeping an eye on: single-leg balance and strength work is a low-effort way to keep that moving in the right direction. We will retest in 3–6 months to see how the picture has changed. Book your next session at gymgeekonline.co.uk.
+      <div class="summary-divider"></div>
+      <div class="summary-note">Session 1 — 31 Mar 2026. Retest recommended in 3–6 months depending on training plans.</div>
+      <div class="summary-divider"></div>
+      <div style="text-align:center;padding:6px 0 10px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px;">Share your results</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Know someone who'd find this useful? Send them the report.</div>
+        <div style="display:flex;justify-content:center;gap:10px;">
+          <a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp" style="width:44px;height:44px;border-radius:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+          <a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram" style="width:44px;height:44px;border-radius:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook" style="width:44px;height:44px;border-radius:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn btn-wa" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn btn-ig" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn btn-fb" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+</div><!-- end cards-grid -->
+
+<!-- ── DISCLAIMER FOOTER ── -->
+<footer style="max-width:960px;margin:36px auto 0;padding:14px 20px;background:#17191b;border-top:1px solid rgba(255,255,255,0.05);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;box-sizing:border-box;">
+  <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:11px;letter-spacing:.04em;color:rgba(255,255,255,.18);">ATHLEEK</span>
+  <span style="color:rgba(255,255,255,.08);font-size:9px;">·</span>
+  <p style="font-size:9px;color:rgba(122,139,168,0.35);line-height:1.6;margin:0;text-align:center;">
+    ⚠ This is beta software — you may notice occasional inconsistencies in results or presentation. Please flag anything that doesn't look right to the GymGeek team. For performance monitoring only, not medical advice. Percentile ranks use a hybrid Gaussian/log-normal CDF method applied to literature-derived summary statistics (mean and SD); they are not rank-based against individual raw data. Asymmetry and RFD percentiles use log-normal CDF; all other metrics use Gaussian CDF. Overall score is a weighted mean (CMJ 20%, Power 20%, IMTP 20%, RSI 15%, RFD 15%, Asymmetry 5%, Sway 5%). F-V profile values are modelled estimates from IMTP and CMJ data. &copy; 2026 GymGeek Dorset.
+  </p>
+  <span style="color:rgba(255,255,255,.08);font-size:9px;">·</span>
+  <span style="font-size:9px;color:rgba(255,255,255,.1);">gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span>
+</footer>
+
+<script>
+
+// ── RSI Protocol note ─────────────────────────────────────────────
+// RSI-Modified in GymGeek reports uses TOTAL CONTRACTION TIME as the
+// time denominator: RSI-mod = Jump Height (m) ÷ (eccentric + concentric
+// + flight time in seconds). This is the ForceDecks / VALD method and
+// produces values ~30–50% lower than flight-time-only protocols.
+// Normative comparisons in the Excel file are anchored to studies using
+// the same Total Contraction Time definition (Suchomel 2018, ForceDecks
+// normative dataset). Do NOT compare to literature citing flight-time-only
+// RSI-mod values without applying a protocol correction.
+
+// ── Writing style ───────────────────────────────────────────────────
+// All generated copy must use em-dashes (—) as dashes, never double
+// hyphens (--). Use en-dashes (–) for ranges (e.g. 3–6 months).
+// British English throughout.
+
+// ── Athlete context (used to personalise written copy) ────────────
+// One short fact about this athlete — goal, injury history, background.
+// Leave as empty string if none provided. Used by Claude at generation
+// time only; this variable is not read at runtime.
+var athleteContext = 'Hip Replacement';
+
+// ── Overall Score — Weighted Formula ─────────────────────────────
+// Overall score is a WEIGHTED mean of the 7 metric percentiles.
+// This replaces the old unweighted mean. Weights reflect S&C importance:
+//
+//   CMJ Height        20%  — primary explosive performance marker
+//   RSI Modified      15%  — reactive/elastic quality
+//   Explosive Power   20%  — best single composite power marker
+//   IMTP Peak Force   20%  — strength foundation
+//   RFD @ 200ms       15%  — neuromuscular speed
+//   Limb Asymmetry     5%  — quality/injury flag (not primary perf)
+//   Postural Sway      5%  — balance quality flag (not primary perf)
+//
+// Usage: var overall = calcOverall(cmj, rsi, pwr, imtp, rfd, asym, sway);
+// Claude: when populating ring scores, use this formula — NOT a simple mean.
+function calcOverall(cmj, rsi, pwr, imtp, rfd, asym, sway) {
+  return Math.round(
+    cmj  * 0.20 +
+    rsi  * 0.15 +
+    pwr  * 0.20 +
+    imtp * 0.20 +
+    rfd  * 0.15 +
+    asym * 0.05 +
+    sway * 0.05
+  );
+}
+
+// ── Previous session data ──────────────────────────────────────────
+// Populated automatically by Claude from the previous session HTML report.
+// If no previous report is uploaded, leave hasPrev: false — nothing will render.
+// See gymgeek-report-prompt.txt for extraction instructions.
+var prevData = {
+  hasPrev: false,           // false
+  date: '',
+  prevOverallGen:   0,      // 0
+  prevOverallElite: 0,      // 0
+  gen: {                    // [vs Active Males Under 40 — previous percentiles]
+    jumpHeight:    0,
+    reactStrength: 0,
+    expPower:      0,
+    maxForce:      0,
+    rfd:           0,
+    legAsym:       0,
+    posturalSway:  0
+  },
+  elite: {                  // [vs Competitive National Runners — previous percentiles]
+    jumpHeight:    0,
+    reactStrength: 0,
+    expPower:      0,
+    maxForce:      0,
+    rfd:           0,
+    legAsym:       0,
+    posturalSway:  0
+  }
+};
+
+function deltaTag(curr, prev) {
+  var diff = curr - prev;
+  if (Math.abs(diff) < 1) return '<span class="delta delta-flat">—</span>';
+  var sign = diff > 0 ? '+' : '';
+  var cls  = diff > 0 ? 'delta-up' : 'delta-down';
+  return '<span class="delta ' + cls + '">' + sign + Math.round(diff) + '</span>';
+}
+
+function renderDeltas() {
+  if (!prevData.hasPrev) return;
+  var genRingInner  = document.querySelector('#ring-gen-inner');
+  var eliteRingInner = document.querySelector('#ring-elite-inner');
+  if (genRingInner) {
+    genRingInner.insertAdjacentHTML('beforeend',
+      '<div style="font-size:8px;color:var(--muted);margin-top:2px;letter-spacing:.03em;">prev ' + prevData.prevOverallGen + '</div>');
+  }
+  if (eliteRingInner) {
+    eliteRingInner.insertAdjacentHTML('beforeend',
+      '<div style="font-size:8px;color:var(--muted);margin-top:2px;letter-spacing:.03em;">prev ' + prevData.prevOverallElite + '</div>');
+  }
+  var noteGen = document.getElementById('prev-session-note-gen');
+  var noteElite = document.getElementById('prev-session-note-elite');
+  var noteText = '▲▼ Arrows show change vs previous session (' + prevData.date + ')';
+  if (noteGen)   noteGen.textContent   = noteText;
+  if (noteElite) noteElite.textContent = noteText;
+  var rows = document.querySelectorAll('[data-metric][data-group]');
+  rows.forEach(function(row) {
+    var metric = row.getAttribute('data-metric');
+    var group  = row.getAttribute('data-group');
+    var curr   = parseInt(row.getAttribute('data-curr'), 10);
+    var prevGroup = prevData[group];
+    if (!prevGroup || prevGroup[metric] === undefined) return;
+    var prev = prevGroup[metric];
+    var badgeEl = row.querySelector('.badge');
+    if (badgeEl) badgeEl.insertAdjacentHTML('afterend', ' ' + deltaTag(curr, prev));
+    var track = row.querySelector('.bar-track');
+    if (track) {
+      var marker = document.createElement('div');
+      marker.className = 'bar-prev';
+      marker.style.left = prev + '%';
+      track.appendChild(marker);
+    }
+  });
+}
+
+function drawRadar(canvasId, values, colour) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var labels = ['Jump Height','React. Strength','Explosive Power','Max Strength','RFD','Asymmetry','Postural Sway'];
+  var N = labels.length;
+  var W = canvas.width, H = canvas.height;
+  var cx = W / 2 - 4, cy = H / 2 + 6;
+  var maxR = Math.min(W, H) / 2 - 46;
+
+  var isLight = document.body.classList.contains('light-mode');
+  var gridColour   = isLight ? 'rgba(0,0,0,0.12)'  : 'rgba(255,255,255,0.07)';
+  var labelColour  = isLight ? '#5a6a7a'            : '#7a8ba8';
+  var pctColour    = isLight ? '#7a8a9a'            : '#7a8ba8';
+
+  function ang(i) { return (Math.PI * 2 * i / N) - Math.PI / 2; }
+  function pt(i, r) { return { x: cx + r * Math.cos(ang(i)), y: cy + r * Math.sin(ang(i)) }; }
+
+  ctx.clearRect(0, 0, W, H);
+
+  [25, 50, 75, 100].forEach(function(pct) {
+    var r = maxR * pct / 100;
+    ctx.beginPath();
+    for (var i = 0; i <= N; i++) { var p = pt(i, r); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); }
+    ctx.closePath();
+    ctx.strokeStyle = gridColour; ctx.lineWidth = 1; ctx.stroke();
+    if (pct < 100) {
+      ctx.fillStyle = pctColour; ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(pct, cx + 3, cy - r + 9);
+    }
+  });
+
+  for (var i = 0; i < N; i++) {
+    var p = pt(i, maxR);
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = gridColour; ctx.lineWidth = 1; ctx.stroke();
+  }
+
+  ctx.beginPath();
+  values.forEach(function(v, i) { var p = pt(i, maxR * v / 100); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
+  ctx.closePath();
+  ctx.fillStyle = colour + '33'; ctx.fill();
+  ctx.strokeStyle = colour; ctx.lineWidth = 2; ctx.stroke();
+
+  values.forEach(function(v, i) {
+    var p = pt(i, maxR * v / 100);
+    ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = colour; ctx.fill();
+  });
+
+  ctx.fillStyle = labelColour; ctx.font = '9px sans-serif';
+
+  function wrapLabel(ctx, text, x, y, maxWidth, lineHeight, align, baseline) {
+    var words = text.split(' ');
+    var lines = [];
+    var current = '';
+    for (var w = 0; w < words.length; w++) {
+      var test = current ? current + ' ' + words[w] : words[w];
+      if (ctx.measureText(test).width > maxWidth && current) {
+        lines.push(current);
+        current = words[w];
+      } else {
+        current = test;
+      }
+    }
+    if (current) lines.push(current);
+    var totalH = lines.length * lineHeight;
+    var startY = baseline === 'bottom' ? y - totalH + lineHeight
+               : baseline === 'top'    ? y
+               :                         y - totalH / 2 + lineHeight / 2;
+    ctx.textAlign = align;
+    ctx.textBaseline = 'alphabetic';
+    for (var l = 0; l < lines.length; l++) {
+      ctx.fillText(lines[l], x, startY + l * lineHeight);
+    }
+  }
+
+  for (var i = 0; i < N; i++) {
+    var p = pt(i, maxR + 22);
+    var align    = p.x < cx - 5 ? 'right' : p.x > cx + 5 ? 'left' : 'center';
+    var baseline = p.y < cy - 5 ? 'bottom' : p.y > cy + 5 ? 'top' : 'middle';
+    wrapLabel(ctx, labels[i], p.x, p.y, 52, 11, align, baseline);
+  }
+}
+
+// ── F-V Curve ──
+function drawFVCurve() {
+  var canvas = document.getElementById('fv-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.offsetWidth || canvas.width;
+  var H = canvas.height;
+  canvas.width = W;
+
+  var isLight = document.body.classList.contains('light-mode');
+  var gridColour  = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)';
+  var labelColour = isLight ? '#5a6a7a'           : '#7a8ba8';
+  var axisColour  = isLight ? 'rgba(0,0,0,0.3)'  : 'rgba(255,255,255,0.25)';
+
+  // Athlete F-V values — estimated from IMTP + CMJ if no loaded jumps
+  // F0 (N/kg) = IMTP_peak_N / body_mass × 0.85
+  // V0 (m/s)  = CMJ peak velocity estimate × 2.0
+  var athF0   = 24.58;    // athlete F0 N/kg
+  var athV0   = 4.28;    // athlete V0 m/s
+
+  // Benchmark group F-V values (from norms / sport literature)
+  var actF0   = 17.5;   // active males under 40
+  var actV0   = 4.52;
+  var eliteF0 = 15.0; // elite distance runners
+  var eliteV0 = 4.06;
+
+  var pad = {l:56, r:28, t:24, b:48};
+  var pw = W - pad.l - pad.r;
+  var ph = H - pad.t - pad.b;
+
+  var maxV = Math.max(athV0, actV0, eliteV0) * 1.2;
+  var maxF = Math.max(athF0, actF0, eliteF0) * 1.2;
+  function fx(v){ return pad.l + (v/maxV)*pw; }
+  function fy(f){ return pad.t + ph - (f/maxF)*ph; }
+
+  ctx.clearRect(0,0,W,H);
+
+  ctx.strokeStyle = gridColour; ctx.lineWidth = 1;
+  for(var vi=0; vi<=5; vi++){
+    var vv=vi*maxV/5; ctx.beginPath(); ctx.moveTo(fx(vv),pad.t); ctx.lineTo(fx(vv),pad.t+ph); ctx.stroke();
+  }
+  for(var fi=0; fi<=5; fi++){
+    var ff=fi*maxF/5; ctx.beginPath(); ctx.moveTo(pad.l,fy(ff)); ctx.lineTo(pad.l+pw,fy(ff)); ctx.stroke();
+  }
+
+  ctx.strokeStyle = axisColour; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,pad.t+ph); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t+ph); ctx.lineTo(pad.l+pw,pad.t+ph); ctx.stroke();
+
+  ctx.fillStyle = labelColour; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  for(var vi2=0; vi2<=5; vi2++){ var vv2=vi2*maxV/5; ctx.fillText(vv2.toFixed(1),fx(vv2),pad.t+ph+14); }
+  ctx.textAlign = 'right';
+  for(var fi2=0; fi2<=5; fi2++){ var ff2=fi2*maxF/5; ctx.fillText(ff2.toFixed(0),pad.l-6,fy(ff2)+3); }
+  ctx.textAlign = 'center';
+  ctx.fillText('Velocity (m/s)', pad.l+pw/2, H-4);
+  ctx.save(); ctx.translate(12,pad.t+ph/2); ctx.rotate(-Math.PI/2); ctx.fillText('Force (N/kg)',0,0); ctx.restore();
+
+  function drawFVLine(f0, v0, colour, dashed) {
+    ctx.beginPath(); ctx.strokeStyle=colour; ctx.lineWidth=2;
+    if(dashed){ ctx.setLineDash([6,4]); } else { ctx.setLineDash([]); }
+    ctx.moveTo(fx(0),fy(f0)); ctx.lineTo(fx(v0),fy(0)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); ctx.strokeStyle=colour+'88'; ctx.lineWidth=1.5;
+    if(dashed){ ctx.setLineDash([4,4]); }
+    var steps=60;
+    for(var s=0;s<=steps;s++){
+      var v=(s/steps)*v0, f=f0*(1-v/v0), p=f*v, pmax=f0*v0/4, pScaled=p/pmax*(f0*0.55);
+      if(s===0){ ctx.moveTo(fx(v),fy(pScaled)); } else { ctx.lineTo(fx(v),fy(pScaled)); }
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  drawFVLine(actF0, actV0, '#FFC11E', true);
+  drawFVLine(eliteF0, eliteV0, '#778FDD', true);
+  drawFVLine(athF0, athV0, '#61C599', false);
+
+  var pmaxV=athV0/2, pmaxF=athF0/2;
+  ctx.beginPath(); ctx.arc(fx(pmaxV),fy(pmaxF),6,0,Math.PI*2);
+  ctx.fillStyle='#61C599'; ctx.fill();
+  ctx.fillStyle=labelColour; ctx.font='9px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('Pmax',fx(pmaxV)+10,fy(pmaxF)+3);
+
+  ctx.font='bold 9px sans-serif';
+  ctx.fillStyle='#61C599'; ctx.textAlign='right'; ctx.fillText('You',fx(athV0)-4,fy(0)+12);
+  ctx.fillStyle='#778FDD'; ctx.fillText('Over 60s',fx(eliteV0)-4,fy(0)+24);
+  ctx.fillStyle='#FFC11E'; ctx.fillText('Over 50s',fx(actV0)-4,fy(0)+36);
+}
+
+
+var SHARE_TEXT = '\ud83c\udccb Just got my force plate results at Gym Geek Dorset! #GymGeekDorset';
+
+function captureCard(btn, callback) {
+  var card = btn.closest('.sc');
+  if (!card) return;
+  var shareBtns = card.querySelectorAll('.share-btns');
+  shareBtns.forEach(function(b){ b.style.visibility='hidden'; });
+  html2canvas(card, {
+    scale: 3, useCORS: true, allowTaint: true,
+    backgroundColor: '#27292B', logging: false,
+    imageTimeout: 0, removeContainer: true
+  }).then(function(canvas) {
+    shareBtns.forEach(function(b){ b.style.visibility=''; });
+    callback(canvas);
+  }).catch(function() {
+    shareBtns.forEach(function(b){ b.style.visibility=''; });
+  });
+}
+
+function canvasToBlob(canvas, cb) {
+  if (canvas.toBlob) { canvas.toBlob(cb, 'image/png'); return; }
+  var bin = atob(canvas.toDataURL('image/png').split(',')[1]);
+  var arr = new Uint8Array(bin.length);
+  for (var i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+  cb(new Blob([arr],{type:'image/png'}));
+}
+
+function shareCard(btn) {
+  captureCard(btn, function(canvas) {
+    canvasToBlob(canvas, function(blob) {
+      var file = new File([blob], 'Pete Barnes - Analyse.png', {type:'image/png'});
+      if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+        navigator.share({ files:[file], title:'My GymGeek Results', text:SHARE_TEXT }).catch(function(){});
+      } else {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href=url; a.download='Pete Barnes - Analyse.png'; a.click();
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+      }
+    });
+  });
+}
+
+function shareWA(e) { e.preventDefault(); shareCard(e.currentTarget); }
+function shareIG(e) { e.preventDefault(); shareCard(e.currentTarget); }
+function shareX(e)  { e.preventDefault(); shareCard(e.currentTarget); }
+function shareFB(e) { e.preventDefault(); shareCard(e.currentTarget); }
+
+function exportPDF() {
+  var btn=document.getElementById('pdf-btn'), label=document.getElementById('pdf-label'), icon=document.getElementById('pdf-icon');
+  btn.disabled=true; label.textContent='Generating…'; icon.style.opacity='0.5';
+  document.body.classList.add('pdf-export');
+  var uiEls=document.querySelectorAll('.pdf-btn,.share-btns');
+  uiEls.forEach(function(el){el.style.visibility='hidden';});
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ startCapture(); }); });
+
+  function startCapture() {
+    var {jsPDF}=window.jspdf;
+    var pageW=595.28,pageH=841.89,margin=20,gap=12,colGap=12;
+    var usableW=pageW-margin*2, halfW=(usableW-colGap)/2;
+    var pageRgb=[244,246,248];
+    var pdf=new jsPDF({unit:'pt',format:'a4',orientation:'portrait'});
+    var yPos=margin;
+    function fillBg(){pdf.setFillColor(pageRgb[0],pageRgb[1],pageRgb[2]);pdf.rect(0,0,pageW,pageH,'F');}
+    fillBg();
+    function capture(el,cb){
+      var prev=el.style.overflow; el.style.overflow='visible';
+      html2canvas(el,{scale:3,useCORS:true,allowTaint:true,backgroundColor:'#ffffff',logging:false,imageTimeout:0,removeContainer:true}).then(function(canvas){
+        el.style.overflow=prev;
+        var r=16*3,w=canvas.width,h=canvas.height;
+        var out=document.createElement('canvas'); out.width=w+12; out.height=h+12;
+        var ctx=out.getContext('2d');
+        ctx.fillStyle='rgb('+pageRgb.join(',')+')'; ctx.fillRect(0,0,out.width,out.height);
+        ctx.shadowColor='rgba(0,0,0,0.10)'; ctx.shadowBlur=10; ctx.shadowOffsetY=2;
+        var ox=6,oy=6;
+        ctx.beginPath(); ctx.moveTo(ox+r,oy); ctx.lineTo(ox+w-r,oy); ctx.quadraticCurveTo(ox+w,oy,ox+w,oy+r);
+        ctx.lineTo(ox+w,oy+h-r); ctx.quadraticCurveTo(ox+w,oy+h,ox+w-r,oy+h);
+        ctx.lineTo(ox+r,oy+h); ctx.quadraticCurveTo(ox,oy+h,ox,oy+h-r);
+        ctx.lineTo(ox,oy+r); ctx.quadraticCurveTo(ox,oy,ox+r,oy); ctx.closePath(); ctx.clip();
+        ctx.shadowColor='transparent'; ctx.drawImage(canvas,ox,oy);
+        cb(out.toDataURL('image/png'),out.width,out.height);
+      });
+    }
+    var grid=document.querySelector('.cards-grid');
+    var allCards=Array.from(grid.querySelectorAll('.sc'));
+    var rows=[]; var i=0;
+    while(i<allCards.length){
+      var card=allCards[i], isWide=card.classList.contains('card-wide');
+      if(isWide){rows.push([card]);i++;}
+      else{var next=allCards[i+1];if(next&&!next.classList.contains('card-wide')){rows.push([card,next]);i+=2;}else{rows.push([card]);i++;}}
+    }
+    function processRow(ri){
+      if(ri>=rows.length){
+        document.body.classList.remove('pdf-export');
+        uiEls.forEach(function(el){el.style.visibility='';});
+        btn.disabled=false; label.textContent='Download PDF'; icon.style.opacity='1';
+        pdf.save('Pete Barnes - Analyse.pdf'); return;
+      }
+      var row=rows[ri], isFirst=ri===0;
+      if(row.length===1){
+        capture(row[0],function(imgData,cw,ch){
+          var imgH=(ch/cw)*usableW;
+          if(!isFirst&&yPos+imgH>pageH-margin){pdf.addPage();fillBg();yPos=margin;}
+          pdf.addImage(imgData,'PNG',margin-6,yPos-6,usableW+12,imgH);
+          yPos+=imgH+gap; processRow(ri+1);
+        });
+      } else {
+        capture(row[0],function(ld,lcw,lch){
+          capture(row[1],function(rd,rcw,rch){
+            var lH=(lch/lcw)*halfW, rH=(rch/rcw)*halfW, rowH=Math.max(lH,rH);
+            if(!isFirst&&yPos+rowH>pageH-margin){pdf.addPage();fillBg();yPos=margin;}
+            pdf.addImage(ld,'PNG',margin-6,yPos-6,halfW+12,lH);
+            pdf.addImage(rd,'PNG',margin+halfW+colGap-6,yPos-6,halfW+12,rH);
+            yPos+=rowH+gap; processRow(ri+1);
+          });
+        });
+      }
+    }
+    processRow(0);
+  } // end startCapture
+} // end exportPDF
+
+function toggleLight() {
+  var body = document.body;
+  var isLight = body.classList.toggle('light-mode');
+  document.getElementById('light-label').textContent = isLight ? 'Dark mode' : 'Light mode';
+  // vs Active Males Under 40: CMJ=27, RSI=22, PWR=36, IMTP=53, RFD=72, ASYM=79, SWAY=52
+  drawRadar('rc-gen', [31, 2, 10, 99, 56, 46, 66], '#FFC11E');
+  // vs Competitive Male Runners: CMJ=44, RSI=13, PWR=62, IMTP=86, RFD=27, ASYM=83, SWAY=40
+  drawRadar('rc-run', [66, 10, 32, 99, 80, 56, 86], '#778FDD');
+  drawFVCurve();
+}
+
+window.addEventListener('load', function() {
+  // vs Active Males Under 40: CMJ=27, RSI=22, PWR=36, IMTP=53, RFD=72, ASYM=79, SWAY=52
+  drawRadar('rc-gen', [31, 2, 10, 99, 56, 46, 66], '#FFC11E');
+  // vs Competitive Male Runners: CMJ=44, RSI=13, PWR=62, IMTP=86, RFD=27, ASYM=83, SWAY=40
+  drawRadar('rc-run', [66, 10, 32, 99, 80, 56, 86], '#778FDD');
+  drawFVCurve();
+});
+</script>
+
+</body>
+</html>
