@@ -1,0 +1,793 @@
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║        GYMGEEK ANALYSE — FORCE PLATE REPORT                         ║
+║        Toby Taylor · Football · 30 Mar 2026                         ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+Rebuilt on updated template — 1 Apr 2026
+Raw data carried from original Session 1 (30 Mar 2026).
+Percentile method corrected to hybrid CDF (log-normal for RFD + Asymmetry).
+
+Athlete: Toby Taylor | Age 16 | Weight 74.4 kg | Football
+Test Date: 30 Mar 2026 (Session 1)
+Athlete Context: Double leg fracture right leg
+
+CMJ Height:        33.3 cm
+RSI Modified:      0.34
+Peak Power (rel.): 22.9 W/kg
+IMTP Peak Force:   3.00 ×BW (223.0 kg)
+RFD @ 200ms:       2640 N/s
+Limb Asymmetry:    6.33%
+Sway Velocity:     9.4 mm/s
+
+Group 1: Active Males — Under 16
+  CMJ=75  RSI=31  PWR=15  IMTP=92  RFD=57  ASYM=64  SWAY=5   Overall=53
+Group 2: Elite Male — Academy U16 (PL/EFL Cat. 1)
+  CMJ=24  RSI=5   PWR=5   IMTP=92  RFD=4   ASYM=52  SWAY=2   Overall=28
+
+F-V profile (estimated):
+  F0=25.02 N/kg | V0=5.11 m/s | Pmax=31.97 W/kg | Slope=4.89
+Benchmarks: Active Males U16 F0=20.8 V0=4.85 | Academy U16 F0=20.6 V0=5.35
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK · Report — Toby Taylor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#61C599;--yellow:#FFC11E;--blue:#778FDD;--red:#ff6363;
+    --card-bg:#27292B;--card-inner:#2f3235;--border:#3a3d40;
+    --border-soft:rgba(255,255,255,0.06);--text:#f0f4ff;--muted:#7a8ba8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#2A2D30;overflow-x:hidden;font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh;padding:28px 20px 48px;}
+  .toolbar{max-width:960px;margin:0 auto 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .toolbar-brand{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:26px;color:#fff;}
+  .toolbar-sub{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+  .cards-grid{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;}
+  .card-wide{grid-column:1/-1;}
+  .sc{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+  .sc-head{padding:16px 20px 12px;border-bottom:1px solid var(--border-soft);}
+  .sc-brand-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .sc-brand{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:12px;text-transform:uppercase;color:#fff;}
+  .sc-type{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+  .sc-name{font-size:18px;font-weight:500;color:#fff;margin-bottom:2px;}
+  .sc-meta{font-size:11px;color:var(--muted);margin-bottom:8px;}
+  .sc-pill{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;border:1px solid rgba(97,197,153,.4);color:#61C599;background:rgba(97,197,153,.08);}
+  .sc-pill-yellow{border-color:rgba(255,193,30,.4)!important;color:#FFC11E!important;background:rgba(255,193,30,.08)!important;}
+  .sc-pill-blue{border-color:rgba(119,143,221,.4)!important;color:#778FDD!important;background:rgba(119,143,221,.08)!important;}
+  .score-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border-soft);background:rgba(255,255,255,.02);}
+  .sc-ring{position:relative;flex-shrink:0;width:68px;height:68px;}
+  .sc-ring svg{position:absolute;top:0;left:0;}
+  .sc-ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .sc-ring-num{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;line-height:1;}
+  .sc-ring-lbl{font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+  .sc-score-desc .title{line-height:1.1;}
+  .sc-score-desc .sub{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
+  .legend-strip{display:flex;gap:14px;padding:8px 20px;background:rgba(255,255,255,.015);border-bottom:1px solid var(--border-soft);}
+  .leg-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted);letter-spacing:.04em;}
+  .leg-dot{width:7px;height:7px;border-radius:50%;}
+  .sc-body{padding:16px 20px;flex:1;background:var(--card-bg);}
+  .radar-wrap{display:flex;justify-content:center;}
+  .sc-metrics{padding:10px 20px 0;}
+  .sc-metrics-hdr{display:flex;justify-content:space-between;align-items:center;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border-soft);margin-bottom:4px;}
+  .sc-metric-row{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .sc-metric-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+  .sc-metric-name{font-size:11px;font-weight:500;color:var(--text);}
+  .sc-metric-right{display:flex;align-items:center;gap:6px;}
+  .sc-pct{font-size:11px;font-weight:500;color:var(--text);}
+  .bar-track{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;position:relative;}
+  .bar-fill{height:100%;border-radius:2px;transition:width .4s ease;}
+  .delta{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;letter-spacing:.03em;}
+  .delta-up{background:rgba(97,197,153,.15);color:#61C599;}
+  .delta-down{background:rgba(255,99,99,.15);color:#ff6363;}
+  .delta-flat{background:rgba(122,139,168,.12);color:#7a8ba8;}
+  .bar-prev{position:absolute;top:0;width:2px;height:100%;background:rgba(255,255,255,.35);border-radius:1px;}
+  .badge{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:4px;}
+  .badge-g{background:rgba(97,197,153,.15);color:#61C599;}
+  .badge-a{background:rgba(255,193,30,.15);color:#FFC11E;}
+  .badge-r{background:rgba(255,99,99,.15);color:#ff6363;}
+  .sc-footer-bar{padding:10px 16px;display:flex;align-items:center;border-top:1px solid var(--border-soft);background:rgba(255,255,255,.01);}
+  .share-btns{display:flex;gap:6px;}
+  .share-btn{width:28px;height:28px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .15s;}
+  .share-btn:hover{background:rgba(255,255,255,.12);}
+  .pdf-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;}
+  .pdf-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
+  .pdf-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .fv-canvas-wrap{display:flex;justify-content:center;padding:12px 0 4px;}
+  .fv-legend{display:flex;gap:16px;justify-content:center;padding:0 20px 12px;flex-wrap:wrap;}
+  .fv-leg-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted);}
+  .fv-leg-line{width:22px;height:3px;border-radius:2px;}
+  .fv-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;padding:12px 20px;border-top:1px solid var(--border-soft);}
+  .fv-stat{text-align:center;}
+  .fv-stat-val{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;}
+  .fv-stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.06em;}
+  .summary-section{padding:20px 20px 4px;}
+  .summary-label{font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .summary-text{font-size:12px;color:var(--muted);line-height:1.75;}
+  .summary-highlight{color:#61C599;font-weight:600;}
+  .summary-highlight-y{color:#FFC11E;font-weight:600;}
+  .summary-highlight-r{color:#ff6363;font-weight:600;}
+  .summary-divider{height:1px;background:rgba(255,255,255,.06);margin:14px 0;}
+  .summary-note{font-size:10px;color:rgba(255,255,255,.25);font-style:italic;}
+  .section-label{grid-column:1/-1;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:4px 2px;display:flex;align-items:center;gap:10px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  @media print,body.pdf-export{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+    body{background:#f4f6f8!important;color:#1a1c1e!important;padding:12px 16px 32px!important;}
+    :root{--green:#1a9e6a!important;--yellow:#c8900a!important;--red:#d94040!important;--card-bg:#ffffff!important;--border:#d8dde3!important;--border-soft:rgba(0,0,0,0.07)!important;--text:#1a1c1e!important;--muted:#5a6a7a!important;}
+    .sc{background:#fff!important;border:1px solid #d0d5db!important;border-radius:10px!important;box-shadow:0 1px 4px rgba(0,0,0,.08)!important;break-inside:avoid!important;page-break-inside:avoid!important;overflow:visible!important;}
+    .cards-grid{display:block!important;column-count:2!important;column-gap:14px!important;max-width:100%!important;}
+    .cards-grid>*{display:block!important;break-inside:avoid!important;page-break-inside:avoid!important;margin-bottom:12px!important;}
+    .card-wide{column-span:all!important;width:100%!important;}
+    .section-label{column-span:all!important;color:#5a6a7a!important;}
+    .section-label::after{background:#d0d5db!important;}
+    .share-btns{display:none!important;}.pdf-btn{display:none!important;}
+    canvas{max-width:100%!important;}
+  }
+  body.light-mode{background:#f0f2f4!important;color:#1a1c1e!important;overflow-x:hidden;}
+  body.light-mode{--green:#1a9e6a;--yellow:#c8900a;--red:#d94040;--card-bg:#ffffff;--card-inner:#f5f7f9;--border:#d8dde3;--border-soft:rgba(0,0,0,0.07);--text:#1a1c1e;--muted:#5a6a7a;}
+  body.light-mode .sc{background:#ffffff!important;border-color:#d8dde3!important;box-shadow:0 1px 6px rgba(0,0,0,.07)!important;}
+  body.light-mode .sc-head{border-bottom-color:rgba(0,0,0,.07)!important;}
+  body.light-mode .sc-brand,body.light-mode .sc-name{color:#1a1c1e!important;}
+  body.light-mode .sc-type,body.light-mode .sc-meta,body.light-mode .sc-ring-lbl{color:#5a6a7a!important;}
+  body.light-mode .sc-score-desc .sub{color:#5a6a7a!important;}
+  body.light-mode .sc-metric-name{color:#3a4a5a!important;}
+  body.light-mode .sc-pct{color:#1a1c1e!important;}
+  body.light-mode .sc-pct-word{color:#5a6a7a!important;}
+  body.light-mode .score-row{background:rgba(0,0,0,.02)!important;border-bottom-color:rgba(0,0,0,.06)!important;}
+  body.light-mode .legend-strip{background:rgba(0,0,0,.02)!important;border-bottom-color:rgba(0,0,0,.05)!important;}
+  body.light-mode .leg-item{color:#5a6a7a!important;}
+  body.light-mode .bar-track{background:rgba(0,0,0,.08)!important;}
+  body.light-mode .sc-footer-bar{border-top-color:rgba(0,0,0,.07)!important;background:#fafbfc!important;}
+  body.light-mode .share-btn{background:rgba(0,0,0,.07)!important;border-color:rgba(0,0,0,.18)!important;}
+  body.light-mode .share-btn:hover{background:rgba(0,0,0,.13)!important;}
+  body.light-mode .share-btn svg{filter:invert(1)!important;}
+  body.light-mode .sc-pill{border-color:rgba(26,158,106,.4)!important;color:#1a7a54!important;background:rgba(26,158,106,.08)!important;}
+  body.light-mode .sc-pill-yellow{border-color:rgba(200,144,10,.4)!important;color:#9a6e00!important;background:rgba(200,144,10,.08)!important;}
+  body.light-mode .sc-pill-blue{border-color:rgba(119,143,221,.4)!important;color:#4a62b8!important;background:rgba(119,143,221,.08)!important;}
+  body.light-mode .badge-g{background:rgba(26,158,106,.12)!important;color:#1a7a54!important;}
+  body.light-mode .badge-a{background:rgba(200,144,10,.12)!important;color:#9a6e00!important;}
+  body.light-mode .badge-r{background:rgba(217,64,64,.12)!important;color:#b02020!important;}
+  body.light-mode .summary-text{color:#1a1c1e!important;}
+  body.light-mode .summary-label,body.light-mode .summary-note{color:#5a6a7a!important;}
+  body.light-mode .summary-highlight{color:#1a9e6a!important;}
+  body.light-mode .summary-highlight-y{color:#c8900a!important;}
+  body.light-mode .summary-highlight-r{color:#d94040!important;}
+  body.light-mode .summary-section,body.light-mode .sc-body{background:#fff!important;}
+  body.light-mode .summary-divider{background:rgba(0,0,0,.08)!important;}
+  body.light-mode .toolbar-brand{color:#1a1c1e!important;}
+  body.light-mode .toolbar-sub{color:#5a6a7a!important;}
+  body.light-mode .section-label{color:#5a6a7a!important;}
+  body.light-mode .section-label::after{background:#d0d5db!important;}
+  body.light-mode .fv-leg-item,body.light-mode .fv-stat-lbl{color:#5a6a7a!important;}
+  body.light-mode [style*="background:#27292B"],body.light-mode [style*="background: #27292B"]{background:#ffffff!important;}
+  body.light-mode [style*="color:#f0f4ff"]{color:#1a1c1e!important;}
+  body.light-mode [style*="color:#7a8ba8"]{color:#5a6a7a!important;}
+  body.light-mode [style*="color:rgba(255,255,255,.15)"],body.light-mode [style*="color:rgba(255,255,255,.25)"]{color:rgba(0,0,0,.3)!important;}
+  body.light-mode footer{background:#e4e7ea!important;border-top-color:rgba(0,0,0,.1)!important;}
+  body.light-mode footer span,body.light-mode footer p{color:rgba(0,0,0,.35)!important;}
+  .light-toggle{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .2s;}
+  .light-toggle:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8);}
+  body.light-mode .light-toggle{border-color:rgba(0,0,0,.15);color:rgba(0,0,0,.45);background:rgba(0,0,0,.04);}
+  body.light-mode .light-toggle:hover{border-color:rgba(0,0,0,.3);color:rgba(0,0,0,.7);}
+  .analyse-wordmark{color:rgba(255,255,255,.45);}
+  body.light-mode .analyse-wordmark{color:#555!important;}
+  body.light-mode .sc-footer-bar .athleek{color:rgba(0,0,0,.5)!important;}
+  body.light-mode [style*="font-family:'Bebas Neue'"][style*="color:#fff"]{color:#1a1c1e!important;}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:16px;letter-spacing:.45em;margin-left:8px;text-transform:uppercase;">Analyse</span></div>
+    <div class="toolbar-sub">Force Plate Report · Toby Taylor · 30 Mar 2026</div>
+  </div>
+  <button class="pdf-btn" id="pdf-btn" onclick="exportPDF()">
+    <svg id="pdf-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <span id="pdf-label">Download PDF</span>
+  </button>
+  <button class="light-toggle" id="light-toggle-btn" onclick="toggleLight()">
+    <svg id="light-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span id="light-label">Light mode</span>
+  </button>
+</div>
+
+<div class="cards-grid">
+
+  <!-- ══ PERFORMANCE PROFILE HEADER ══ -->
+  <div class="card-wide" style="background:none;border:none;padding:10px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Performance Profile</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">How You Compare</div>
+  </div>
+
+  <!-- ══ SECTION SUBHEADERS ══ -->
+  <div class="card-wide" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:4px 2px 0;background:none;border:none;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FFC11E;padding:6px 2px 4px;border-bottom:2px solid rgba(255,193,30,.4);">vs Active Males Under 16 &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">regularly active boys, non-academy</span></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#778FDD;padding:6px 2px 4px;border-bottom:2px solid rgba(119,143,221,.4);">vs Academy U16 (PL/EFL) &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">elite youth football</span></div>
+  </div>
+
+  <!-- ══ METRIC BREAKDOWN: vs Active Males Under 16 ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Metric Breakdown</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 30 Mar 2026</div>
+      <div class="sc-pill">vs Active Males — Under 16</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Active boys who train regularly, not in a professional academy. A solid real-world benchmark for your age group.</div>
+      <div id="prev-session-note-gen" style="font-size:9px;color:var(--muted);margin-top:5px;opacity:.6;"></div>
+    </div>
+    <div class="sc-metrics">
+      <div class="sc-metrics-hdr"><span>Metric</span><span style="margin-right:auto;margin-left:8px;color:rgba(255,255,255,.12);">Result</span><span>Percentile rank</span></div>
+      <div class="sc-metric-row" data-metric="jumpHeight" data-group="gen" data-curr="75">
+        <div class="sc-metric-top"><span class="sc-metric-name">Jump Height</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">33.3 cm</span><span class="sc-pct">75th</span><span class="badge badge-g">GOOD</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:#61C599"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="reactStrength" data-group="gen" data-curr="31">
+        <div class="sc-metric-top"><span class="sc-metric-name">Reactive Strength</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">0.34</span><span class="sc-pct">31st</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:31%;background:#ff6363"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="expPower" data-group="gen" data-curr="15">
+        <div class="sc-metric-top"><span class="sc-metric-name">Explosive Power</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">22.9 W/kg</span><span class="sc-pct">15th</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:15%;background:#ff6363"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="maxForce" data-group="gen" data-curr="92">
+        <div class="sc-metric-top"><span class="sc-metric-name">Maximum Force</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">3.00 ×BW</span><span class="sc-pct">92nd</span><span class="badge badge-g">GOOD</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:92%;background:#61C599"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="rfd" data-group="gen" data-curr="57">
+        <div class="sc-metric-top"><span class="sc-metric-name">Rate of Force Development</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">2640 N/s</span><span class="sc-pct">57th</span><span class="badge badge-a">AVG</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:57%;background:#FFC11E"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="legAsym" data-group="gen" data-curr="64">
+        <div class="sc-metric-top"><span class="sc-metric-name">Leg Asymmetry</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">6.33%</span><span class="sc-pct">64th</span><span class="badge badge-a">AVG</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:64%;background:#FFC11E"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="posturalSway" data-group="gen" data-curr="5">
+        <div class="sc-metric-top"><span class="sc-metric-name">Postural Sway</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">9.4 mm/s</span><span class="sc-pct">5th</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%;background:#ff6363"></div></div>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══ METRIC BREAKDOWN: vs Elite Academy U16 ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Metric Breakdown</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 30 Mar 2026</div>
+      <div class="sc-pill sc-pill-blue">vs Elite Male — Academy U16 (PL/EFL)</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Premier League and EFL Category 1 academy players: the top end of youth football in England.</div>
+      <div id="prev-session-note-elite" style="font-size:9px;color:var(--muted);margin-top:5px;opacity:.6;"></div>
+    </div>
+    <div class="sc-metrics">
+      <div class="sc-metrics-hdr"><span>Metric</span><span style="margin-right:auto;margin-left:8px;color:rgba(255,255,255,.12);">Result</span><span>Percentile rank</span></div>
+      <div class="sc-metric-row" data-metric="jumpHeight" data-group="elite" data-curr="24">
+        <div class="sc-metric-top"><span class="sc-metric-name">Jump Height</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">33.3 cm</span><span class="sc-pct">24th</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:24%;background:#ff6363"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="reactStrength" data-group="elite" data-curr="5">
+        <div class="sc-metric-top"><span class="sc-metric-name">Reactive Strength</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">0.34</span><span class="sc-pct">5th</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%;background:#ff6363"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="expPower" data-group="elite" data-curr="5">
+        <div class="sc-metric-top"><span class="sc-metric-name">Explosive Power</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">22.9 W/kg</span><span class="sc-pct">5th</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%;background:#ff6363"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="maxForce" data-group="elite" data-curr="92">
+        <div class="sc-metric-top"><span class="sc-metric-name">Maximum Force</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">3.00 ×BW</span><span class="sc-pct">92nd</span><span class="badge badge-g">GOOD</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:92%;background:#61C599"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="rfd" data-group="elite" data-curr="4">
+        <div class="sc-metric-top"><span class="sc-metric-name">Rate of Force Development</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">2640 N/s</span><span class="sc-pct">4th</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:4%;background:#ff6363"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="legAsym" data-group="elite" data-curr="52">
+        <div class="sc-metric-top"><span class="sc-metric-name">Leg Asymmetry</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">6.33%</span><span class="sc-pct">52nd</span><span class="badge badge-a">AVG</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:52%;background:#FFC11E"></div></div>
+      </div>
+      <div class="sc-metric-row" data-metric="posturalSway" data-group="elite" data-curr="2">
+        <div class="sc-metric-top"><span class="sc-metric-name">Postural Sway</span><div class="sc-metric-right"><span class="sc-pct-word" style="font-size:10px;color:var(--muted);">9.4 mm/s</span><span class="sc-pct">2nd</span><span class="badge badge-r">LOW</span></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:2%;background:#ff6363"></div></div>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══ OVERALL SCORE SUBHEADERS ══ -->
+  <div class="card-wide" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:4px 2px 0;background:none;border:none;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FFC11E;padding:6px 2px 4px;border-bottom:2px solid rgba(255,193,30,.4);">vs Active Males Under 16 &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">regularly active boys, non-academy</span></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#778FDD;padding:6px 2px 4px;border-bottom:2px solid rgba(119,143,221,.4);">vs Academy U16 (PL/EFL) &nbsp;·&nbsp; <span style="font-weight:400;opacity:.7;text-transform:none;letter-spacing:0;">elite youth football</span></div>
+  </div>
+
+  <!-- ══ OVERALL SCORE + RADAR: vs Active Males Under 16 ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Overall Score &amp; Profile</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 30 Mar 2026</div>
+      <div class="sc-pill">vs Active Males — Under 16</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Active boys who train regularly, not in a professional academy. A solid real-world benchmark for your age group.</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,193,30,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#FFC11E" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="82.7" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner" id="ring-gen-inner"><div class="sc-ring-num" style="color:#FFC11E">53</div><div class="sc-ring-lbl">overall</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#FFC11E;">Top 47%</div>
+        <div class="sub">vs Active Males — Under 16</div>
+      </div>
+    </div>
+    <div class="legend-strip">
+      <div class="leg-item"><div class="leg-dot" style="background:#ff6363"></div>Below 33rd</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#FFC11E"></div>33–66th</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#61C599"></div>Above 66th</div>
+    </div>
+    <div class="sc-body"><div class="radar-wrap"><canvas id="rc-gen" width="320" height="270"></canvas></div></div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══ OVERALL SCORE + RADAR: vs Elite Academy U16 ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Overall Score &amp; Profile</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 30 Mar 2026</div>
+      <div class="sc-pill sc-pill-blue">vs Elite Male — Academy U16 (PL/EFL)</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Premier League and EFL Category 1 academy players: the top end of youth football in England.</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,99,99,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#ff6363" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="126.6" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner" id="ring-elite-inner"><div class="sc-ring-num" style="color:#ff6363">28</div><div class="sc-ring-lbl">overall</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#ff6363;">Bottom 28%</div>
+        <div class="sub">vs Elite Male — Academy U16 (PL/EFL)</div>
+      </div>
+    </div>
+    <div class="legend-strip">
+      <div class="leg-item"><div class="leg-dot" style="background:#ff6363"></div>Below 33rd</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#FFC11E"></div>33–66th</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#61C599"></div>Above 66th</div>
+    </div>
+    <div class="sc-body"><div class="radar-wrap"><canvas id="rc-elite" width="320" height="270"></canvas></div></div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══ INTRO BLOCK ══ -->
+  <div class="card-wide" style="background:#27292B;border:1px solid #3a3d40;border-radius:14px;display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;margin-bottom:4px;">
+    <div style="padding:16px 20px;border-right:1px solid var(--border-soft);">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#FFC11E;margin-bottom:7px;">Left cards — Active Males Under 16</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.7;margin-bottom:8px;"><strong>Regularly active boys under 16 who are not in a professional academy</strong>: kids who play for local clubs, train consistently, and take sport seriously. Norms are drawn from Moran et al. 2017 and related youth CMJ and IMTP research.</div>
+      <div style="font-size:11px;color:#7a8ba8;line-height:1.7;">Beating this group means you are performing <em>above the standard of a fit, active boy your age</em>. A meaningful and relevant baseline.</div>
+    </div>
+    <div style="padding:16px 20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#778FDD;margin-bottom:7px;">Right cards — PL/EFL Academy U16</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.7;margin-bottom:8px;"><strong>Category 1 Premier League and EFL academy players at U16</strong>: the most athletically developed youth footballers in England. Norms anchored to Morris et al. 2020, Goller et al. 2019, and VALD ForceDecks academy profiling data.</div>
+      <div style="font-size:11px;color:#7a8ba8;line-height:1.7;">This group shows you <em>exactly where the ceiling is</em>. Your Maximum Force already matches this standard, and the work now is bringing the other qualities up to the same level.</div>
+    </div>
+  </div>
+
+  <!-- ══ STANDOUT & PRIORITY FOCUS HEADER ══ -->
+  <div class="card-wide" style="background:none;border:none;padding:10px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Your Results</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">Standout &amp; Priority Focus</div>
+    <div style="font-size:11px;color:#7a8ba8;text-align:center;line-height:1.6;">Your single best metric and the one area most worth working on, both benchmarked against active males under 16.</div>
+  </div>
+
+  <!-- ══ BEST METRIC: Maximum Force ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Best Metric</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 30 Mar 2026</div>
+      <div class="sc-pill">vs Active Males — Under 16</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Active boys who train regularly, not in a professional academy. A solid real-world benchmark for your age group.</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(97,197,153,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#61C599" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="14.1" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner"><div class="sc-ring-num" style="color:#61C599">92</div><div class="sc-ring-lbl">pctile</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#61C599;">Top 8%</div>
+        <div class="sub">Maximum Force<br>vs Active Males — Under 16</div>
+      </div>
+    </div>
+    <div class="sc-body">
+      <div style="display:flex;justify-content:space-around;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:12px;">
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:#61C599;">3.00 ×BW</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Your result</div></div>
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:var(--muted);">≥2.65 ×BW</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Top third target</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">Generating three times your own bodyweight in a maximal isometric pull is exceptional for a 16-year-old. It puts you in the top 8% of active boys your age and comfortably matches a typical PL/EFL Academy U16 player on this measure. That is a serious foundation of lower-body strength, and given you've been through a double leg fracture to the right, the fact that you're producing this kind of output tells us the rehabilitation has done its job in terms of raw force production. For a footballer, this kind of ground-force capacity underpins everything from aerial duels to driving out of turns. The engine is very much there. Worth noting: IMTP scores are sensitive to testing setup and technique, so this percentile is best read as a strong directional indicator rather than a precise ranking.</div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══ PRIORITY FOCUS: Postural Sway ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Area to Watch</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 30 Mar 2026</div>
+      <div class="sc-pill sc-pill-yellow">Priority Focus</div>
+    </div>
+    <div class="score-row">
+      <div class="sc-ring">
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,99,99,.12)" stroke-width="6"/>
+          <circle cx="34" cy="34" r="28" fill="none" stroke="#ff6363" stroke-width="6" stroke-dasharray="175.9" stroke-dashoffset="167.1" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+        </svg>
+        <div class="sc-ring-inner"><div class="sc-ring-num" style="color:#ff6363">5</div><div class="sc-ring-lbl">pctile</div></div>
+      </div>
+      <div class="sc-score-desc">
+        <div class="title" style="font-size:15px;font-weight:600;color:#ff6363;">Bottom 5%</div>
+        <div class="sub">Postural Sway<br>vs Active Males — Under 16</div>
+      </div>
+    </div>
+    <div class="sc-body">
+      <div style="display:flex;justify-content:space-around;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:12px;">
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:#ff6363;">9.4 mm/s</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Your result</div></div>
+        <div style="text-align:center;"><div style="font-size:17px;font-weight:500;font-family:'DM Mono',monospace;color:var(--muted);">≤5.7 mm/s</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">Top third target</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">Your postural sway of 9.4 mm/s is the standout finding in this report, well above the norm for active boys your age and the single most important area to address. This isn't a general athletic weakness; after a double leg fracture to the right, the sensory feedback pathways from the injured limb often need deliberate retraining to recover, and this score very likely reflects that disruption. The good news is this is very addressable: single-leg balance progressions, perturbation training, and proprioceptive drills can shift this meaningfully in a matter of weeks. For a footballer, postural control underpins everything from first touch under pressure to landing mechanics and change of direction. Getting this right will make a visible difference on the pitch.</div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span><div class="share-btns"><a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a><a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div>
+  </div>
+
+  <!-- ══ F-V SECTION HEADER ══ -->
+  <div class="card-wide" style="background:none;border:none;padding:18px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Force-Velocity Profile</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">Your Force-Velocity Curve</div>
+    <div style="font-size:11px;color:#7a8ba8;text-align:center;line-height:1.6;">An estimated power fingerprint built from your pull and jump results. Green is you; yellow is an active male under 16; blue is the Academy U16 benchmark.</div>
+  </div>
+
+  <!-- ══ F-V CURVE CARD ══ -->
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Force-Velocity · Estimated Profile</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 74.4 kg · 30 Mar 2026</div>
+    </div>
+    <div class="fv-canvas-wrap"><canvas id="fv-canvas" width="860" height="320" style="max-width:100%;"></canvas></div>
+    <div class="fv-legend">
+      <div class="fv-leg-item"><div class="fv-leg-line" style="background:#61C599;"></div>Your curve</div>
+      <div class="fv-leg-item"><div class="fv-leg-line" style="background:#778FDD;border-top:2px dashed #778FDD;height:0;margin-top:1px;"></div>Academy U16 benchmark</div>
+      <div class="fv-leg-item"><div class="fv-leg-line" style="background:#FFC11E;border-top:2px dashed #FFC11E;height:0;margin-top:1px;"></div>Active males U16 benchmark</div>
+      <div class="fv-leg-item"><div style="width:10px;height:10px;border-radius:50%;background:#61C599;"></div>Your Pmax point</div>
+    </div>
+    <div class="fv-stats">
+      <div class="fv-stat"><div class="fv-stat-val" style="color:#61C599;">25.0 N/kg</div><div class="fv-stat-lbl">F&#8320; — Est. Max Force</div></div>
+      <div class="fv-stat"><div class="fv-stat-val" style="color:#61C599;">5.11 m/s</div><div class="fv-stat-lbl">V&#8320; — Est. Max Velocity</div></div>
+      <div class="fv-stat"><div class="fv-stat-val" style="color:#FFC11E;">32.0 W/kg</div><div class="fv-stat-lbl">Pmax — Est. Peak Power</div></div>
+      <div class="fv-stat"><div class="fv-stat-val" style="color:#FFC11E;">4.89 N·s/kg·m</div><div class="fv-stat-lbl">F-V Slope (Est.)</div></div>
+    </div>
+    <div style="padding:10px 20px 14px;">
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">Your force-velocity curve tells an interesting story: your force end (essentially how big your engine is) sits well above the active U16 benchmark and tracks closely with the academy profile, which is an exceptional result for your age. The velocity end of the curve is where the current gap lies. Your legs are better at grinding out maximal force than moving quickly under load, which is exactly what the low Explosive Power and Reactive Strength scores are telling you too. Think of it as having one of the most powerful engines in the room with a gearbox that hasn't yet learned to use it at full speed. That is a very solvable problem, and the strength foundation you already have makes it a good one to have.</div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══ WHAT WE MEASURED ══ -->
+  <div class="section-label">What We Measured</div>
+
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Metric Glossary</span></div>
+      <div class="sc-name">What the numbers mean</div>
+      <div class="sc-meta">A plain-language guide to every metric in this report</div>
+    </div>
+    <div style="padding:6px 20px 10px;">
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Jump Height</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">CMJ Height.</span> How high off the ground you jumped. A direct measure of explosive leg power.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Reactive Strength</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">RSI Modified.</span> Jump height divided by total movement time (eccentric + concentric + flight). Rewards both height and speed of execution. GymGeek uses the ForceDecks total-contraction-time method; values are typically lower than flight-time-only protocols.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Explosive Power</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">Peak Power (rel.).</span> The highest power output during the jump, divided by bodyweight. Shows how explosively force is generated per kilogram.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Leg Asymmetry</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">Limb Asymmetry (CMJ).</span> The percentage difference in force between left and right leg during the jump. Under 10% is considered well-balanced; higher values indicate one leg is doing more work than the other.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Maximum Force</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">IMTP Peak Force.</span> The maximum force recorded during a maximal isometric pull against a fixed bar, relative to bodyweight. A measure of overall lower body strength.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Rate of Force Development</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">RFD @ 200ms (IMTP).</span> How quickly force builds in the first 200 milliseconds of the isometric pull, in Newtons per second (N/s). A high RFD means your nervous system fires fast, which translates directly to explosiveness on the pitch. Calculated using a 5-SD onset detection threshold against a 3-second baseline.</div></div>
+      <div style="display:flex;gap:10px;padding:9px 0;"><div style="font-size:11px;font-weight:600;color:var(--text);min-width:160px;flex-shrink:0;">Postural Sway</div><div style="font-size:11px;color:var(--muted);line-height:1.55;"><span style="opacity:0.5;font-style:italic;">Sway Velocity.</span> The average speed of the body's centre of pressure whilst standing still, in mm/s. Lower values indicate better postural stability and balance control.</div></div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══ SUMMARY ══ -->
+  <div class="section-label">Summary &amp; Recommendations</div>
+
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Athlete Summary</span></div>
+      <div class="sc-name">Toby Taylor</div>
+      <div class="sc-meta">Football · Age 16 · 74.4 kg · 30 Mar 2026</div>
+    </div>
+    <div class="summary-section">
+      <div class="summary-label">Toby, here's how you got on</div>
+      <div class="summary-text">
+
+        <span class="summary-highlight">What's working well</span><br><br>
+
+        The headline result is your Maximum Force: 3.00 times your bodyweight in the isometric pull, putting you in the top 8% of active boys your age and matching or exceeding a typical PL/EFL Academy U16 player on this measure. That is a serious number, and it tells us the foundational strength is genuinely there. Your Jump Height (33.3 cm, 75th percentile vs active U16 males) is also solid; you're clearing most of your peers in the air. Given that you've been through a double leg fracture to the right, these strength and jump numbers are particularly encouraging: the rehabilitation has clearly done its job in terms of raw force production. Your Leg Asymmetry at 6.33% is also a pleasing result. Both legs are contributing fairly evenly to the jump, which after that kind of injury history reflects well on where you've got to.
+
+        <div class="summary-divider"></div>
+
+        <span class="summary-highlight-y">Where there's room to improve</span><br><br>
+
+        The gap between your raw strength and your explosive output is the defining feature of this profile. Despite having excellent force capacity, your Explosive Power (22.9 W/kg, 15th percentile) and Reactive Strength (RSI 0.34, 31st percentile) sit low against active peers and considerably lower against academy-level comparison. Your legs can generate serious force, but you're not yet converting it quickly into movement. Rate of Force Development at 2640 N/s is in the average band against active boys but sits in the bottom 4% against academy players, reinforcing the same picture: fast force expression is the area that needs to develop. Think of it as having the engine, but the gearbox still needs tuning.<br><br>
+
+        Postural Sway (9.4 mm/s, bottom 5%) is the most clinically significant finding in this report. This is very likely a direct consequence of the right leg fracture and the disrupted balance feedback that follows long bone injuries. It needs deliberate targeted work and will not resolve with general training alone.
+
+        <div class="summary-divider"></div>
+
+        <span class="summary-highlight">What we're going to do about it</span><br><br>
+
+        We'll retest in 3–4 months to track progress. Book your next session at gymgeekonline.co.uk.
+
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-note">Session 1 · 30 Mar 2026. Retest recommended in 3–4 months.</div>
+      <div class="summary-divider"></div>
+      <div style="text-align:center;padding:6px 0 10px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px;">Share your results</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Know someone who'd find this useful? Send them the report.</div>
+        <div style="display:flex;justify-content:center;gap:10px;">
+          <a class="share-btn" href="#" onclick="shareWA(event)" title="WhatsApp" style="width:44px;height:44px;border-radius:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+          <a class="share-btn" href="#" onclick="shareIG(event)" title="Instagram" style="width:44px;height:44px;border-radius:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a class="share-btn" href="#" onclick="shareFB(event)" title="Facebook" style="width:44px;height:44px;border-radius:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="sc-footer-bar" style="justify-content:space-between;align-items:center;"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span class="athleek" style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;·&nbsp; gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span></div>
+  </div>
+
+</div>
+
+<footer style="max-width:960px;margin:36px auto 0;padding:14px 20px;background:#17191b;border-top:1px solid rgba(255,255,255,0.05);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;box-sizing:border-box;">
+  <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:11px;letter-spacing:.04em;color:rgba(255,255,255,.18);">ATHLEEK</span>
+  <span style="color:rgba(255,255,255,.08);font-size:9px;">·</span>
+  <p style="font-size:9px;color:rgba(122,139,168,0.35);line-height:1.6;margin:0;text-align:center;">
+    ⚠ This is beta software — you may notice occasional inconsistencies in results or presentation. Please flag anything that doesn't look right to the GymGeek team. For performance monitoring only, not medical advice. Percentile ranks use a hybrid Gaussian/log-normal CDF method applied to literature-derived summary statistics (mean and SD); they are not rank-based against individual raw data. Asymmetry and RFD percentiles use log-normal CDF; all other metrics use Gaussian CDF. Overall score is a weighted mean (CMJ 20%, Power 20%, IMTP 20%, RSI 15%, RFD 15%, Asymmetry 5%, Sway 5%). F-V profile values are modelled estimates from IMTP and CMJ data. &copy; 2026 GymGeek Dorset.
+  </p>
+  <span style="color:rgba(255,255,255,.08);font-size:9px;">·</span>
+  <span style="font-size:9px;color:rgba(255,255,255,.1);">gymgeekonline.co.uk &nbsp;·&nbsp; athleek.co.uk</span>
+</footer>
+
+<script>
+var prevData = {
+  hasPrev: false,
+  date: '',
+  prevOverallGen: 0, prevOverallElite: 0,
+  gen:   { jumpHeight:0, reactStrength:0, expPower:0, maxForce:0, rfd:0, legAsym:0, posturalSway:0 },
+  elite: { jumpHeight:0, reactStrength:0, expPower:0, maxForce:0, rfd:0, legAsym:0, posturalSway:0 }
+};
+
+function calcOverall(cmj,rsi,pwr,imtp,rfd,asym,sway) {
+  return Math.round(cmj*0.20+rsi*0.15+pwr*0.20+imtp*0.20+rfd*0.15+asym*0.05+sway*0.05);
+}
+
+function drawRadar(canvasId, values, colour) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var labels = ['Jump Height','React. Strength','Explosive Power','Max Strength','RFD','Asymmetry','Postural Sway'];
+  var N = labels.length, W = canvas.width, H = canvas.height;
+  var cx = W/2-4, cy = H/2+6, maxR = Math.min(W,H)/2-46;
+  var isLight = document.body.classList.contains('light-mode');
+  var gc = isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.07)';
+  var lc = isLight ? '#5a6a7a' : '#7a8ba8';
+  var pc = isLight ? '#7a8a9a' : '#7a8ba8';
+  function ang(i){ return (Math.PI*2*i/N)-Math.PI/2; }
+  function pt(i,r){ return {x:cx+r*Math.cos(ang(i)),y:cy+r*Math.sin(ang(i))}; }
+  ctx.clearRect(0,0,W,H);
+  [25,50,75,100].forEach(function(pct){
+    var r=maxR*pct/100; ctx.beginPath();
+    for(var i=0;i<=N;i++){var p=pt(i%N,r);i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);}
+    ctx.closePath();ctx.strokeStyle=gc;ctx.lineWidth=1;ctx.stroke();
+    if(pct<100){ctx.fillStyle=pc;ctx.font='8px sans-serif';ctx.textAlign='center';ctx.fillText(pct,cx+3,cy-r+9);}
+  });
+  for(var i=0;i<N;i++){var p=pt(i,maxR);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(p.x,p.y);ctx.strokeStyle=gc;ctx.lineWidth=1;ctx.stroke();}
+  ctx.beginPath();
+  values.forEach(function(v,i){var p=pt(i,maxR*v/100);i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);});
+  ctx.closePath();ctx.fillStyle=colour+'33';ctx.fill();ctx.strokeStyle=colour;ctx.lineWidth=2;ctx.stroke();
+  values.forEach(function(v,i){var p=pt(i,maxR*v/100);ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fillStyle=colour;ctx.fill();});
+  ctx.fillStyle=lc;ctx.font='9px sans-serif';
+  function wrapLabel(ctx,text,x,y,mw,lh,align,baseline){
+    var words=text.split(' '),lines=[],cur='';
+    for(var w=0;w<words.length;w++){var t=cur?cur+' '+words[w]:words[w];if(ctx.measureText(t).width>mw&&cur){lines.push(cur);cur=words[w];}else{cur=t;}}
+    if(cur)lines.push(cur);
+    var th=lines.length*lh,sy=baseline==='bottom'?y-th+lh:baseline==='top'?y:y-th/2+lh/2;
+    ctx.textAlign=align;ctx.textBaseline='alphabetic';
+    for(var l=0;l<lines.length;l++){ctx.fillText(lines[l],x,sy+l*lh);}
+  }
+  for(var i=0;i<N;i++){var p=pt(i,maxR+22);var a=p.x<cx-5?'right':p.x>cx+5?'left':'center';var b=p.y<cy-5?'bottom':p.y>cy+5?'top':'middle';wrapLabel(ctx,labels[i],p.x,p.y,52,11,a,b);}
+}
+
+function drawFVCurve() {
+  var canvas = document.getElementById('fv-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.offsetWidth || canvas.width, H = canvas.height;
+  canvas.width = W;
+  var isLight = document.body.classList.contains('light-mode');
+  var gc = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)';
+  var lc = isLight ? '#5a6a7a' : '#7a8ba8';
+  var ac = isLight ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.25)';
+  var athF0=25.02, athV0=5.11, actF0=20.8, actV0=4.85, eliteF0=20.6, eliteV0=5.35;
+  var pad={l:56,r:28,t:24,b:48}, pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  var maxV=Math.max(athV0,actV0,eliteV0)*1.2, maxF=Math.max(athF0,actF0,eliteF0)*1.2;
+  function fx(v){return pad.l+(v/maxV)*pw;} function fy(f){return pad.t+ph-(f/maxF)*ph;}
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle=gc;ctx.lineWidth=1;
+  for(var vi=0;vi<=5;vi++){var vv=vi*maxV/5;ctx.beginPath();ctx.moveTo(fx(vv),pad.t);ctx.lineTo(fx(vv),pad.t+ph);ctx.stroke();}
+  for(var fi=0;fi<=5;fi++){var ff=fi*maxF/5;ctx.beginPath();ctx.moveTo(pad.l,fy(ff));ctx.lineTo(pad.l+pw,fy(ff));ctx.stroke();}
+  ctx.strokeStyle=ac;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ph);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t+ph);ctx.lineTo(pad.l+pw,pad.t+ph);ctx.stroke();
+  ctx.fillStyle=lc;ctx.font='9px sans-serif';ctx.textAlign='center';
+  for(var vi2=0;vi2<=5;vi2++){var vv2=vi2*maxV/5;ctx.fillText(vv2.toFixed(1),fx(vv2),pad.t+ph+14);}
+  ctx.textAlign='right';
+  for(var fi2=0;fi2<=5;fi2++){var ff2=fi2*maxF/5;ctx.fillText(ff2.toFixed(0),pad.l-6,fy(ff2)+3);}
+  ctx.textAlign='center';ctx.fillText('Velocity (m/s)',pad.l+pw/2,H-4);
+  ctx.save();ctx.translate(12,pad.t+ph/2);ctx.rotate(-Math.PI/2);ctx.fillText('Force (N/kg)',0,0);ctx.restore();
+  function drawLine(f0,v0,col,dashed){
+    ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=2;
+    if(dashed)ctx.setLineDash([6,4]);else ctx.setLineDash([]);
+    ctx.moveTo(fx(0),fy(f0));ctx.lineTo(fx(v0),fy(0));ctx.stroke();ctx.setLineDash([]);
+    ctx.beginPath();ctx.strokeStyle=col+'88';ctx.lineWidth=1.5;
+    if(dashed)ctx.setLineDash([4,4]);
+    for(var s=0;s<=60;s++){var v=(s/60)*v0,f=f0*(1-v/v0),p=f*v,pm=f0*v0/4,ps=p/pm*(f0*0.55);s===0?ctx.moveTo(fx(v),fy(ps)):ctx.lineTo(fx(v),fy(ps));}
+    ctx.stroke();ctx.setLineDash([]);
+  }
+  drawLine(actF0,actV0,'#FFC11E',true);
+  drawLine(eliteF0,eliteV0,'#778FDD',true);
+  drawLine(athF0,athV0,'#61C599',false);
+  ctx.beginPath();ctx.arc(fx(athV0/2),fy(athF0/2),6,0,Math.PI*2);ctx.fillStyle='#61C599';ctx.fill();
+  ctx.fillStyle=lc;ctx.font='9px sans-serif';ctx.textAlign='left';ctx.fillText('Pmax',fx(athV0/2)+10,fy(athF0/2)+3);
+  ctx.font='bold 9px sans-serif';
+  ctx.fillStyle='#61C599';ctx.textAlign='right';ctx.fillText('You',fx(athV0)-4,fy(0)+12);
+  ctx.fillStyle='#778FDD';ctx.fillText('Academy U16',fx(eliteV0)-4,fy(0)+24);
+  ctx.fillStyle='#FFC11E';ctx.fillText('Active U16',fx(actV0)-4,fy(0)+36);
+}
+
+function toggleLight() {
+  var isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('light-label').textContent = isLight ? 'Dark mode' : 'Light mode';
+  drawRadar('rc-gen',   [75, 31, 15, 92, 57, 64, 5],  '#FFC11E');
+  drawRadar('rc-elite', [24,  5,  5, 92,  4, 52, 2],  '#778FDD');
+  drawFVCurve();
+}
+
+function shareCard(btn) {
+  var card = btn.closest('.sc');
+  if (!card) return;
+  var sb = card.querySelectorAll('.share-btns');
+  sb.forEach(function(b){b.style.visibility='hidden';});
+  html2canvas(card,{scale:3,useCORS:true,allowTaint:true,backgroundColor:'#27292B',logging:false,imageTimeout:0,removeContainer:true}).then(function(canvas){
+    sb.forEach(function(b){b.style.visibility='';});
+    canvas.toBlob(function(blob){
+      var file=new File([blob],'Toby Taylor - Analyse.png',{type:'image/png'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        navigator.share({files:[file],title:'My GymGeek Results',text:'\ud83c\udccb Just got my force plate results at Gym Geek Dorset! #GymGeekDorset'}).catch(function(){});
+      } else {
+        var url=URL.createObjectURL(blob);
+        var a=document.createElement('a');a.href=url;a.download='Toby Taylor - Analyse.png';a.click();
+        setTimeout(function(){URL.revokeObjectURL(url);},1000);
+      }
+    },'image/png');
+  }).catch(function(){sb.forEach(function(b){b.style.visibility='';});});
+}
+function shareWA(e){e.preventDefault();shareCard(e.currentTarget);}
+function shareIG(e){e.preventDefault();shareCard(e.currentTarget);}
+function shareFB(e){e.preventDefault();shareCard(e.currentTarget);}
+function shareX(e){e.preventDefault();shareCard(e.currentTarget);}
+
+function exportPDF() {
+  var btn=document.getElementById('pdf-btn'),label=document.getElementById('pdf-label'),icon=document.getElementById('pdf-icon');
+  btn.disabled=true;label.textContent='Generating…';icon.style.opacity='0.5';
+  document.body.classList.add('pdf-export');
+  var uiEls=document.querySelectorAll('.pdf-btn,.share-btns');
+  uiEls.forEach(function(el){el.style.visibility='hidden';});
+  requestAnimationFrame(function(){requestAnimationFrame(function(){startCapture();});});
+  function startCapture(){
+    var {jsPDF}=window.jspdf;
+    var pageW=595.28,pageH=841.89,margin=20,gap=12,colGap=12;
+    var usableW=pageW-margin*2,halfW=(usableW-colGap)/2,pageRgb=[244,246,248];
+    var pdf=new jsPDF({unit:'pt',format:'a4',orientation:'portrait'}),yPos=margin;
+    function fillBg(){pdf.setFillColor(pageRgb[0],pageRgb[1],pageRgb[2]);pdf.rect(0,0,pageW,pageH,'F');}
+    fillBg();
+    function capture(el,cb){
+      var prev=el.style.overflow;el.style.overflow='visible';
+      html2canvas(el,{scale:3,useCORS:true,allowTaint:true,backgroundColor:'#ffffff',logging:false,imageTimeout:0,removeContainer:true}).then(function(canvas){
+        el.style.overflow=prev;
+        var r=48,w=canvas.width,h=canvas.height;
+        var out=document.createElement('canvas');out.width=w+12;out.height=h+12;
+        var ctx=out.getContext('2d');
+        ctx.fillStyle='rgb('+pageRgb.join(',')+')';ctx.fillRect(0,0,out.width,out.height);
+        ctx.shadowColor='rgba(0,0,0,0.10)';ctx.shadowBlur=10;ctx.shadowOffsetY=2;
+        var ox=6,oy=6;
+        ctx.beginPath();ctx.moveTo(ox+r,oy);ctx.lineTo(ox+w-r,oy);ctx.quadraticCurveTo(ox+w,oy,ox+w,oy+r);
+        ctx.lineTo(ox+w,oy+h-r);ctx.quadraticCurveTo(ox+w,oy+h,ox+w-r,oy+h);
+        ctx.lineTo(ox+r,oy+h);ctx.quadraticCurveTo(ox,oy+h,ox,oy+h-r);
+        ctx.lineTo(ox,oy+r);ctx.quadraticCurveTo(ox,oy,ox+r,oy);ctx.closePath();ctx.clip();
+        ctx.shadowColor='transparent';ctx.drawImage(canvas,ox,oy);
+        cb(out.toDataURL('image/png'),out.width,out.height);
+      });
+    }
+    var grid=document.querySelector('.cards-grid');
+    var allCards=Array.from(grid.querySelectorAll('.sc'));
+    var rows=[],i=0;
+    while(i<allCards.length){
+      var card=allCards[i],isWide=card.classList.contains('card-wide');
+      if(isWide){rows.push([card]);i++;}
+      else{var next=allCards[i+1];if(next&&!next.classList.contains('card-wide')){rows.push([card,next]);i+=2;}else{rows.push([card]);i++;}}
+    }
+    function processRow(ri){
+      if(ri>=rows.length){
+        document.body.classList.remove('pdf-export');
+        uiEls.forEach(function(el){el.style.visibility='';});
+        btn.disabled=false;label.textContent='Download PDF';icon.style.opacity='1';
+        pdf.save('Toby Taylor - Analyse.pdf');return;
+      }
+      var row=rows[ri],isFirst=ri===0;
+      if(row.length===1){
+        capture(row[0],function(imgData,cw,ch){
+          var imgH=(ch/cw)*usableW;
+          if(!isFirst&&yPos+imgH>pageH-margin){pdf.addPage();fillBg();yPos=margin;}
+          pdf.addImage(imgData,'PNG',margin-6,yPos-6,usableW+12,imgH);
+          yPos+=imgH+gap;processRow(ri+1);
+        });
+      } else {
+        capture(row[0],function(ld,lcw,lch){
+          capture(row[1],function(rd,rcw,rch){
+            var lH=(lch/lcw)*halfW,rH=(rch/rcw)*halfW,rowH=Math.max(lH,rH);
+            if(!isFirst&&yPos+rowH>pageH-margin){pdf.addPage();fillBg();yPos=margin;}
+            pdf.addImage(ld,'PNG',margin-6,yPos-6,halfW+12,lH);
+            pdf.addImage(rd,'PNG',margin+halfW+colGap-6,yPos-6,halfW+12,rH);
+            yPos+=rowH+gap;processRow(ri+1);
+          });
+        });
+      }
+    }
+    processRow(0);
+  }
+}
+
+window.addEventListener('load', function() {
+  // G1 Active Males U16: CMJ=75, RSI=31, PWR=15, IMTP=92, RFD=57, ASYM=64, SWAY=5
+  drawRadar('rc-gen',   [75, 31, 15, 92, 57, 64, 5],  '#FFC11E');
+  // G2 Elite Academy U16: CMJ=24, RSI=5, PWR=5, IMTP=92, RFD=4, ASYM=52, SWAY=2
+  drawRadar('rc-elite', [24,  5,  5, 92,  4, 52, 2],  '#778FDD');
+  drawFVCurve();
+});
+</script>
+</body>
+</html>
