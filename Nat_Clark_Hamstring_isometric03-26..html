@@ -1,0 +1,581 @@
+<!--
+  GYMGEEK ANALYSE — HAMSTRING ISOMETRIC SUPPLEMENT
+  Nat Clark · 31 Mar 2026
+  Source: Hamstrings_Isometric_2026-03-26_15-24.csv / PDF (Meloq System)
+  All values taken from PDF table (more precise than ring display values).
+  Body mass 57.3 kg (from main report prompt; used for normalisation).
+  Right leg = affected side (right hamstring tendinopathy).
+  Left leg = reference / unaffected side.
+  No published normative dataset exists specifically for hamstring tendinopathy
+  patients using this Meloq protocol. Comparisons use:
+    (a) Interlimb asymmetry vs 10% clinical threshold (Taberner & Cohen 2020;
+        Sportsmith / Ripley et al.)
+    (b) Normalised peak force vs collegiate female active population
+        (female soccer players: 2.62 N/kg; Rouissi et al. 2024, PMC11268924)
+    (c) Clinical context from PHT rehabilitation literature
+        (Docking & Cook 2016, JOSPT; Rich et al. 2025, IJSPT)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK · Hamstring Isometric — Nat Clark</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #61C599; --yellow: #FFC11E; --blue: #778FDD; --red: #ff6363;
+    --card-bg: #27292B; --border: #3a3d40; --border-soft: rgba(255,255,255,0.06);
+    --text: #f0f4ff; --muted: #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #2A2D30; font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; padding: 28px 20px 48px; overflow-x: hidden; }
+
+  .toolbar { max-width: 960px; margin: 0 auto 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .toolbar-sub { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+  .analyse-wordmark { color: rgba(255,255,255,.45); }
+
+  .cards-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card-wide { grid-column: 1 / -1; }
+
+  .sc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+  .sc-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--border-soft); }
+  .sc-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .sc-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .sc-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .sc-name { font-size: 18px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+  .sc-meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .sc-pill { display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(255,99,99,.4); color: #ff6363; background: rgba(255,99,99,.08); }
+  .sc-pill-amber { border-color: rgba(255,193,30,.4) !important; color: #FFC11E !important; background: rgba(255,193,30,.08) !important; }
+  .sc-pill-green { border-color: rgba(97,197,153,.4) !important; color: #61C599 !important; background: rgba(97,197,153,.08) !important; }
+
+  .sc-body { padding: 16px 20px; flex: 1; }
+  .sc-footer-bar { padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-soft); background: rgba(255,255,255,.01); }
+
+  /* ── METRIC BARS ── */
+  .metric-table { width: 100%; }
+  .metric-hdr { display: flex; font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); margin-bottom: 4px; }
+  .metric-hdr span:first-child { flex: 1; }
+  .metric-hdr .col-val { width: 70px; text-align: right; }
+  .metric-hdr .col-bar { width: 120px; margin-left: 10px; }
+  .metric-hdr .col-flag { width: 50px; text-align: right; }
+
+  .metric-row { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .metric-top { display: flex; align-items: center; margin-bottom: 5px; gap: 8px; }
+  .metric-name { font-size: 11px; font-weight: 500; color: var(--text); flex: 1; }
+  .metric-val { font-size: 11px; font-family: 'DM Mono', monospace; width: 70px; text-align: right; flex-shrink: 0; }
+  .bar-wrap { width: 120px; flex-shrink: 0; margin-left: 10px; }
+  .bar-track { height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; }
+  .metric-flag { width: 50px; text-align: right; flex-shrink: 0; }
+
+  .badge { font-size: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+  .badge-g { background: rgba(97,197,153,.15); color: #61C599; }
+  .badge-a { background: rgba(255,193,30,.15); color: #FFC11E; }
+  .badge-r { background: rgba(255,99,99,.15); color: #ff6363; }
+
+  /* ── SPLIT BARS (L vs R) ── */
+  .split-bar-wrap { display: flex; align-items: center; gap: 8px; width: 100%; }
+  .split-label { font-size: 9px; color: var(--muted); width: 14px; flex-shrink: 0; text-align: center; }
+  .split-track { flex: 1; height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+  .split-fill-l { height: 100%; border-radius: 3px; background: #61C599; }
+  .split-fill-r { height: 100%; border-radius: 3px; }
+
+  /* ── THRESHOLD CARD ── */
+  .threshold-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .threshold-metric { font-size: 11px; font-weight: 500; color: var(--text); flex: 1; }
+  .threshold-asym { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; width: 52px; text-align: right; flex-shrink: 0; }
+  .threshold-bar-wrap { width: 140px; flex-shrink: 0; }
+  .threshold-track { height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; position: relative; }
+  .threshold-fill { height: 100%; border-radius: 3px; }
+  .threshold-marker { position: absolute; top: -3px; width: 2px; height: 12px; background: rgba(255,255,255,.6); border-radius: 1px; }
+  .threshold-status { font-size: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; width: 58px; text-align: center; flex-shrink: 0; }
+
+  /* ── SUMMARY ── */
+  .summary-text { font-size: 12px; color: var(--muted); line-height: 1.75; }
+  .summary-highlight { color: #61C599; font-weight: 600; }
+  .summary-highlight-y { color: #FFC11E; font-weight: 600; }
+  .summary-highlight-r { color: #ff6363; font-weight: 600; }
+  .summary-divider { height: 1px; background: rgba(255,255,255,.06); margin: 14px 0; }
+  .summary-note { font-size: 10px; color: rgba(255,255,255,.25); font-style: italic; }
+  .summary-label { font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  .section-label { grid-column: 1 / -1; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 4px 2px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .pdf-btn { display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 8px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.7); font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; transition: all .2s; }
+  .pdf-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .pdf-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .light-toggle { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: rgba(255,255,255,.5); font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; transition: all .2s; }
+  .light-toggle:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+
+  body.light-mode { background: #f0f2f4 !important; color: #1a1c1e !important; }
+  body.light-mode { --card-bg: #ffffff; --border: #d8dde3; --border-soft: rgba(0,0,0,0.07); --text: #1a1c1e; --muted: #5a6a7a; }
+  body.light-mode .sc { background: #fff !important; border-color: #d8dde3 !important; box-shadow: 0 1px 6px rgba(0,0,0,.07) !important; }
+  body.light-mode .sc-brand { color: #1a1c1e !important; } body.light-mode .sc-name { color: #1a1c1e !important; }
+  body.light-mode .bar-track, body.light-mode .split-track, body.light-mode .threshold-track { background: rgba(0,0,0,.08) !important; }
+  body.light-mode .toolbar-brand { color: #1a1c1e !important; } body.light-mode .toolbar-sub { color: #5a6a7a !important; }
+  body.light-mode .section-label { color: #5a6a7a !important; } body.light-mode .section-label::after { background: #d0d5db !important; }
+  body.light-mode .summary-text { color: #1a1c1e !important; }
+  body.light-mode .summary-label { color: #5a6a7a !important; }
+  body.light-mode .summary-note { color: #5a6a7a !important; }
+  body.light-mode .summary-highlight { color: #1a9e6a !important; }
+  body.light-mode .summary-highlight-y { color: #c8900a !important; }
+  body.light-mode .summary-highlight-r { color: #d94040 !important; }
+  body.light-mode .summary-divider { background: rgba(0,0,0,.08) !important; }
+  body.light-mode .sc-footer-bar { background: #fafbfc !important; }
+  body.light-mode .metric-name { color: #1a1c1e !important; }
+  body.light-mode .analyse-wordmark { color: #555 !important; }
+  body.light-mode .light-toggle { border-color: rgba(0,0,0,.15); color: rgba(0,0,0,.45); background: rgba(0,0,0,.04); }
+  body.light-mode .light-toggle:hover { border-color: rgba(0,0,0,.3); color: rgba(0,0,0,.7); }
+  body.light-mode footer { background: #e4e7ea !important; border-top-color: rgba(0,0,0,.1) !important; }
+  body.light-mode footer span, body.light-mode footer p { color: rgba(0,0,0,.35) !important; }
+  body.light-mode [style*="color:#f0f4ff"] { color: #1a1c1e !important; }
+  body.light-mode [style*="color:#7a8ba8"] { color: #5a6a7a !important; }
+  body.light-mode [style*="background:#27292B"] { background: #ffffff !important; }
+
+  @media print, body.pdf-export {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #f4f6f8 !important; padding: 12px 16px 32px !important; }
+    .sc { background: #fff !important; border: 1px solid #d0d5db !important; break-inside: avoid !important; }
+    .cards-grid { display: block !important; column-count: 2 !important; column-gap: 14px !important; }
+    .cards-grid > * { display: block !important; break-inside: avoid !important; margin-bottom: 12px !important; }
+    .card-wide { column-span: all !important; }
+    .pdf-btn { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:16px;letter-spacing:.45em;margin-left:8px;text-transform:uppercase;">Analyse</span></div>
+    <div class="toolbar-sub">Hamstring Isometric Supplement &middot; Nat Clark &middot; 31 Mar 2026</div>
+  </div>
+  <button class="pdf-btn" id="pdf-btn" onclick="exportPDF()">
+    <svg id="pdf-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <span id="pdf-label">Download PDF</span>
+  </button>
+  <button class="light-toggle" id="light-toggle-btn" onclick="toggleLight()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span id="light-label">Light mode</span>
+  </button>
+</div>
+
+<div class="cards-grid">
+
+  <!-- ══ SECTION HEADER ══ -->
+  <div class="card-wide" style="background:none;border:none;padding:10px 2px 4px;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="height:1px;flex:1;background:linear-gradient(to right, transparent, #3a3d40);"></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);">Supplement — Hamstring Isometric</div>
+      <div style="height:1px;flex:1;background:linear-gradient(to left, transparent, #3a3d40);"></div>
+    </div>
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;color:#fff;text-align:center;line-height:1;">Left vs Right: Hamstring Profile</div>
+    <div style="font-size:11px;color:#7a8ba8;text-align:center;line-height:1.6;">Single-leg isometric hamstring assessment (Meloq System, 31 Mar 2026). Right leg = affected side (right hamstring tendinopathy). All results compared against the 10% interlimb asymmetry threshold used clinically to guide loading progression in hamstring injury rehabilitation.</div>
+  </div>
+
+  <!-- ══ ASYMMETRY THRESHOLDS CARD ══ -->
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row">
+        <span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span>
+        <span class="sc-type">Asymmetry vs Clinical Threshold</span>
+      </div>
+      <div class="sc-name">Nat Clark</div>
+      <div class="sc-meta">Running &middot; Age 42 &middot; Right hamstring tendinopathy &middot; 31 Mar 2026</div>
+      <div class="sc-pill">Right side deficit</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">The bar shows interlimb asymmetry for each metric. The white marker is the 10% clinical threshold: a commonly used criterion for safe progression of loading in hamstring rehabilitation (Taberner &amp; Cohen 2020; Ripley et al. 2022). All results above 10% indicate the right side has a meaningful deficit vs the left.</div>
+    </div>
+    <div class="sc-body">
+      <div style="display:flex;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border-soft);margin-bottom:4px;">
+        <span style="flex:1;">Metric</span>
+        <span style="width:60px;text-align:right;">Asymmetry</span>
+        <span style="width:150px;margin-left:12px;">vs 10% threshold</span>
+        <span style="width:64px;text-align:right;">Status</span>
+      </div>
+
+      <!-- Peak Force -->
+      <div class="threshold-row">
+        <div class="threshold-metric">Peak Force</div>
+        <div class="threshold-asym" style="color:#ff6363;">23.0%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track">
+            <div class="threshold-fill" style="width:min(100%,92%);background:#ff6363;"></div>
+            <div class="threshold-marker" style="left:calc(10% / 1 * (140px/100) - but we use inline)"></div>
+          </div>
+          <div style="position:relative;height:0;">
+            <div style="position:absolute;top:-10px;left:calc(10% * 1.4px);left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-r" style="margin-left:4px;">ABOVE</div>
+      </div>
+
+      <!-- Concentric RFD -->
+      <div class="threshold-row">
+        <div class="threshold-metric">Rate of Force Development</div>
+        <div class="threshold-asym" style="color:#ff6363;">51.1%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track" style="position:relative;">
+            <div class="threshold-fill" style="width:100%;background:#ff6363;"></div>
+            <div style="position:absolute;top:-3px;left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-r" style="margin-left:4px;">ABOVE</div>
+      </div>
+
+      <!-- Time to Peak Force -->
+      <div class="threshold-row">
+        <div class="threshold-metric">Time to Peak Force</div>
+        <div class="threshold-asym" style="color:#ff6363;">23.6%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track" style="position:relative;">
+            <div class="threshold-fill" style="width:min(100%,94%);background:#ff6363;"></div>
+            <div style="position:absolute;top:-3px;left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-r" style="margin-left:4px;">ABOVE</div>
+      </div>
+
+      <!-- Impulse -->
+      <div class="threshold-row">
+        <div class="threshold-metric">Impulse</div>
+        <div class="threshold-asym" style="color:#ff6363;">15.1%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track" style="position:relative;">
+            <div class="threshold-fill" style="width:min(100%,60%);background:#ff6363;"></div>
+            <div style="position:absolute;top:-3px;left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-r" style="margin-left:4px;">ABOVE</div>
+      </div>
+
+      <!-- Mean Force -->
+      <div class="threshold-row">
+        <div class="threshold-metric">Mean Force</div>
+        <div class="threshold-asym" style="color:#ff6363;">27.0%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track" style="position:relative;">
+            <div class="threshold-fill" style="width:min(100%,100%);background:#ff6363;"></div>
+            <div style="position:absolute;top:-3px;left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-r" style="margin-left:4px;">ABOVE</div>
+      </div>
+
+      <!-- Contraction Duration -->
+      <div class="threshold-row">
+        <div class="threshold-metric">Contraction Duration</div>
+        <div class="threshold-asym" style="color:#61C599;">7.7%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track" style="position:relative;">
+            <div class="threshold-fill" style="width:31%;background:#61C599;"></div>
+            <div style="position:absolute;top:-3px;left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-g" style="margin-left:4px;">BELOW</div>
+      </div>
+
+      <!-- Force Decay Rate -->
+      <div class="threshold-row" style="border-bottom:none;">
+        <div class="threshold-metric">Force Decay Rate</div>
+        <div class="threshold-asym" style="color:#ff6363;">62.2%</div>
+        <div class="threshold-bar-wrap" style="margin-left:12px;">
+          <div class="threshold-track" style="position:relative;">
+            <div class="threshold-fill" style="width:100%;background:#ff6363;"></div>
+            <div style="position:absolute;top:-3px;left:14px;width:2px;height:12px;background:rgba(255,255,255,.55);border-radius:1px;"></div>
+          </div>
+        </div>
+        <div class="threshold-status badge badge-r" style="margin-left:4px;">ABOVE</div>
+      </div>
+
+      <div style="margin-top:12px;font-size:9px;color:rgba(255,255,255,.2);font-style:italic;">White marker = 10% threshold &nbsp;&middot;&nbsp; Bar fills to asymmetry value (capped at bar width). 6 of 7 metrics exceed threshold.</div>
+    </div>
+    <div class="sc-footer-bar"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;&middot;&nbsp; gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══ SIDE-BY-SIDE BARS: L vs R ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Left vs Right — Force</span></div>
+      <div class="sc-name">Peak &amp; Mean Force</div>
+      <div class="sc-meta">Absolute values &middot; Left = unaffected &middot; Right = affected</div>
+    </div>
+    <div class="sc-body">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:12px;">Green = left (unaffected). Orange = right (affected side). Bars normalised to left limb = 100%.</div>
+
+      <!-- Peak Force -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;font-weight:500;">Peak Force</span><span style="font-size:10px;color:var(--muted);">L 15.46 kg &nbsp;|&nbsp; R 11.91 kg</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">L</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:100%;background:#61C599;height:6px;"></div></div>
+          <span style="font-size:9px;color:var(--muted);width:36px;text-align:right;">2.65 N/kg</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">R</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:77%;background:#ff6363;height:6px;"></div></div>
+          <span style="font-size:9px;color:#ff6363;width:36px;text-align:right;">2.04 N/kg</span>
+        </div>
+      </div>
+
+      <!-- Mean Force -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;font-weight:500;">Mean Force</span><span style="font-size:10px;color:var(--muted);">L 13.69 kg &nbsp;|&nbsp; R 10.00 kg</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">L</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:100%;background:#61C599;height:6px;"></div></div>
+          <span style="font-size:9px;color:var(--muted);width:36px;text-align:right;">13.69 kg</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">R</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:73%;background:#ff6363;height:6px;"></div></div>
+          <span style="font-size:9px;color:#ff6363;width:36px;text-align:right;">10.00 kg</span>
+        </div>
+      </div>
+
+      <!-- Impulse -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;font-weight:500;">Impulse</span><span style="font-size:10px;color:var(--muted);">L 8.06 &nbsp;|&nbsp; R 9.49</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">L</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:85%;background:#61C599;height:6px;"></div></div>
+          <span style="font-size:9px;color:var(--muted);width:28px;text-align:right;">8.06</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">R</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:100%;background:#FFC11E;height:6px;"></div></div>
+          <span style="font-size:9px;color:#FFC11E;width:28px;text-align:right;">9.49</span>
+        </div>
+      </div>
+      <div style="font-size:9px;color:rgba(255,255,255,.2);font-style:italic;margin-top:4px;">Impulse is higher on the right: right leg held the contraction longer to compensate for lower peak force, producing a similar total force-time area.</div>
+    </div>
+    <div class="sc-footer-bar"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;&middot;&nbsp; gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══ SIDE-BY-SIDE BARS: RFD + Timing ══ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Left vs Right — Explosive &amp; Fatigue</span></div>
+      <div class="sc-name">Rate of Force Dev. &amp; Decay</div>
+      <div class="sc-meta">Explosive capacity and endurance profile per limb</div>
+    </div>
+    <div class="sc-body">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:12px;">Green = left (unaffected). Red = right (affected). Bars normalised to dominant (left) limb = 100%.</div>
+
+      <!-- RFD -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;font-weight:500;">Rate of Force Development</span><span style="font-size:10px;color:var(--muted);">L 130 N/s &nbsp;|&nbsp; R 63 N/s</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">L</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:100%;background:#61C599;height:6px;"></div></div>
+          <span style="font-size:9px;color:var(--muted);width:44px;text-align:right;">130 N/s</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">R</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:49%;background:#ff6363;height:6px;"></div></div>
+          <span style="font-size:9px;color:#ff6363;width:44px;text-align:right;">63 N/s</span>
+        </div>
+      </div>
+
+      <!-- Time to Peak Force -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;font-weight:500;">Time to Peak Force</span><span style="font-size:10px;color:var(--muted);">L 0.68 s &nbsp;|&nbsp; R 0.89 s</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">L</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:76%;background:#61C599;height:6px;"></div></div>
+          <span style="font-size:9px;color:var(--muted);width:32px;text-align:right;">0.68 s</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">R</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:100%;background:#ff6363;height:6px;"></div></div>
+          <span style="font-size:9px;color:#ff6363;width:32px;text-align:right;">0.89 s</span>
+        </div>
+      </div>
+      <div style="font-size:9px;color:rgba(255,255,255,.2);font-style:italic;margin-bottom:12px;">Right takes 210ms longer to reach peak force: a direct sign of reduced neuromuscular drive to the affected limb.</div>
+
+      <!-- Force Decay Rate -->
+      <div style="margin-bottom:6px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;font-weight:500;">Force Decay Rate</span><span style="font-size:10px;color:var(--muted);">L 0.62 kg/s &nbsp;|&nbsp; R 1.64 kg/s</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">L</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:38%;background:#61C599;height:6px;"></div></div>
+          <span style="font-size:9px;color:var(--muted);width:56px;text-align:right;">0.62 kg/s</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:9px;color:var(--muted);width:8px;">R</span>
+          <div class="bar-track" style="flex:1;height:6px;"><div class="bar-fill" style="width:100%;background:#ff6363;height:6px;"></div></div>
+          <span style="font-size:9px;color:#ff6363;width:56px;text-align:right;">1.64 kg/s</span>
+        </div>
+      </div>
+      <div style="font-size:9px;color:rgba(255,255,255,.2);font-style:italic;margin-top:4px;">Right force drops off 2.6x faster than left. Higher decay = lower endurance and sustain capacity in the affected hamstring.</div>
+    </div>
+    <div class="sc-footer-bar"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;&middot;&nbsp; gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══ CONTEXT / NORMS NOTE ══ -->
+  <div class="section-label">Contextual Benchmarking</div>
+
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Population Context</span></div>
+      <div class="sc-name">Peak Force in Context</div>
+      <div class="sc-meta">Normalised peak force (N/kg) vs published reference data</div>
+    </div>
+    <div class="sc-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Normalised Peak Force (N/kg)</div>
+
+          <!-- Left limb -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-size:11px;font-weight:500;color:#61C599;">Left (unaffected)</span>
+              <span style="font-size:12px;font-family:'DM Mono',monospace;color:#61C599;">2.65 N/kg</span>
+            </div>
+            <div class="bar-track" style="height:6px;"><div class="bar-fill" style="width:100%;background:#61C599;height:6px;"></div></div>
+            <div style="font-size:9px;color:var(--muted);margin-top:3px;">101% of female active population mean</div>
+          </div>
+
+          <!-- Right limb -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-size:11px;font-weight:500;color:#ff6363;">Right (affected)</span>
+              <span style="font-size:12px;font-family:'DM Mono',monospace;color:#ff6363;">2.04 N/kg</span>
+            </div>
+            <div class="bar-track" style="height:6px;"><div class="bar-fill" style="width:77%;background:#ff6363;height:6px;"></div></div>
+            <div style="font-size:9px;color:var(--muted);margin-top:3px;">78% of female active population mean</div>
+          </div>
+
+          <!-- Reference -->
+          <div style="margin-bottom:8px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-size:11px;font-weight:500;color:rgba(255,255,255,.35);">Female active (mean)</span>
+              <span style="font-size:12px;font-family:'DM Mono',monospace;color:rgba(255,255,255,.35);">2.62 N/kg</span>
+            </div>
+            <div class="bar-track" style="height:6px;"><div class="bar-fill" style="width:99%;background:rgba(255,255,255,.2);height:6px;"></div></div>
+            <div style="font-size:9px;color:rgba(255,255,255,.2);margin-top:3px;">Reference: Rouissi et al. 2024 (female soccer, n=47)</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">What the literature tells us</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+            <p style="margin-bottom:8px;"><span style="color:#fff;font-weight:500;">No tendinopathy-specific norms exist</span> for this test configuration. There is currently no published normative dataset for hamstring isometric force in people with proximal or distal hamstring tendinopathy. The 10% asymmetry threshold used here comes from return-to-sport and loading-progression criteria in hamstring strain injury rehabilitation (Taberner &amp; Cohen 2020), which is the closest available clinical benchmark.</p>
+            <p style="margin-bottom:8px;"><span style="color:#fff;font-weight:500;">The left limb looks healthy.</span> At 2.65 N/kg, the unaffected leg matches a typical active female population. This is a useful internal reference point.</p>
+            <p><span style="color:#fff;font-weight:500;">The right limb has a clear deficit.</span> At 2.04 N/kg it sits 23% below the left and roughly 22% below the active population mean. The RFD and force decay data suggest the deficit is not just in how much force the right hamstring can produce, but in how quickly it ramps up and how long it can sustain it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-footer-bar"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;&middot;&nbsp; gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</span></div>
+  </div>
+
+  <!-- ══ SUMMARY ══ -->
+  <div class="section-label">Clinical Summary</div>
+
+  <div class="sc card-wide">
+    <div class="sc-head">
+      <div class="sc-brand-row"><span class="sc-brand">GYMGEEK<span class="analyse-wordmark" style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:8px;letter-spacing:.38em;margin-left:4px;text-transform:uppercase;">Analyse</span></span><span class="sc-type">Supplement Summary</span></div>
+      <div class="sc-name">Nat Clark</div>
+      <div class="sc-meta">Hamstring Isometric Supplement &middot; 31 Mar 2026</div>
+    </div>
+    <div style="padding:20px 20px 4px;">
+      <div class="summary-label">Nat, here is what the hamstring test shows</div>
+      <div class="summary-text">
+
+        <span class="summary-highlight">What's clear from this test.</span> The right hamstring is carrying a meaningful deficit compared to the left. Peak force on the right is 11.91 kg versus 15.46 kg on the left: a 23% difference that is more than double the 10% threshold used clinically to determine when it is safe to progress hamstring loading in rehabilitation. Mean force and impulse tell the same story; the right hamstring produces and sustains less force across the entire contraction. Contraction duration is the one metric within the 10% threshold, at 7.7%, which suggests the right leg is trying to compensate by holding on longer, even though it is producing less force. That pattern is typical in a tendinopathic limb.
+
+        <div class="summary-divider"></div>
+
+        <span class="summary-highlight-y">The explosive side is where the gap is largest.</span> Rate of force development shows a 51% asymmetry: the right hamstring produces force at roughly half the speed of the left. This matters particularly for a runner, where fast hamstring activation in the late swing phase is a central demand of the gait cycle. The right also takes 210 milliseconds longer to reach peak force than the left. Alongside this, the force decay rate on the right is 2.6 times faster than the left: once the right hamstring peaks, it drops off quickly, suggesting the muscle-tendon unit fatigues or inhibits more rapidly on the affected side. These are not just strength deficits: they reflect altered neuromuscular drive to the tendinopathic limb, which is a well-documented response in tendinopathy even when the athlete feels broadly functional.
+
+        <div class="summary-divider"></div>
+
+        <span class="summary-highlight">The left limb provides a good internal target.</span> At 2.65 N/kg normalised peak force, the unaffected left hamstring sits right at the active female population mean, which means it is a credible and achievable rehab target for the right. Getting the right limb's peak force, RFD, and force decay back to within 10% of the left is the most specific and meaningful benchmark to track through rehabilitation. This test provides a clean baseline to retest against in 6 to 12 weeks as loading progresses.
+
+        <div class="summary-divider"></div>
+
+        <span style="font-size:11px;color:var(--muted);line-height:1.7;"><strong style="color:rgba(255,255,255,.5);">A note on this test.</strong> No published normative data exists for hamstring isometric force in people with hamstring tendinopathy using this protocol configuration. The 10% asymmetry threshold cited here is drawn from hamstring strain injury rehabilitation literature (Taberner &amp; Cohen 2020; Ripley et al. 2022) and is the closest available clinical reference point. These results are intended to support clinical decision-making alongside symptom response, clinical examination, and loading tolerance: not as a standalone return-to-sport criterion. Please share with the treating physiotherapist.</span>
+
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-note">Supplement to main GymGeek Analyse report &mdash; 31 Mar 2026. Retest recommended in 6&ndash;12 weeks as rehabilitation progresses.</div>
+    </div>
+    <div class="sc-footer-bar"><span style="font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.15);">POWERED BY <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;letter-spacing:.04em;">ATHLEEK</span> &nbsp;&middot;&nbsp; gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</span></div>
+  </div>
+
+</div><!-- end cards-grid -->
+
+<footer style="max-width:960px;margin:36px auto 0;padding:14px 20px;background:#17191b;border-top:1px solid rgba(255,255,255,0.05);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;box-sizing:border-box;">
+  <span style="font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:11px;letter-spacing:.04em;color:rgba(255,255,255,.18);">ATHLEEK</span>
+  <span style="color:rgba(255,255,255,.08);font-size:9px;">·</span>
+  <p style="font-size:9px;color:rgba(122,139,168,0.35);line-height:1.6;margin:0;text-align:center;">
+    &#9888; This is beta software. Supplement report only: not medical advice. No normative database exists for hamstring isometric testing in tendinopathy populations; the 10% asymmetry threshold is derived from hamstring strain injury rehabilitation criteria (Taberner &amp; Cohen 2020; Ripley et al. 2022) and should not be used as a standalone clinical criterion. Normalised peak force comparison uses collegiate female soccer data (Rouissi et al. 2024) as a proxy active population. Source data: Meloq System hamstring isometric assessment. &copy; 2026 GymGeek Dorset.
+  </p>
+  <span style="color:rgba(255,255,255,.08);font-size:9px;">·</span>
+  <span style="font-size:9px;color:rgba(255,255,255,.1);">gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</span>
+</footer>
+
+<script>
+function toggleLight() {
+  document.body.classList.toggle('light-mode');
+  document.getElementById('light-label').textContent = document.body.classList.contains('light-mode') ? 'Dark mode' : 'Light mode';
+}
+
+function exportPDF() {
+  var btn=document.getElementById('pdf-btn'), label=document.getElementById('pdf-label'), icon=document.getElementById('pdf-icon');
+  btn.disabled=true; label.textContent='Generating…'; icon.style.opacity='0.5';
+  document.body.classList.add('pdf-export');
+  var uiEls=document.querySelectorAll('.pdf-btn');
+  uiEls.forEach(function(el){el.style.visibility='hidden';});
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    var {jsPDF}=window.jspdf;
+    var pageW=595.28,pageH=841.89,margin=20,gap=12;
+    var usableW=pageW-margin*2;
+    var pageRgb=[244,246,248];
+    var pdf=new jsPDF({unit:'pt',format:'a4',orientation:'portrait'});
+    var yPos=margin;
+    function fillBg(){pdf.setFillColor(pageRgb[0],pageRgb[1],pageRgb[2]);pdf.rect(0,0,pageW,pageH,'F');}
+    fillBg();
+    function capture(el,cb){
+      html2canvas(el,{scale:3,useCORS:true,allowTaint:true,backgroundColor:'#ffffff',logging:false,imageTimeout:0,removeContainer:true}).then(function(canvas){
+        var r=16*3,w=canvas.width,h=canvas.height;
+        var out=document.createElement('canvas'); out.width=w+12; out.height=h+12;
+        var ctx=out.getContext('2d');
+        ctx.fillStyle='rgb('+pageRgb.join(',')+')'; ctx.fillRect(0,0,out.width,out.height);
+        ctx.shadowColor='rgba(0,0,0,0.10)'; ctx.shadowBlur=10; ctx.shadowOffsetY=2;
+        var ox=6,oy=6;
+        ctx.beginPath(); ctx.moveTo(ox+r,oy); ctx.lineTo(ox+w-r,oy); ctx.quadraticCurveTo(ox+w,oy,ox+w,oy+r);
+        ctx.lineTo(ox+w,oy+h-r); ctx.quadraticCurveTo(ox+w,oy+h,ox+w-r,oy+h);
+        ctx.lineTo(ox+r,oy+h); ctx.quadraticCurveTo(ox,oy+h,ox,oy+h-r);
+        ctx.lineTo(ox,oy+r); ctx.quadraticCurveTo(ox,oy,ox+r,oy); ctx.closePath(); ctx.clip();
+        ctx.shadowColor='transparent'; ctx.drawImage(canvas,ox,oy);
+        cb(out.toDataURL('image/png'),out.width,out.height);
+      });
+    }
+    var cards=Array.from(document.querySelectorAll('.sc'));
+    function processCard(i){
+      if(i>=cards.length){
+        document.body.classList.remove('pdf-export');
+        uiEls.forEach(function(el){el.style.visibility='';});
+        btn.disabled=false; label.textContent='Download PDF'; icon.style.opacity='1';
+        pdf.save('NatClark-Hamstring-Supplement-31Mar26.pdf'); return;
+      }
+      capture(cards[i],function(imgData,cw,ch){
+        var imgH=(ch/cw)*usableW;
+        if(i>0&&yPos+imgH>pageH-margin){pdf.addPage();fillBg();yPos=margin;}
+        pdf.addImage(imgData,'PNG',margin-6,yPos-6,usableW+12,imgH);
+        yPos+=imgH+gap; processCard(i+1);
+      });
+    }
+    processCard(0);
+  }); });
+}
+</script>
+</body>
+</html>
