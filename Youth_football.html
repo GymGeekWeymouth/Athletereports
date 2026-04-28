@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATHLEEK · Youth S&C for 11-16yr Olds</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  :root {
+    --green: #61C599;
+    --green-dark: #1a9e6a;
+    --amber: #FFC11E;
+    --ink: #1a1c1e;
+    --muted: #888;
+    --light: #f8fafb;
+    --border: #e8eaec;
+  }
+
+  body {
+    background: #f4f5f7;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 32px 28px 40px;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .brand-name {
+    font-family: 'Raleway', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 36px;
+    color: var(--ink);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .brand-tag {
+    display: inline-block;
+    background: var(--green-dark);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+  .doc-title-block { text-align: right; }
+  .doc-title { font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .doc-subtitle { font-size: 11px; color: var(--muted); margin-top: 4px; letter-spacing: .06em; text-transform: uppercase; }
+
+  /* ── HERO ── */
+  .hero-band {
+    background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 20px 24px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .hero-stat-block {
+    flex-shrink: 0; text-align: center;
+    border-right: 1px solid rgba(255,255,255,.15);
+    padding-right: 24px;
+  }
+  .hero-stat { font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 500; color: var(--green); line-height: 1; }
+  .hero-stat-label { font-size: 9px; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
+  .hero-text { font-size: 14px; color: rgba(255,255,255,.8); line-height: 1.65; flex: 1; }
+  .hero-text strong { color: #fff; font-weight: 600; }
+
+  /* ── BODY GRID ── */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* ── CARDS ── */
+  .section-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .section-card.full-width { grid-column: 1 / -1; }
+
+  .card-header {
+    background: var(--light); padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-header.dark { background: var(--ink); border-bottom-color: #333; }
+  .card-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-dark); flex-shrink: 0; }
+  .card-dot.amber { background: var(--amber); }
+  .card-dot.white { background: #fff; }
+  .card-header-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .card-header.dark .card-header-label { color: rgba(255,255,255,.6); }
+  .card-body { padding: 16px; }
+
+  /* ── REASON ITEMS ── */
+  .reason-list { display: flex; flex-direction: column; gap: 14px; }
+  .reason-item { display: flex; gap: 12px; align-items: flex-start; }
+  .reason-icon { font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+  .reason-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .reason-text { font-size: 12px; color: #555; line-height: 1.6; }
+
+  /* ── MYTH ── */
+  .myth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .myth-item { background: #fff5f5; border: 1px solid #ffe0e0; border-radius: 7px; padding: 10px 12px; }
+  .myth-item.fact { background: #f0faf6; border-color: #c3e8d8; }
+  .myth-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #ff6363; margin-bottom: 4px; }
+  .myth-item.fact .myth-label { color: var(--green-dark); }
+  .myth-text { font-size: 12px; color: #444; line-height: 1.5; }
+
+  /* ── RESEARCH ── */
+  .research-box { background: var(--light); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .research-quote { font-size: 13px; color: #333; font-style: italic; line-height: 1.65; margin-bottom: 10px; }
+  .research-attr { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .research-attr strong { color: var(--green-dark); font-style: normal; }
+
+  /* ── STAFF ── */
+  .staff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .staff-card {
+    background: var(--light); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    border-top: 3px solid var(--green-dark);
+  }
+  .staff-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+  .staff-cred {
+    display: inline-block;
+    background: rgba(26,158,106,.1); border: 1px solid rgba(26,158,106,.2);
+    color: var(--green-dark); font-size: 10px; font-weight: 700;
+    letter-spacing: .06em; border-radius: 4px; padding: 2px 8px; margin-bottom: 10px;
+  }
+  .staff-bio { font-size: 12px; color: #555; line-height: 1.65; }
+
+  .clients-bar {
+    background: var(--ink); border-radius: 8px;
+    padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .clients-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--green);
+    white-space: nowrap; padding-top: 3px; flex-shrink: 0;
+  }
+  .clients-names { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.65; }
+  .clients-names strong { color: #fff; font-weight: 600; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    margin-top: 24px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer-left { display: flex; align-items: center; gap: 7px; }
+  .footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-dark); flex-shrink: 0; }
+  .footer-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; color: #bbb; text-transform: uppercase; }
+  .footer-detail { font-size: 11px; color: #bbb; }
+  .footer-note { font-size: 11px; color: #bbb; font-style: italic; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    body { background: #fff; }
+    .page { padding: 20px 16px 32px; }
+
+    .doc-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .doc-title-block { text-align: left; }
+    .doc-title { font-size: 18px; }
+    .brand-name { font-size: 32px; }
+
+    .hero-band { flex-direction: column; gap: 12px; padding: 16px; }
+    .hero-stat-block {
+      border-right: none;
+      border-bottom: 1px solid rgba(255,255,255,.15);
+      padding-right: 0; padding-bottom: 12px;
+      width: 100%; display: flex;
+      align-items: center; gap: 12px; justify-content: center;
+    }
+    .hero-stat { font-size: 28px; }
+    .hero-text { font-size: 13px; }
+
+    .body-grid { grid-template-columns: 1fr; gap: 12px; }
+    .myth-grid { grid-template-columns: 1fr; gap: 8px; }
+    .staff-grid { grid-template-columns: 1fr; gap: 12px; }
+
+    .clients-bar { flex-direction: column; gap: 8px; }
+    .clients-label { white-space: normal; }
+
+    .doc-footer { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .footer-detail { display: none; }
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: #fff; font-size: 9pt; }
+    .page { max-width: 100%; padding: 14mm 16mm 10mm; }
+    .reason-title { font-size: 8.5pt; }
+    .reason-text, .myth-text, .staff-bio, .clients-names { font-size: 8pt; }
+    .hero-text { font-size: 9pt; }
+    .doc-title { font-size: 13pt; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="brand-block">
+      <div class="brand-name">ATHLEEK</div>
+      <div><span class="brand-tag">Youth S&amp;C</span></div>
+    </div>
+    <div class="doc-title-block">
+      <div class="doc-title">Why Strength &amp; Conditioning<br>Matters for 11-16yr Olds</div>
+      <div class="doc-subtitle">And what our sessions look like</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-band">
+    <div class="hero-stat-block">
+      <div class="hero-stat">11-16yr</div>
+      <div class="hero-stat-label">Critical years</div>
+    </div>
+    <div class="hero-text">
+      The teenage years are not just about growing taller   they are one of the most important periods for building the physical foundations a young person will rely on for the rest of their sporting life. <strong>Get it right now, and the benefits last a lifetime. Leave it too late, and some of those opportunities simply pass.</strong>
+    </div>
+  </div>
+
+  <!-- BODY GRID -->
+  <div class="body-grid">
+
+    <!-- LEFT -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <div class="section-card">
+        <div class="card-header">
+          <div class="card-dot"></div>
+          <span class="card-header-label">Why it matters   simply explained</span>
+        </div>
+        <div class="card-body">
+          <div class="reason-list">
+            <div class="reason-item">
+              <div class="reason-icon">🦴</div>
+              <div>
+                <div class="reason-title">Bodies are changing fast</div>
+                <div class="reason-text">During the teenage growth spurt, bones grow quickly   but muscles, tendons and coordination take time to catch up. Research from Professors Lloyd &amp; Oliver at Cardiff Metropolitan University shows that well-designed S&amp;C programs help young athletes manage these changes safely, reducing the risk of strains and overuse injuries.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">⚡</div>
+              <div>
+                <div class="reason-title">Strength is trainable at any age</div>
+                <div class="reason-text">Lloyd &amp; Oliver's internationally recognised Youth Physical Development model shows that strength, speed and power can all be developed safely throughout adolescence   provided training is age-appropriate and well supervised.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">🏃</div>
+              <div>
+                <div class="reason-title">Movement skills that last a lifetime</div>
+                <div class="reason-text">Young people who learn to move well carry those skills into adulthood. The 11-16 age range is a key window to build a solid movement foundation   one that makes them better athletes and reduces injury risk for years to come.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">🛡️</div>
+              <div>
+                <div class="reason-title">Fewer injuries on the pitch</div>
+                <div class="reason-text">Evidence consistently shows that young athletes who follow structured S&amp;C programs are significantly less likely to get injured. For a footballer, this means more time playing, less time on the sideline.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-header">
+          <div class="card-dot amber"></div>
+          <span class="card-header-label">Common myths   and the truth</span>
+        </div>
+        <div class="card-body">
+          <div class="myth-grid">
+            <div class="myth-item">
+              <div class="myth-label">✗ Myth</div>
+              <div class="myth-text">"Weights will stunt my child's growth"</div>
+            </div>
+            <div class="myth-item fact">
+              <div class="myth-label">✓ Fact</div>
+              <div class="myth-text">No evidence supports this. Supervised resistance training is safe and beneficial for young athletes.</div>
+            </div>
+            <div class="myth-item">
+              <div class="myth-label">✗ Myth</div>
+              <div class="myth-text">"Sport practice is enough"</div>
+            </div>
+            <div class="myth-item fact">
+              <div class="myth-label">✓ Fact</div>
+              <div class="myth-text">Sport develops skill. S&amp;C builds the physical platform that makes those skills possible   and sustainable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <div class="section-card">
+        <div class="card-header dark">
+          <div class="card-dot white"></div>
+          <span class="card-header-label">Grounded in leading research</span>
+        </div>
+        <div class="card-body">
+          <div class="research-box">
+            <div class="research-quote">"Most, if not all, components of fitness are trainable throughout childhood and adolescence   the key is age-appropriate, well-structured training that respects individual differences in growth and maturation."</div>
+            <div class="research-attr"><strong>Lloyd &amp; Oliver</strong> · Youth Physical Development Model, 2012 &amp; Strength and Conditioning for Young Athletes, 3rd Ed.</div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#666;line-height:1.6">
+            Our programs are built on this body of work. We treat each young person as an individual   not just their age   and design training that meets them where they are physically.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-header dark">
+          <div class="card-dot white"></div>
+          <span class="card-header-label">What a session looks like</span>
+        </div>
+        <div class="card-body">
+          <div class="reason-list">
+            <div class="reason-item">
+              <div class="reason-icon">⚡</div>
+              <div>
+                <div class="reason-title">Plyometric warm-up</div>
+                <div class="reason-text">A dynamic, jump and bound-based warm-up that gets the nervous system firing and teaches the body to produce and absorb force.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">🏃</div>
+              <div>
+                <div class="reason-title">Sprint mechanics   in and outdoors</div>
+                <div class="reason-text">Posture, arm drive, stride mechanics and acceleration work that translates directly onto the pitch.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">🎯</div>
+              <div>
+                <div class="reason-title">Movement pattern work</div>
+                <div class="reason-text">How to squat safely, hinge properly, land without jarring joints, and change direction under control   the foundations everything else is built on.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">🏋️</div>
+              <div>
+                <div class="reason-title">Learning to lift   safely and properly</div>
+                <div class="reason-text">Weights introduced progressively with full coaching support. Lifting is a skill   done right, it's one of the best investments a young athlete can make.</div>
+              </div>
+            </div>
+            <div class="reason-item">
+              <div class="reason-icon">🏆</div>
+              <div>
+                <div class="reason-title">Game to finish</div>
+                <div class="reason-text">A competitive, game-based activity that brings everything together   fun, fast-paced, and directly connected to their sport.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- STAFF SECTION -->
+  <div class="section-card full-width" style="margin-bottom:16px">
+    <div class="card-header">
+      <div class="card-dot"></div>
+      <span class="card-header-label">Who you'll be working with</span>
+    </div>
+    <div class="card-body">
+      <div class="staff-grid">
+        <div class="staff-card">
+          <div class="staff-name">Joe Otton</div>
+          <div><span class="staff-cred">BSc Strength &amp; Conditioning · 15 Years Experience</span></div>
+          <div class="staff-bio">Joe has spent 15 years working with footballers across every level of the game, as well as international athletes across a number of sports. With a degree in Strength &amp; Conditioning, he combines academic knowledge with real-world experience to help young athletes build the physical foundations they need to thrive, safely and effectively.</div>
+        </div>
+        <div class="staff-card">
+          <div class="staff-name">Lloyd Beals</div>
+          <div><span class="staff-cred">BSc Sports Therapy · 12 Years Experience</span></div>
+          <div class="staff-bio">Lloyd has worked at Bristol Rovers, Yeovil FC and Weymouth FC, bringing professional club experience to every session. With over 12 years across sports therapy, Lloyd understands exactly what young players need to stay fit, develop and progress through the game.</div>
+        </div>
+      </div>
+      <div class="clients-bar">
+        <div class="clients-label">Who we work with</div>
+        <div class="clients-names">We currently work with many of the best young footballers in the local area, including <strong>Tom Bearwish, Matty Burrows, Harry Hutchinson, Josh Williams</strong> and <strong>Calvin Brooks</strong>, amongst many more. We also have established relationships with <strong>Milton Abbey School</strong> and <strong>Budmouth Academy</strong>, supporting their student athletes as part of our wider commitment to youth development in the region.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="footer-left">
+      <div class="footer-dot"></div>
+      <span class="footer-brand">ATHLEEK</span>
+      <span class="footer-detail">&nbsp;·&nbsp;<a href="https://www.athleek.co.uk" target="_blank" style="color:#bbb;text-decoration:underline;">athleek.co.uk</a> · Unit 2, 15 Cambridge Road, Weymouth, DT4 9TJ</span>
+    </div>
+    <div class="footer-note">ATHLEEK is part of the GymGeek group · <a href="https://www.gymgeekonline.co.uk" target="_blank" style="color:#bbb;text-decoration:underline;">gymgeekonline.co.uk</a></div>
+  </div>
+
+</div>
+</body>
+</html>
