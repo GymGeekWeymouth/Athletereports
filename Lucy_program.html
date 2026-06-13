@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GYMGEEK · Lucy's Program · Glute Hypertrophy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Raleway:ital,wght@1,900&amp;family=DM+Sans:wght@300;400;500;600&amp;family=DM+Mono:wght@400;500&amp;family=Jost:wght@200;300&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #61C599; --yellow: #FFC11E; --blue: #778FDD; --red: #ff6363;
+    --rose: #E87FA0; --rose-soft: rgba(232,127,160,.15); --rose-border: rgba(232,127,160,.35);
+    --card-bg: #27292B; --card-inner: #2f3235; --border: #3a3d40;
+    --border-soft: rgba(255,255,255,0.06); --text: #f0f4ff; --muted: #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #2A2D30; font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; padding: 28px 20px 80px; overflow-x: hidden; }
+
+  /* TOOLBAR */
+  .toolbar { max-width: 1200px; margin: 0 auto 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .club-wordmark { color: rgba(255,255,255,.45); font-family: 'Jost', sans-serif; font-style: normal; font-weight: 200; font-size: 16px; letter-spacing: .45em; margin-left: 8px; text-transform: uppercase; }
+  .toolbar-sub { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+  .light-toggle { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: rgba(255,255,255,.5); font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; transition: all .2s; }
+  .light-toggle:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+
+  /* HERO BANNER */
+  .hero { max-width: 1200px; margin: 0 auto 40px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 36px 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(232,127,160,.12) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -40px; left: 20%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(97,197,153,.07) 0%, transparent 70%); pointer-events: none; }
+  .hero-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--rose); margin-bottom: 10px; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 6vw, 72px); letter-spacing: .04em; line-height: .95; color: #fff; margin-bottom: 16px; }
+  .hero-title span { color: var(--rose); }
+  .hero-desc { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 560px; margin-bottom: 24px; }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-pill { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: var(--muted); }
+  .hero-pill.accent { background: var(--rose-soft); border-color: var(--rose-border); color: var(--rose); }
+
+  /* SCIENCE BANNER */
+  .science-bar { max-width: 1200px; margin: 0 auto 40px; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px 24px; display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+  .science-item { flex: 1; min-width: 180px; }
+  .science-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--rose); margin-bottom: 4px; }
+  .science-text { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* WEEK SECTION */
+  .week-section { max-width: 1200px; margin: 0 auto 48px; }
+  .week-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .week-number { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: .04em; color: #fff; line-height: 1; flex-shrink: 0; }
+  .week-meta { }
+  .week-title { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--rose); margin-bottom: 2px; }
+  .week-note { font-size: 10px; color: var(--muted); }
+  .week-divider { flex: 1; height: 1px; background: linear-gradient(to right, #3a3d40, transparent); }
+
+  /* SESSION GRID */
+  .session-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  /* SESSION CARD */
+  .sc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .sc-head { padding: 14px 18px 10px; border-bottom: 1px solid var(--border-soft); }
+  .sc-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .sc-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .sc-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--rose); }
+  .sc-session-label { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .06em; color: #fff; line-height: 1; }
+  .sc-session-sub { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+
+  /* SUPERSET */
+  .superset-block { margin: 12px 16px; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; overflow: hidden; }
+  .superset-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 8px 14px 6px; border-bottom: 1px solid var(--border-soft); background: rgba(255,255,255,.02); }
+  .superset-label.rose { color: var(--rose); }
+
+  /* STANDALONE */
+  .standalone-block { margin: 12px 16px; }
+
+  /* EXERCISE ROW */
+  .ex-row { display: flex; align-items: flex-start; padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,.04); gap: 10px; }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-code { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; color: var(--muted); flex-shrink: 0; width: 22px; padding-top: 1px; }
+  .ex-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.3; }
+  .ex-stats { display: flex; gap: 5px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; }
+  .ex-chip { font-size: 9px; padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,.06); color: var(--muted); white-space: nowrap; border: 1px solid var(--border-soft); }
+  .ex-chip-val { color: var(--text); font-weight: 500; }
+  .ex-chip.rose { background: var(--rose-soft); border-color: var(--rose-border); color: var(--rose); }
+  .ex-chip.rose .ex-chip-val { color: var(--rose); }
+  .ex-note { font-size: 9px; color: var(--muted); margin-top: 3px; line-height: 1.4; font-style: italic; }
+  .sc-footer { padding: 8px 16px 10px; font-size: 9px; color: rgba(255,255,255,.2); letter-spacing: .06em; text-transform: uppercase; border-top: 1px solid var(--border-soft); }
+
+  /* LIVE CLOCK */
+  .live-clock { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: rgba(255,255,255,.7); letter-spacing: .04em; display: flex; align-items: center; gap: 2px; }
+  .live-clock .clock-seconds { font-size: 12px; color: rgba(255,255,255,.35); align-self: flex-end; margin-bottom: 1px; }
+
+  /* PROGRESSION TABLE */
+  .prog-table { max-width: 1200px; margin: 0 auto 48px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .prog-table-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--border-soft); }
+  .prog-table-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .05em; color: #fff; }
+  .prog-table-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .prog-rows { padding: 8px 0; }
+  .prog-row { display: grid; grid-template-columns: 80px 1fr 1fr 1fr 1fr; gap: 8px; padding: 10px 20px; border-bottom: 1px solid rgba(255,255,255,.04); align-items: center; }
+  .prog-row:last-child { border-bottom: none; }
+  .prog-row.header { padding: 6px 20px 8px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .prog-row.header span { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .prog-week-label { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--rose); }
+  .prog-cell { font-size: 11px; color: var(--muted); }
+  .prog-cell strong { color: var(--text); font-weight: 600; }
+
+  /* LIGHT MODE */
+  body.light-mode { background: #f0f2f4; color: #1a1c1e; }
+  body.light-mode { --rose: #c0456e; --rose-soft: rgba(192,69,110,.1); --rose-border: rgba(192,69,110,.25); --green: #1a9e6a; --yellow: #c8900a; --blue: #4a62b8; --card-bg: #ffffff; --card-inner: #f5f7f9; --border: #d8dde3; --border-soft: rgba(0,0,0,0.07); --text: #1a1c1e; --muted: #5a6a7a; }
+  body.light-mode .sc { box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+  body.light-mode .sc-brand { color: #1a1c1e; }
+  body.light-mode .toolbar-brand { color: #1a1c1e; }
+  body.light-mode .club-wordmark { color: #555; }
+  body.light-mode .toolbar-sub { color: #5a6a7a; }
+  body.light-mode .week-number { color: #1a1c1e; }
+  body.light-mode .week-divider { background: linear-gradient(to right, #d0d5db, transparent); }
+  body.light-mode .light-toggle { border-color: rgba(0,0,0,.15); color: rgba(0,0,0,.45); background: rgba(0,0,0,.04); }
+  body.light-mode .light-toggle:hover { border-color: rgba(0,0,0,.3); color: rgba(0,0,0,.7); }
+  body.light-mode .superset-label { background: rgba(0,0,0,.02); }
+  body.light-mode .ex-chip { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.08); }
+  body.light-mode .hero { background: #fff; }
+  body.light-mode .hero-title { color: #1a1c1e; }
+  body.light-mode .sc-session-label { color: #1a1c1e; }
+  body.light-mode .live-clock { color: rgba(0,0,0,.55); }
+  body.light-mode .live-clock .clock-seconds { color: rgba(0,0,0,.3); }
+  body.light-mode .prog-table { background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+  body.light-mode .prog-row { border-bottom-color: rgba(0,0,0,.06); }
+  body.light-mode .science-bar { background: #fff; border-color: rgba(0,0,0,.08); }
+
+  /* FAB GROUP */
+  .fab-group { position: fixed; bottom: 28px; right: 24px; z-index: 800; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .timer-fab { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 50px; background: #FFC11E; color: #1a1c1e; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(255,193,30,.45); transition: transform .15s, box-shadow .15s, background .15s; }
+  .timer-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 26px rgba(255,193,30,.55); background: #ffd04f; }
+  .timer-fab:active { transform: translateY(0); box-shadow: 0 2px 12px rgba(255,193,30,.35); }
+  body.light-mode .timer-fab { box-shadow: 0 4px 20px rgba(200,144,10,.3); }
+
+
+  /* FINISHER MODAL */
+
+  @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @media (max-width: 860px) { .session-grid { grid-template-columns: 1fr; } .prog-row { grid-template-columns: 60px 1fr 1fr; } .prog-row .prog-cell:nth-child(4), .prog-row .prog-cell:nth-child(5), .prog-row.header span:nth-child(4), .prog-row.header span:nth-child(5) { display: none; } }
+  @media (max-width: 540px) { .hero { padding: 24px 20px; } }
+
+  /* TIMER */
+  .timer-backdrop { display: none; position: fixed; inset: 0; background: transparent; z-index: 900; pointer-events: none; }
+  .timer-backdrop.open { display: block; }
+  .timer-panel { pointer-events: all; background: #1e2022; border: 1px solid #3a3d40; border-radius: 16px; width: 380px; min-width: 280px; min-height: 260px; padding: 0 0 20px; box-shadow: 0 8px 40px rgba(0,0,0,.6); font-family: 'DM Sans', sans-serif; animation: popIn .2s ease; position: fixed; top: 80px; right: 28px; resize: both; overflow: auto; z-index: 901; }
+  .timer-drag-handle { width: 100%; padding: 10px 16px 8px; cursor: grab; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.06); user-select: none; background: rgba(255,255,255,.02); border-radius: 16px 16px 0 0; }
+  .timer-drag-handle:active { cursor: grabbing; }
+  .timer-drag-title { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.3); }
+  .timer-drag-bar { width: 32px; height: 3px; background: rgba(255,255,255,.15); border-radius: 2px; }
+  .timer-tabs { display: flex; margin: 12px 16px 0; gap: 5px; }
+  .timer-tab { flex: 1; padding: 6px 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: all .15s; }
+  .timer-tab.active { background: rgba(255,193,30,.12); border-color: rgba(255,193,30,.35); color: #FFC11E; }
+  .timer-face { text-align: center; padding: 18px 16px 0; }
+  .timer-display { font-family: 'DM Mono', monospace; font-size: 58px; font-weight: 500; letter-spacing: .04em; line-height: 1; color: #fff; transition: color .2s; }
+  .timer-display.running { color: #FFC11E; }
+  .timer-display.resting { color: #778FDD; }
+  .timer-display.finished { color: #FFC11E; }
+  .timer-sublabel { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; min-height: 14px; }
+  .interval-config { display: flex; gap: 7px; margin: 12px 16px 0; align-items: center; }
+  .cfg-group { flex: 1; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; padding: 7px 8px; }
+  .cfg-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .cfg-row { display: flex; align-items: center; gap: 4px; }
+  .cfg-btn { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .12s; line-height: 1; }
+  .cfg-btn:hover { background: rgba(255,255,255,.14); }
+  .cfg-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: #fff; flex: 1; text-align: center; }
+  .round-track { display: flex; justify-content: center; gap: 5px; margin: 10px 16px 0; flex-wrap: wrap; min-height: 12px; }
+  .round-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.12); transition: background .2s; }
+  .round-dot.done { background: #FFC11E; }
+  .round-dot.active { background: #61C599; }
+  .timer-controls { display: flex; gap: 8px; margin: 14px 16px 0; }
+  .ctrl-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; letter-spacing: .03em; }
+  .ctrl-play { background: #FFC11E; color: #1a1c1e; }
+  .ctrl-play:hover { background: #ffd04f; }
+  .ctrl-play:active { background: #e6ac00; }
+  .ctrl-reset { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); color: var(--muted); flex: 0 0 52px; font-size: 11px; }
+  .ctrl-reset:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .lap-list { margin: 10px 16px 0; max-height: 90px; overflow-y: auto; }
+  .lap-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 11px; color: var(--muted); }
+  .lap-row:last-child { border-bottom: none; }
+  .lap-row .lap-time { font-family: 'DM Mono', monospace; color: #fff; font-size: 11px; }
+  .timer-close { position: absolute; top: 9px; right: 12px; width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; z-index: 2; }
+  .timer-close:hover { background: rgba(255,255,255,.16); color: #fff; }
+  body.light-mode .timer-panel { background: #f0f2f4; border-color: #d8dde3; box-shadow: 0 8px 40px rgba(0,0,0,.18); }
+  body.light-mode .timer-drag-handle { background: rgba(0,0,0,.02); border-bottom-color: rgba(0,0,0,.07); }
+  body.light-mode .timer-drag-title { color: rgba(0,0,0,.3); }
+  body.light-mode .timer-drag-bar { background: rgba(0,0,0,.15); }
+  body.light-mode .timer-display { color: #1a1c1e; }
+  body.light-mode .timer-display.running { color: #c8900a; }
+  body.light-mode .timer-display.resting { color: #4a62b8; }
+  body.light-mode .cfg-group { background: #fff; border-color: rgba(0,0,0,.1); }
+  body.light-mode .cfg-val { color: #1a1c1e; }
+  body.light-mode .cfg-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: #1a1c1e; }
+  body.light-mode .ctrl-reset { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-close { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-tab { border-color: rgba(0,0,0,.12); color: #5a6a7a; }
+  body.light-mode .round-dot { background: rgba(0,0,0,.1); }
+  body.light-mode .lap-row { color: #5a6a7a; border-bottom-color: rgba(0,0,0,.07); }
+  body.light-mode .lap-row .lap-time { color: #1a1c1e; }
+
+  /* ── WEIGHT TRACKER ── */
+  .ex-stats { align-items: center; }
+  .wt-widget { display: flex; align-items: center; gap: 3px; margin-left: 4px; }
+  .wt-input { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; width: 52px; padding: 3px 5px; border-radius: 6px; border: 1px solid rgba(232,127,160,.4); background: rgba(232,127,160,.08); color: var(--rose); text-align: center; outline: none; transition: border-color .15s, background .15s; -moz-appearance: textfield; }
+  .wt-input::-webkit-outer-spin-button, .wt-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .wt-input:focus { border-color: var(--rose); background: rgba(232,127,160,.14); }
+  .wt-input.wt-loaded { border-color: rgba(97,197,153,.5); background: rgba(97,197,153,.08); color: var(--green); }
+  .wt-input.wt-saved { border-color: rgba(97,197,153,.7); background: rgba(97,197,153,.12); color: var(--green); }
+  .wt-btn { width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .1s; line-height: 1; padding: 0; }
+  .wt-btn:hover { background: rgba(255,255,255,.14); color: #fff; }
+  .wt-suggest { font-size: 9px; color: var(--rose); font-style: italic; white-space: nowrap; margin-left: 4px; opacity: .8; min-width: 0; }
+  body.light-mode .wt-input { border-color: rgba(192,69,110,.35); background: rgba(192,69,110,.06); color: var(--rose); }
+  body.light-mode .wt-input:focus { border-color: var(--rose); background: rgba(192,69,110,.1); }
+  body.light-mode .wt-input.wt-loaded { border-color: rgba(26,158,106,.5); background: rgba(26,158,106,.08); color: var(--green); }
+  body.light-mode .wt-input.wt-saved { border-color: rgba(26,158,106,.7); background: rgba(26,158,106,.1); color: var(--green); }
+  body.light-mode .wt-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: #5a6a7a; }
+  body.light-mode .wt-btn:hover { background: rgba(0,0,0,.12); color: #1a1c1e; }
+  /* Export button in toolbar */
+  .export-btn { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--rose-border); background: var(--rose-soft); color: var(--rose); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .export-btn:hover { background: rgba(232,127,160,.25); }
+  body.light-mode .export-btn { border-color: rgba(192,69,110,.3); background: rgba(192,69,110,.08); color: var(--rose); }
+</style>
+</head>
+<body class="light-mode">
+<!-- TOOLBAR -->
+<div class="toolbar">
+<div>
+<div class="toolbar-brand">GYMGEEK<span class="club-wordmark">Lucy's Program</span></div>
+<div class="toolbar-sub">Glute Hypertrophy · 4 Weeks</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;">
+<div class="live-clock">
+<span id="clockHM"></span><span class="clock-seconds" id="clockS"></span>
+</div>
+<button class="light-toggle" id="fsBtn" onclick="toggleFullscreen()">
+<svg fill="none" height="13" id="fsIcon" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="13"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" x2="14" y1="3" y2="10"></line><line x1="3" x2="10" y1="21" y2="14"></line></svg>
+<span id="fsLabel">Full screen</span>
+</button>
+<button class="light-toggle" onclick="toggleLight()">
+<svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line><line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line><line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line></svg>
+<span id="light-label">Dark mode</span>
+</button>
+<button class="export-btn" onclick="exportWeights()">
+<svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+Save / Export
+</button>
+</div>
+</div>
+<!-- ══ WEEK 1 ══ -->
+<div class="week-section">
+<div class="week-header">
+<div class="week-number">Week 1</div>
+<div class="week-meta">
+<div class="week-title">Acclimation</div>
+<div class="week-note">3 sets · 10–12 reps · 3 RIR · establish weights</div>
+</div>
+<div class="week-divider"></div>
+</div>
+<div class="session-grid">
+<!-- SESSION A -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session A</span>
+</div>
+<div class="sc-session-label">Hip Thrust Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="barbell_hip_thrust" data-ex-id="w1_s1_r0" data-ex-name="Barbell Hip Thrust" data-target-reps="11.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s1_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_r0',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_r0" min="0" oninput="wtSave('w1_s1_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s1_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="romanian_deadlift" data-ex-id="w1_s1_r1" data-ex-name="Romanian Deadlift" data-target-reps="11.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s1_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_r1',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_r1" min="0" oninput="wtSave('w1_s1_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s1_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_goblet_squat" data-ex-id="w1_s1_r2" data-ex-name="Dumbbell Goblet Squat" data-target-reps="11.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Goblet Squat</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s1_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_r2',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_r2" min="0" oninput="wtSave('w1_s1_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s1_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_kickback" data-ex-id="w1_s1_r3" data-ex-name="Cable Kickback (glute stance)" data-target-reps="12.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Kickback (glute stance)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> each</span>
+<div class="wt-widget" data-ex="w1_s1_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_r3',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_r3" min="0" oninput="wtSave('w1_s1_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s1_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="lying_dumbbell_hip_abduction" data-ex-id="w1_s1_r4" data-ex-name="Lying Dumbbell Hip Abduction" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Lying Dumbbell Hip Abduction</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w1_s1_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_r4',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_r4" min="0" oninput="wtSave('w1_s1_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s1_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_overhead_press" data-ex-id="w1_s1_addon_0" data-ex-name="Dumbbell Overhead Press" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Overhead Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s1_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_addon_0" max="200" min="0" oninput="wtSave('w1_s1_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w1_s1_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="cable_lateral_raise" data-ex-id="w1_s1_addon_1" data-ex-name="Cable Lateral Raise" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Cable Lateral Raise</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w1_s1_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s1_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w1_s1_addon_1" max="200" min="0" oninput="wtSave('w1_s1_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s1_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w1_s1_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- SESSION B -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session B</span>
+</div>
+<div class="sc-session-label">RDL Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="trap_bar_/_dumbbell_romanian_deadlift" data-ex-id="w1_s2_r0" data-ex-name="Trap Bar / Dumbbell Romanian Deadlift" data-target-reps="11.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Trap Bar / Dumbbell Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s2_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_r0',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_r0" min="0" oninput="wtSave('w1_s2_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s2_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="45°_hyperextension" data-ex-id="w1_s2_r1" data-ex-name="45° Hyperextension (glute focus)" data-target-reps="11.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">45° Hyperextension (glute focus)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s2_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_r1',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_r1" min="0" oninput="wtSave('w1_s2_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s2_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_step-up" data-ex-id="w1_s2_r2" data-ex-name="Dumbbell Step-Up" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Step-Up</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w1_s2_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_r2',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_r2" min="0" oninput="wtSave('w1_s2_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s2_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_pull-through" data-ex-id="w1_s2_r3" data-ex-name="Cable Pull-Through" data-target-reps="13.5">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Pull-Through</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w1_s2_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_r3',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_r3" min="0" oninput="wtSave('w1_s2_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s2_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="banded_clamshell" data-ex-id="w1_s2_r4" data-ex-name="Banded Clamshell" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Banded Clamshell</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w1_s2_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_r4',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_r4" min="0" oninput="wtSave('w1_s2_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s2_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Core</div>
+<div class="ex-row" data-ex-canon="dead_bug" data-ex-id="w1_s2_addon_0" data-ex-name="Dead Bug" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dead Bug</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8 each</span> reps</span>
+<div class="wt-widget" data-ex="w1_s2_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_addon_0" max="200" min="0" oninput="wtSave('w1_s2_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w1_s2_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="pallof_press" data-ex-id="w1_s2_addon_1" data-ex-name="Pallof Press" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Pallof Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10 each</span> reps</span>
+<div class="wt-widget" data-ex="w1_s2_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s2_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w1_s2_addon_1" max="200" min="0" oninput="wtSave('w1_s2_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s2_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w1_s2_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- SESSION C -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session C</span>
+</div>
+<div class="sc-session-label">Full Coverage</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="single-leg_barbell_hip_thrust" data-ex-id="w1_s3_r0" data-ex-name="Single-Leg Barbell Hip Thrust" data-target-reps="10.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Single-Leg Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w1_s3_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_r0',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_r0" min="0" oninput="wtSave('w1_s3_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s3_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="cable_sumo_deadlift" data-ex-id="w1_s3_r1" data-ex-name="Cable Sumo Deadlift (low pulley)" data-target-reps="12.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Sumo Deadlift (low pulley)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s3_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_r1',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_r1" min="0" oninput="wtSave('w1_s3_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s3_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_romanian_deadlift" data-ex-id="w1_s3_r2" data-ex-name="Dumbbell Romanian Deadlift (single leg)" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Romanian Deadlift (single leg)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w1_s3_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_r2',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_r2" min="0" oninput="wtSave('w1_s3_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s3_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_hip_abduction" data-ex-id="w1_s3_r3" data-ex-name="Cable Hip Abduction (standing)" data-target-reps="15.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Hip Abduction (standing)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w1_s3_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_r3',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_r3" min="0" oninput="wtSave('w1_s3_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s3_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="glute_bridge" data-ex-id="w1_s3_r4" data-ex-name="Glute Bridge (bodyweight, feet elevated)" data-target-reps="20.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Glute Bridge (bodyweight, feet elevated)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">20</span> reps</span>
+<div class="wt-widget" data-ex="w1_s3_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_r4',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_r4" min="0" oninput="wtSave('w1_s3_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w1_s3_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_single_arm_row" data-ex-id="w1_s3_addon_0" data-ex-name="Dumbbell Single-Arm Row" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Single-Arm Row</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w1_s3_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_addon_0" max="200" min="0" oninput="wtSave('w1_s3_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w1_s3_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="face_pull_cable" data-ex-id="w1_s3_addon_1" data-ex-name="Face Pull (cable)" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Face Pull (cable)</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> reps</span>
+<div class="wt-widget" data-ex="w1_s3_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w1_s3_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w1_s3_addon_1" max="200" min="0" oninput="wtSave('w1_s3_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w1_s3_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w1_s3_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+</div>
+</div>
+<!-- ══ WEEK 2 ══ -->
+<div class="week-section">
+<div class="week-header">
+<div class="week-number">Week 2</div>
+<div class="week-meta">
+<div class="week-title">Volume Build</div>
+<div class="week-note">3–4 sets · 8–10 reps · 2 RIR · increase load on main lifts</div>
+</div>
+<div class="week-divider"></div>
+</div>
+<div class="session-grid">
+<!-- W2 SESSION A -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session A · W2</span>
+</div>
+<div class="sc-session-label">Hip Thrust Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="barbell_hip_thrust" data-ex-id="w2_s1_r0" data-ex-name="Barbell Hip Thrust" data-target-reps="9.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> reps</span>
+<div class="wt-widget" data-ex="w2_s1_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_r0',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_r0" min="0" oninput="wtSave('w2_s1_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s1_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="romanian_deadlift" data-ex-id="w2_s1_r1" data-ex-name="Romanian Deadlift" data-target-reps="9.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> reps</span>
+<div class="wt-widget" data-ex="w2_s1_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_r1',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_r1" min="0" oninput="wtSave('w2_s1_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s1_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_goblet_squat" data-ex-id="w2_s1_r2" data-ex-name="Dumbbell Goblet Squat" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Goblet Squat</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> reps</span>
+<div class="wt-widget" data-ex="w2_s1_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_r2',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_r2" min="0" oninput="wtSave('w2_s1_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s1_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_kickback" data-ex-id="w2_s1_r3" data-ex-name="Cable Kickback (glute stance)" data-target-reps="12.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Kickback (glute stance)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> each</span>
+<div class="wt-widget" data-ex="w2_s1_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_r3',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_r3" min="0" oninput="wtSave('w2_s1_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s1_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="lying_dumbbell_hip_abduction" data-ex-id="w2_s1_r4" data-ex-name="Lying Dumbbell Hip Abduction" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Lying Dumbbell Hip Abduction</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w2_s1_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_r4',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_r4" min="0" oninput="wtSave('w2_s1_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s1_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_overhead_press" data-ex-id="w2_s1_addon_0" data-ex-name="Dumbbell Overhead Press" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Overhead Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w2_s1_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_addon_0" max="200" min="0" oninput="wtSave('w2_s1_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w2_s1_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="cable_lateral_raise" data-ex-id="w2_s1_addon_1" data-ex-name="Cable Lateral Raise" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Cable Lateral Raise</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w2_s1_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s1_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w2_s1_addon_1" max="200" min="0" oninput="wtSave('w2_s1_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s1_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w2_s1_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- W2 SESSION B -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session B · W2</span>
+</div>
+<div class="sc-session-label">RDL Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="trap_bar_/_dumbbell_romanian_deadlift" data-ex-id="w2_s2_r0" data-ex-name="Trap Bar / Dumbbell Romanian Deadlift" data-target-reps="9.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Trap Bar / Dumbbell Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> reps</span>
+<div class="wt-widget" data-ex="w2_s2_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_r0',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_r0" min="0" oninput="wtSave('w2_s2_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s2_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="45°_hyperextension" data-ex-id="w2_s2_r1" data-ex-name="45° Hyperextension (loaded)" data-target-reps="11.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">45° Hyperextension (loaded)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w2_s2_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_r1',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_r1" min="0" oninput="wtSave('w2_s2_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s2_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_step-up" data-ex-id="w2_s2_r2" data-ex-name="Dumbbell Step-Up" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Step-Up</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w2_s2_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_r2',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_r2" min="0" oninput="wtSave('w2_s2_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s2_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_pull-through" data-ex-id="w2_s2_r3" data-ex-name="Cable Pull-Through" data-target-reps="13.5">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Pull-Through</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w2_s2_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_r3',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_r3" min="0" oninput="wtSave('w2_s2_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s2_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="banded_clamshell" data-ex-id="w2_s2_r4" data-ex-name="Banded Clamshell" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Banded Clamshell</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w2_s2_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_r4',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_r4" min="0" oninput="wtSave('w2_s2_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s2_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Core</div>
+<div class="ex-row" data-ex-canon="dead_bug" data-ex-id="w2_s2_addon_0" data-ex-name="Dead Bug" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dead Bug</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8 each</span> reps</span>
+<div class="wt-widget" data-ex="w2_s2_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_addon_0" max="200" min="0" oninput="wtSave('w2_s2_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w2_s2_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="pallof_press" data-ex-id="w2_s2_addon_1" data-ex-name="Pallof Press" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Pallof Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10 each</span> reps</span>
+<div class="wt-widget" data-ex="w2_s2_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s2_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w2_s2_addon_1" max="200" min="0" oninput="wtSave('w2_s2_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s2_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w2_s2_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- W2 SESSION C -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session C · W2</span>
+</div>
+<div class="sc-session-label">Full Coverage</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="single-leg_barbell_hip_thrust" data-ex-id="w2_s3_r0" data-ex-name="Single-Leg Barbell Hip Thrust" data-target-reps="9.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Single-Leg Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> each</span>
+<div class="wt-widget" data-ex="w2_s3_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_r0',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_r0" min="0" oninput="wtSave('w2_s3_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s3_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="cable_sumo_deadlift" data-ex-id="w2_s3_r1" data-ex-name="Cable Sumo Deadlift (low pulley)" data-target-reps="12.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Sumo Deadlift (low pulley)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w2_s3_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_r1',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_r1" min="0" oninput="wtSave('w2_s3_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s3_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_romanian_deadlift" data-ex-id="w2_s3_r2" data-ex-name="Dumbbell Romanian Deadlift (single leg)" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Romanian Deadlift (single leg)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w2_s3_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_r2',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_r2" min="0" oninput="wtSave('w2_s3_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s3_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_hip_abduction" data-ex-id="w2_s3_r3" data-ex-name="Cable Hip Abduction (standing)" data-target-reps="15.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Hip Abduction (standing)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w2_s3_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_r3',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_r3" min="0" oninput="wtSave('w2_s3_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s3_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="glute_bridge" data-ex-id="w2_s3_r4" data-ex-name="Glute Bridge (feet elevated, loaded)" data-target-reps="17.5">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Glute Bridge (feet elevated, loaded)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15–20</span> reps</span>
+<div class="wt-widget" data-ex="w2_s3_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_r4',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_r4" min="0" oninput="wtSave('w2_s3_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w2_s3_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_single_arm_row" data-ex-id="w2_s3_addon_0" data-ex-name="Dumbbell Single-Arm Row" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Single-Arm Row</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w2_s3_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_addon_0" max="200" min="0" oninput="wtSave('w2_s3_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w2_s3_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="face_pull_cable" data-ex-id="w2_s3_addon_1" data-ex-name="Face Pull (cable)" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Face Pull (cable)</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> reps</span>
+<div class="wt-widget" data-ex="w2_s3_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w2_s3_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w2_s3_addon_1" max="200" min="0" oninput="wtSave('w2_s3_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w2_s3_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w2_s3_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+</div>
+</div>
+<!-- ══ WEEK 3 ══ -->
+<div class="week-section">
+<div class="week-header">
+<div class="week-number">Week 3</div>
+<div class="week-meta">
+<div class="week-title">Overreach</div>
+<div class="week-note">4 sets · 8–10 reps · 1 RIR · max productive volume</div>
+</div>
+<div class="week-divider"></div>
+</div>
+<div class="session-grid">
+<!-- W3 SESSION A -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session A · W3</span>
+</div>
+<div class="sc-session-label">Hip Thrust Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="barbell_hip_thrust" data-ex-id="w3_s1_r0" data-ex-name="Barbell Hip Thrust" data-target-reps="8.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8</span> reps</span>
+<div class="wt-widget" data-ex="w3_s1_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_r0',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_r0" min="0" oninput="wtSave('w3_s1_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s1_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="romanian_deadlift" data-ex-id="w3_s1_r1" data-ex-name="Romanian Deadlift" data-target-reps="8.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8</span> reps</span>
+<div class="wt-widget" data-ex="w3_s1_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_r1',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_r1" min="0" oninput="wtSave('w3_s1_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s1_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_goblet_squat" data-ex-id="w3_s1_r2" data-ex-name="Dumbbell Goblet Squat" data-target-reps="9.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Goblet Squat</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> reps</span>
+<div class="wt-widget" data-ex="w3_s1_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_r2',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_r2" min="0" oninput="wtSave('w3_s1_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s1_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_kickback" data-ex-id="w3_s1_r3" data-ex-name="Cable Kickback (glute stance)" data-target-reps="12.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Kickback (glute stance)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> each</span>
+<div class="wt-widget" data-ex="w3_s1_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_r3',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_r3" min="0" oninput="wtSave('w3_s1_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s1_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="lying_dumbbell_hip_abduction" data-ex-id="w3_s1_r4" data-ex-name="Lying Dumbbell Hip Abduction" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Lying Dumbbell Hip Abduction</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w3_s1_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_r4',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_r4" min="0" oninput="wtSave('w3_s1_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s1_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_overhead_press" data-ex-id="w3_s1_addon_0" data-ex-name="Dumbbell Overhead Press" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Overhead Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w3_s1_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_addon_0" max="200" min="0" oninput="wtSave('w3_s1_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w3_s1_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="cable_lateral_raise" data-ex-id="w3_s1_addon_1" data-ex-name="Cable Lateral Raise" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Cable Lateral Raise</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w3_s1_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s1_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w3_s1_addon_1" max="200" min="0" oninput="wtSave('w3_s1_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s1_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w3_s1_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- W3 SESSION B -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session B · W3</span>
+</div>
+<div class="sc-session-label">RDL Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="trap_bar_/_dumbbell_romanian_deadlift" data-ex-id="w3_s2_r0" data-ex-name="Trap Bar / Dumbbell Romanian Deadlift" data-target-reps="8.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Trap Bar / Dumbbell Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8</span> reps</span>
+<div class="wt-widget" data-ex="w3_s2_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_r0',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_r0" min="0" oninput="wtSave('w3_s2_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s2_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="45°_hyperextension" data-ex-id="w3_s2_r1" data-ex-name="45° Hyperextension (loaded)" data-target-reps="10.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">45° Hyperextension (loaded)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> reps</span>
+<div class="wt-widget" data-ex="w3_s2_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_r1',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_r1" min="0" oninput="wtSave('w3_s2_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s2_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_step-up" data-ex-id="w3_s2_r2" data-ex-name="Dumbbell Step-Up" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Step-Up</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w3_s2_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_r2',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_r2" min="0" oninput="wtSave('w3_s2_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s2_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_pull-through" data-ex-id="w3_s2_r3" data-ex-name="Cable Pull-Through" data-target-reps="12.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Pull-Through</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w3_s2_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_r3',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_r3" min="0" oninput="wtSave('w3_s2_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s2_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="banded_clamshell" data-ex-id="w3_s2_r4" data-ex-name="Banded Clamshell (heavy band)" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Banded Clamshell (heavy band)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w3_s2_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_r4',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_r4" min="0" oninput="wtSave('w3_s2_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s2_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Core</div>
+<div class="ex-row" data-ex-canon="dead_bug" data-ex-id="w3_s2_addon_0" data-ex-name="Dead Bug" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dead Bug</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8 each</span> reps</span>
+<div class="wt-widget" data-ex="w3_s2_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_addon_0" max="200" min="0" oninput="wtSave('w3_s2_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w3_s2_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="pallof_press" data-ex-id="w3_s2_addon_1" data-ex-name="Pallof Press" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Pallof Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10 each</span> reps</span>
+<div class="wt-widget" data-ex="w3_s2_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s2_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w3_s2_addon_1" max="200" min="0" oninput="wtSave('w3_s2_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s2_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w3_s2_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- W3 SESSION C -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session C · W3</span>
+</div>
+<div class="sc-session-label">Full Coverage</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="single-leg_barbell_hip_thrust" data-ex-id="w3_s3_r0" data-ex-name="Single-Leg Barbell Hip Thrust" data-target-reps="9.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Single-Leg Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> each</span>
+<div class="wt-widget" data-ex="w3_s3_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_r0',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_r0" min="0" oninput="wtSave('w3_s3_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s3_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="cable_sumo_deadlift" data-ex-id="w3_s3_r1" data-ex-name="Cable Sumo Deadlift (low pulley)" data-target-reps="11.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Sumo Deadlift (low pulley)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w3_s3_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_r1',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_r1" min="0" oninput="wtSave('w3_s3_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s3_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_romanian_deadlift" data-ex-id="w3_s3_r2" data-ex-name="Dumbbell Romanian Deadlift (single leg)" data-target-reps="9.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Romanian Deadlift (single leg)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8–10</span> each</span>
+<div class="wt-widget" data-ex="w3_s3_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_r2',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_r2" min="0" oninput="wtSave('w3_s3_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s3_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset C</div>
+<div class="ex-row" data-ex-canon="cable_hip_abduction" data-ex-id="w3_s3_r3" data-ex-name="Cable Hip Abduction (standing)" data-target-reps="15.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Hip Abduction (standing)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w3_s3_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_r3',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_r3" min="0" oninput="wtSave('w3_s3_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s3_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="glute_bridge" data-ex-id="w3_s3_r4" data-ex-name="Glute Bridge (feet elevated, loaded)" data-target-reps="13.5">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Glute Bridge (feet elevated, loaded)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w3_s3_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_r4',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_r4" min="0" oninput="wtSave('w3_s3_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w3_s3_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_single_arm_row" data-ex-id="w3_s3_addon_0" data-ex-name="Dumbbell Single-Arm Row" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Single-Arm Row</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w3_s3_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_addon_0" max="200" min="0" oninput="wtSave('w3_s3_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w3_s3_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="face_pull_cable" data-ex-id="w3_s3_addon_1" data-ex-name="Face Pull (cable)" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Face Pull (cable)</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> reps</span>
+<div class="wt-widget" data-ex="w3_s3_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w3_s3_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w3_s3_addon_1" max="200" min="0" oninput="wtSave('w3_s3_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w3_s3_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w3_s3_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+</div>
+</div>
+<!-- ══ WEEK 4 — DELOAD ══ -->
+<div class="week-section">
+<div class="week-header">
+<div class="week-number">Week 4</div>
+<div class="week-meta">
+<div class="week-title">Deload</div>
+<div class="week-note">2 sets · 12–15 reps · 4–5 RIR · 70% of W3 load · same exercises</div>
+</div>
+<div class="week-divider"></div>
+</div>
+<div class="session-grid">
+<!-- W4 SESSION A -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session A · W4 Deload</span>
+</div>
+<div class="sc-session-label">Hip Thrust Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="barbell_hip_thrust" data-ex-id="w4_s1_r0" data-ex-name="Barbell Hip Thrust" data-target-reps="13.5">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w4_s1_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_r0',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_r0" min="0" oninput="wtSave('w4_s1_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s1_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="romanian_deadlift" data-ex-id="w4_s1_r1" data-ex-name="Romanian Deadlift" data-target-reps="12.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w4_s1_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_r1',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_r1" min="0" oninput="wtSave('w4_s1_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s1_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_goblet_squat" data-ex-id="w4_s1_r2" data-ex-name="Dumbbell Goblet Squat" data-target-reps="12.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Goblet Squat</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w4_s1_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_r2',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_r2" min="0" oninput="wtSave('w4_s1_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s1_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Accessory</div>
+<div class="ex-row" data-ex-canon="cable_kickback" data-ex-id="w4_s1_r3" data-ex-name="Cable Kickback" data-target-reps="15.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Kickback</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w4_s1_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_r3',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_r3" min="0" oninput="wtSave('w4_s1_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s1_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="lying_dumbbell_hip_abduction" data-ex-id="w4_s1_r4" data-ex-name="Lying Dumbbell Hip Abduction" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Lying Dumbbell Hip Abduction</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w4_s1_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_r4',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_r4" min="0" oninput="wtSave('w4_s1_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s1_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_overhead_press" data-ex-id="w4_s1_addon_0" data-ex-name="Dumbbell Overhead Press" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Overhead Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w4_s1_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_addon_0" max="200" min="0" oninput="wtSave('w4_s1_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w4_s1_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="cable_lateral_raise" data-ex-id="w4_s1_addon_1" data-ex-name="Cable Lateral Raise" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Cable Lateral Raise</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12–15</span> reps</span>
+<div class="wt-widget" data-ex="w4_s1_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s1_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w4_s1_addon_1" max="200" min="0" oninput="wtSave('w4_s1_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s1_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w4_s1_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- W4 SESSION B -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session B · W4 Deload</span>
+</div>
+<div class="sc-session-label">RDL Focus</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="trap_bar_/_dumbbell_romanian_deadlift" data-ex-id="w4_s2_r0" data-ex-name="Trap Bar / Dumbbell Romanian Deadlift" data-target-reps="12.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Trap Bar / Dumbbell Romanian Deadlift</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w4_s2_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_r0',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_r0" min="0" oninput="wtSave('w4_s2_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s2_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="45°_hyperextension" data-ex-id="w4_s2_r1" data-ex-name="45° Hyperextension (light load)" data-target-reps="12.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">45° Hyperextension (light load)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+<div class="wt-widget" data-ex="w4_s2_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_r1',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_r1" min="0" oninput="wtSave('w4_s2_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s2_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_step-up" data-ex-id="w4_s2_r2" data-ex-name="Dumbbell Step-Up" data-target-reps="10.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Step-Up</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10</span> each</span>
+<div class="wt-widget" data-ex="w4_s2_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_r2',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_r2" min="0" oninput="wtSave('w4_s2_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s2_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Accessory</div>
+<div class="ex-row" data-ex-canon="cable_pull-through" data-ex-id="w4_s2_r3" data-ex-name="Cable Pull-Through" data-target-reps="15.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Pull-Through</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> reps</span>
+<div class="wt-widget" data-ex="w4_s2_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_r3',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_r3" min="0" oninput="wtSave('w4_s2_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s2_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="banded_clamshell" data-ex-id="w4_s2_r4" data-ex-name="Banded Clamshell" data-target-reps="15.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Banded Clamshell</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w4_s2_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_r4',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_r4" min="0" oninput="wtSave('w4_s2_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s2_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Core</div>
+<div class="ex-row" data-ex-canon="dead_bug" data-ex-id="w4_s2_addon_0" data-ex-name="Dead Bug" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dead Bug</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">8 each</span> reps</span>
+<div class="wt-widget" data-ex="w4_s2_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_addon_0" max="200" min="0" oninput="wtSave('w4_s2_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w4_s2_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="pallof_press" data-ex-id="w4_s2_addon_1" data-ex-name="Pallof Press" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Pallof Press</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10 each</span> reps</span>
+<div class="wt-widget" data-ex="w4_s2_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s2_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w4_s2_addon_1" max="200" min="0" oninput="wtSave('w4_s2_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s2_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w4_s2_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+<!-- W4 SESSION C -->
+<div class="sc">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Lucy's Program</span></span>
+<span class="sc-type">Session C · W4 Deload</span>
+</div>
+<div class="sc-session-label">Full Coverage</div>
+</div>
+<div class="superset-block">
+<div class="superset-label rose">Main Lift</div>
+<div class="ex-row" data-ex-canon="single-leg_barbell_hip_thrust" data-ex-id="w4_s3_r0" data-ex-name="Single-Leg Barbell Hip Thrust" data-target-reps="12.0">
+<span class="ex-code">A</span>
+<div style="flex:1">
+<div class="ex-name">Single-Leg Barbell Hip Thrust</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> each</span>
+<div class="wt-widget" data-ex="w4_s3_r0"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_r0',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_r0" min="0" oninput="wtSave('w4_s3_r0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_r0',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s3_r0"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Superset B</div>
+<div class="ex-row" data-ex-canon="cable_sumo_deadlift" data-ex-id="w4_s3_r1" data-ex-name="Cable Sumo Deadlift (low pulley)" data-target-reps="15.0">
+<span class="ex-code">B1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Sumo Deadlift (low pulley)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> reps</span>
+<div class="wt-widget" data-ex="w4_s3_r1"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_r1',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_r1" min="0" oninput="wtSave('w4_s3_r1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_r1',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s3_r1"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="dumbbell_romanian_deadlift" data-ex-id="w4_s3_r2" data-ex-name="Dumbbell Romanian Deadlift (single leg)" data-target-reps="12.0">
+<span class="ex-code">B2</span>
+<div style="flex:1">
+<div class="ex-name">Dumbbell Romanian Deadlift (single leg)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">12</span> each</span>
+<div class="wt-widget" data-ex="w4_s3_r2"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_r2',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_r2" min="0" oninput="wtSave('w4_s3_r2')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_r2',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s3_r2"></div></div>
+</div>
+</div>
+<div class="superset-block">
+<div class="superset-label">Accessory</div>
+<div class="ex-row" data-ex-canon="cable_hip_abduction" data-ex-id="w4_s3_r3" data-ex-name="Cable Hip Abduction (standing)" data-target-reps="15.0">
+<span class="ex-code">C1</span>
+<div style="flex:1">
+<div class="ex-name">Cable Hip Abduction (standing)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> each</span>
+<div class="wt-widget" data-ex="w4_s3_r3"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_r3',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_r3" min="0" oninput="wtSave('w4_s3_r3')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_r3',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s3_r3"></div></div>
+</div>
+<div class="ex-row" data-ex-canon="glute_bridge" data-ex-id="w4_s3_r4" data-ex-name="Glute Bridge (bodyweight)" data-target-reps="20.0">
+<span class="ex-code">C2</span>
+<div style="flex:1">
+<div class="ex-name">Glute Bridge (bodyweight)</div>
+</div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">20</span> reps</span>
+<div class="wt-widget" data-ex="w4_s3_r4"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_r4',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_r4" min="0" oninput="wtSave('w4_s3_r4')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_r4',2.5)">+</button></div><div class="wt-suggest" id="wts_w4_s3_r4"></div></div>
+</div>
+</div>
+
+<div class="superset-block">
+<div class="superset-label">Upper Body</div>
+<div class="ex-row" data-ex-canon="dumbbell_single_arm_row" data-ex-id="w4_s3_addon_0" data-ex-name="Dumbbell Single-Arm Row" data-target-reps="11">
+<span class="ex-code">D1</span>
+<div style="flex:1"><div class="ex-name">Dumbbell Single-Arm Row</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">10–12</span> reps</span>
+<div class="wt-widget" data-ex="w4_s3_addon_0"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_addon_0',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_addon_0" max="200" min="0" oninput="wtSave('w4_s3_addon_0')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_addon_0',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w4_s3_addon_0"></div>
+</div>
+</div>
+<div class="ex-row" data-ex-canon="face_pull_cable" data-ex-id="w4_s3_addon_1" data-ex-name="Face Pull (cable)" data-target-reps="11">
+<span class="ex-code">D2</span>
+<div style="flex:1"><div class="ex-name">Face Pull (cable)</div></div>
+<div class="ex-stats">
+<span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+<span class="ex-chip"><span class="ex-chip-val">15</span> reps</span>
+<div class="wt-widget" data-ex="w4_s3_addon_1"><button class="wt-btn wt-minus" onclick="wtAdj('w4_s3_addon_1',-2.5)">−</button><input class="wt-input" id="wt_w4_s3_addon_1" max="200" min="0" oninput="wtSave('w4_s3_addon_1')" placeholder="kg" step="0.5" type="number"/><button class="wt-btn wt-plus" onclick="wtAdj('w4_s3_addon_1',2.5)">+</button></div>
+<div class="wt-suggest" id="wts_w4_s3_addon_1"></div>
+</div>
+</div>
+</div><div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+</div>
+</div>
+</div>
+<!-- FAB GROUP -->
+<div class="fab-group">
+
+<button class="timer-fab" onclick="openTimer()">
+<svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+    Timer
+  </button>
+</div>
+
+
+<!-- TIMER OVERLAY -->
+<div class="timer-backdrop" id="timerBackdrop">
+<div class="timer-panel" id="timerPanel">
+<div class="timer-drag-handle" id="timerDragHandle">
+<span class="timer-drag-title">GymGeek Timer</span>
+<div class="timer-drag-bar"></div>
+<button class="timer-close" onclick="closeTimer()">✕</button>
+</div>
+<div class="timer-tabs">
+<button class="timer-tab active" id="tabStopwatch" onclick="switchTab('stopwatch')">Stopwatch</button>
+<button class="timer-tab" id="tabInterval" onclick="switchTab('interval')">Interval</button>
+<button class="timer-tab" id="tabEmom" onclick="switchTab('emom')">EMOM</button>
+<button class="timer-tab" id="tabCountdown" onclick="switchTab('countdown')">Countdown</button>
+</div>
+<div id="paneStopwatch">
+<div class="timer-face"><div class="timer-display" id="swDisplay">00:00.0</div><div class="timer-sublabel" id="swSublabel"></div></div>
+<div class="lap-list" id="lapList"></div>
+<div class="timer-controls">
+<button class="ctrl-btn ctrl-reset" onclick="swLap()" style="flex:0 0 64px;font-size:11px;">Lap</button>
+<button class="ctrl-btn ctrl-play" id="swPlayBtn" onclick="swToggle()">Start</button>
+<button class="ctrl-btn ctrl-reset" onclick="swReset()">Reset</button>
+</div>
+</div>
+<div id="paneInterval" style="display:none;">
+<div class="timer-face"><div class="timer-display" id="ivDisplay">00:30</div><div class="timer-sublabel" id="ivSublabel">Set work time &amp; rounds</div></div>
+<div class="round-track" id="roundTrack"></div>
+<div class="interval-config" id="ivConfig">
+<div class="cfg-group"><div class="cfg-label">Work</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('work',-5)">−</button><span class="cfg-val" id="ivWorkVal">30s</span><button class="cfg-btn" onclick="adjIv('work',5)">+</button></div></div>
+<div class="cfg-group"><div class="cfg-label">Rest</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('rest',-5)">−</button><span class="cfg-val" id="ivRestVal">30s</span><button class="cfg-btn" onclick="adjIv('rest',5)">+</button></div></div>
+<div class="cfg-group"><div class="cfg-label">Rounds</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('rounds',-1)">−</button><span class="cfg-val" id="ivRoundsVal">3</span><button class="cfg-btn" onclick="adjIv('rounds',1)">+</button></div></div>
+</div>
+<div class="timer-controls"><button class="ctrl-btn ctrl-play" id="ivPlayBtn" onclick="ivToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="ivReset()">Reset</button></div>
+</div>
+<div id="paneEmom" style="display:none;">
+<div class="timer-face"><div class="timer-display" id="emDisplay">01:00</div><div class="timer-sublabel" id="emSublabel">Every minute on the minute</div></div>
+<div class="round-track" id="emRoundTrack"></div>
+<div class="interval-config" id="emConfig">
+<div class="cfg-group"><div class="cfg-label">Minutes</div><div class="cfg-row"><button class="cfg-btn" onclick="adjEm('mins',-1)">−</button><span class="cfg-val" id="emMinsVal">1</span><button class="cfg-btn" onclick="adjEm('mins',1)">+</button></div></div>
+<div class="cfg-group"><div class="cfg-label">Rounds</div><div class="cfg-row"><button class="cfg-btn" onclick="adjEm('rounds',-1)">−</button><span class="cfg-val" id="emRoundsVal">10</span><button class="cfg-btn" onclick="adjEm('rounds',1)">+</button></div></div>
+</div>
+<div class="timer-controls"><button class="ctrl-btn ctrl-play" id="emPlayBtn" onclick="emToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="emReset()">Reset</button></div>
+</div>
+<div id="paneCountdown" style="display:none;">
+<div style="display:flex;gap:6px;margin:12px 16px 0;">
+<button id="cdModeWork" onclick="cdSetMode('work')" style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(97,197,153,.35);background:rgba(97,197,153,.12);color:#61C599;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">● Work</button>
+<button id="cdModeRest" onclick="cdSetMode('rest')" style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">◎ Rest</button>
+</div>
+<div class="timer-face"><div class="timer-display" id="cdDisplay">03:00</div><div class="timer-sublabel" id="cdSublabel">Set duration &amp; press Start</div></div>
+<div class="interval-config" id="cdConfig">
+<div class="cfg-group" style="flex:2;"><div class="cfg-label">Duration</div><div class="cfg-row"><button class="cfg-btn" onclick="adjCd(-30)">−30</button><span class="cfg-val" id="cdVal">3:00</span><button class="cfg-btn" onclick="adjCd(30)">+30</button></div></div>
+<div class="cfg-group" style="flex:1;"><div class="cfg-label"> </div><div class="cfg-row" style="justify-content:center;gap:4px;"><button class="cfg-btn" onclick="adjCd(-10)" style="width:auto;padding:0 7px;font-size:10px;">−10</button><button class="cfg-btn" onclick="adjCd(10)" style="width:auto;padding:0 7px;font-size:10px;">+10</button></div></div>
+</div>
+<div class="timer-controls"><button class="ctrl-btn ctrl-play" id="cdPlayBtn" onclick="cdToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="cdReset()">Reset</button></div>
+</div>
+</div>
+</div>
+<script>
+/* ── 24-HOUR AUTO REFRESH ── */
+setTimeout(function(){location.reload();}, 24*60*60*1000);
+
+/* ── LIVE CLOCK ── */
+function tickClock(){var now=new Date(),h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();document.getElementById('clockHM').textContent=(h<10?'0'+h:h)+':'+(m<10?'0'+m:m)+' ';document.getElementById('clockS').textContent=(s<10?'0'+s:s);}
+tickClock();setInterval(tickClock,1000);
+
+/* ── LIGHT MODE ── */
+function toggleLight(){var b=document.body,l=b.classList.toggle('light-mode');document.getElementById('light-label').textContent=l?'Dark mode':'Light mode';}
+
+/* ── FULLSCREEN ── */
+function toggleFullscreen(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(function(){});}else{document.exitFullscreen().catch(function(){});}}
+document.addEventListener('fullscreenchange',function(){var f=!!document.fullscreenElement;document.getElementById('fsLabel').textContent=f?'Exit':'Full screen';var i=document.getElementById('fsIcon');i.innerHTML=f?'<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>':'<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>';});
+
+/* ── TIMER OPEN / CLOSE ── */
+function openTimer(){document.getElementById('timerBackdrop').classList.add('open');}
+function closeTimer(){document.getElementById('timerBackdrop').classList.remove('open');}
+
+/* ── DRAG ── */
+(function(){
+  var panel,handle,dragging=false,ox=0,oy=0;
+  document.addEventListener('DOMContentLoaded',function(){
+    panel=document.getElementById('timerPanel');
+    handle=document.getElementById('timerDragHandle');
+    handle.addEventListener('mousedown',startDrag);
+    handle.addEventListener('touchstart',startDragT,{passive:false});
+  });
+  function startDrag(e){
+    if(e.target.closest('.timer-close'))return;
+    dragging=true;
+    var r=panel.getBoundingClientRect();
+    panel.style.right='auto';
+    panel.style.left=r.left+'px';
+    panel.style.top=r.top+'px';
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    document.addEventListener('mousemove',onDrag);
+    document.addEventListener('mouseup',stopDrag);
+    e.preventDefault();
+  }
+  function startDragT(e){
+    if(e.target.closest('.timer-close'))return;
+    dragging=true;
+    var t=e.touches[0],r=panel.getBoundingClientRect();
+    panel.style.right='auto';
+    panel.style.left=r.left+'px';
+    panel.style.top=r.top+'px';
+    ox=t.clientX-r.left; oy=t.clientY-r.top;
+    document.addEventListener('touchmove',onDragT,{passive:false});
+    document.addEventListener('touchend',stopDrag);
+    e.preventDefault();
+  }
+  function onDrag(e){if(!dragging)return;var x=e.clientX-ox,y=e.clientY-oy;clamp(x,y);}
+  function onDragT(e){if(!dragging)return;var t=e.touches[0],x=t.clientX-ox,y=t.clientY-oy;clamp(x,y);e.preventDefault();}
+  function clamp(x,y){var pw=panel.offsetWidth,ph=panel.offsetHeight,maxX=window.innerWidth-pw,maxY=window.innerHeight-ph;panel.style.left=Math.max(0,Math.min(x,maxX))+'px';panel.style.top=Math.max(0,Math.min(y,maxY))+'px';}
+  function stopDrag(){dragging=false;document.removeEventListener('mousemove',onDrag);document.removeEventListener('mouseup',stopDrag);document.removeEventListener('touchmove',onDragT);document.removeEventListener('touchend',stopDrag);}
+})();
+
+/* ── TABS ── */
+var currentTab='stopwatch';
+function switchTab(tab){currentTab=tab;['stopwatch','interval','emom','countdown'].forEach(function(t){document.getElementById('tab'+cap(t)).classList.toggle('active',t===tab);document.getElementById('pane'+cap(t)).style.display=t===tab?'':'none';});}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+/* ── STOPWATCH ── */
+var swRunning=false,swStart=0,swElapsed=0,swRaf=null,swLaps=[],swLapStart=0;
+function swToggle(){if(swRunning){swElapsed+=Date.now()-swStart;cancelAnimationFrame(swRaf);swRaf=null;swRunning=false;document.getElementById('swPlayBtn').textContent='Resume';document.getElementById('swDisplay').classList.remove('running');}else{swStart=Date.now();swRunning=true;document.getElementById('swPlayBtn').textContent='Stop';document.getElementById('swDisplay').classList.add('running');swTick();}}
+function swTick(){if(!swRunning)return;document.getElementById('swDisplay').textContent=fmtSW(swElapsed+(Date.now()-swStart));swRaf=requestAnimationFrame(swTick);}
+function swLap(){if(!swRunning&&swElapsed===0)return;var total=swElapsed+(swRunning?Date.now()-swStart:0),split=total-swLapStart;swLapStart=total;swLaps.unshift({n:swLaps.length+1,split:split,total:total});renderLaps();}
+function swReset(){
+  if(swRaf){cancelAnimationFrame(swRaf);swRaf=null;}
+  swRunning=false;swStart=0;swElapsed=0;swLapStart=0;swLaps=[];
+  document.getElementById('swDisplay').textContent='00:00.0';
+  document.getElementById('swDisplay').className='timer-display';
+  document.getElementById('swPlayBtn').textContent='Start';
+  document.getElementById('swSublabel').textContent='';
+  renderLaps();
+}
+function renderLaps(){var el=document.getElementById('lapList');if(!swLaps.length){el.innerHTML='';return;}el.innerHTML=swLaps.map(function(l){return'<div class="lap-row"><span>Lap '+l.n+'</span><span class="lap-time">'+fmtSW(l.split)+'</span><span class="lap-time" style="color:var(--muted);font-size:10px;">'+fmtSW(l.total)+'</span></div>';}).join('');}
+function fmtSW(ms){var m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),t=Math.floor((ms%1000)/100);return pad(m)+':'+pad(s)+'.'+t;}
+
+/* ── INTERVAL ── */
+var ivWork=30,ivRest=30,ivRounds=3,ivRunning=false,ivPhase='work',ivRoundCurrent=1,ivInterval=null,ivEndTime=0,ivLastBeepAt=-1,ivRemaining=0;
+function adjIv(f,d){if(ivRunning)return;if(f==='work'){ivWork=Math.max(5,ivWork+d);document.getElementById('ivWorkVal').textContent=ivWork+'s';}if(f==='rest'){ivRest=Math.max(0,ivRest+d);document.getElementById('ivRestVal').textContent=ivRest+'s';}if(f==='rounds'){ivRounds=Math.max(1,ivRounds+d);document.getElementById('ivRoundsVal').textContent=ivRounds;}ivRemaining=ivWork;document.getElementById('ivDisplay').textContent=fmtCD(ivWork);buildRoundDots();}
+function buildRoundDots(){var el=document.getElementById('roundTrack');el.innerHTML='';for(var i=1;i<=ivRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<ivRoundCurrent?' done':i===ivRoundCurrent?' active':'');d.id='dot'+i;el.appendChild(d);}}
+function ivToggle(){if(ivRunning){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivPlayBtn').textContent='Resume';document.getElementById('ivDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(ivRemaining===0){ivPhase='work';ivRoundCurrent=1;ivRemaining=ivWork;}ivRunning=true;document.getElementById('ivPlayBtn').textContent='Pause';document.getElementById('ivConfig').style.opacity='.4';buildRoundDots();ivEndTime=Date.now()+ivRemaining*1000;ivInterval=setInterval(ivTick,250);ivTick();}}
+function ivTick(){var rem=Math.ceil((ivEndTime-Date.now())/1000);if(rem<=0){soundFinish();if(ivPhase==='work'){if(ivRest>0){ivPhase='rest';ivRemaining=ivRest;ivEndTime=Date.now()+ivRest*1000;ivLastBeepAt=-1;}else{ivNextRound();}}else{ivNextRound();}return;}if(rem<=3&&rem!==ivLastBeepAt){ivLastBeepAt=rem;soundCountdown(rem);}ivRemaining=rem;document.getElementById('ivDisplay').textContent=fmtCD(rem);document.getElementById('ivDisplay').className='timer-display '+(ivPhase==='work'?'running':'resting');document.getElementById('ivSublabel').textContent=(ivPhase==='work'?'● WORK':'◎ REST')+'  ·  Round '+ivRoundCurrent+' of '+ivRounds;}
+function ivNextRound(){var dot=document.getElementById('dot'+ivRoundCurrent);if(dot)dot.className='round-dot done';if(ivRoundCurrent>=ivRounds){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivDisplay').textContent='Done!';document.getElementById('ivDisplay').className='timer-display finished';document.getElementById('ivSublabel').textContent='All '+ivRounds+' rounds complete';document.getElementById('ivPlayBtn').textContent='Start';document.getElementById('ivConfig').style.opacity='1';ivRemaining=0;soundFanfare();return;}ivRoundCurrent++;ivLastBeepAt=-1;ivPhase='work';ivRemaining=ivWork;ivEndTime=Date.now()+ivWork*1000;buildRoundDots();}
+function ivReset(){
+  clearInterval(ivInterval);ivInterval=null;
+  ivRunning=false;ivPhase='work';ivRoundCurrent=1;ivRemaining=ivWork;ivLastBeepAt=-1;
+  document.getElementById('ivDisplay').textContent=fmtCD(ivWork);
+  document.getElementById('ivDisplay').className='timer-display';
+  document.getElementById('ivSublabel').textContent='Set work time & rounds';
+  document.getElementById('ivPlayBtn').textContent='Start';
+  document.getElementById('ivConfig').style.opacity='1';
+  buildRoundDots();
+}
+
+/* ── EMOM ── */
+var emMins=1,emRounds=10,emRunning=false,emRoundCurrent=1,emInterval=null,emEndTime=0,emLastBeepAt=-1;
+function adjEm(f,d){if(emRunning)return;if(f==='mins'){emMins=Math.max(1,Math.min(5,emMins+d));document.getElementById('emMinsVal').textContent=emMins;}if(f==='rounds'){emRounds=Math.max(1,Math.min(30,emRounds+d));document.getElementById('emRoundsVal').textContent=emRounds;}document.getElementById('emDisplay').textContent=fmtCD(emMins*60);buildEmDots();}
+function buildEmDots(){var el=document.getElementById('emRoundTrack');el.innerHTML='';for(var i=1;i<=emRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<emRoundCurrent?' done':i===emRoundCurrent?' active':'');d.id='emdot'+i;el.appendChild(d);}}
+function emToggle(){if(emRunning){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emPlayBtn').textContent='Resume';document.getElementById('emDisplay').classList.remove('running');}else{unlockAudio();soundStart();if(emRoundCurrent>emRounds){emRoundCurrent=1;}emRunning=true;document.getElementById('emPlayBtn').textContent='Pause';document.getElementById('emConfig').style.opacity='.4';buildEmDots();emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;emInterval=setInterval(emTick,250);emTick();}}
+function emTick(){var rem=Math.ceil((emEndTime-Date.now())/1000);if(rem<=0){var dot=document.getElementById('emdot'+emRoundCurrent);if(dot)dot.className='round-dot done';if(emRoundCurrent>=emRounds){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emDisplay').textContent='Done!';document.getElementById('emDisplay').className='timer-display finished';document.getElementById('emSublabel').textContent='All '+emRounds+' rounds complete';document.getElementById('emPlayBtn').textContent='Start';document.getElementById('emConfig').style.opacity='1';soundFanfare();return;}emRoundCurrent++;emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;soundFinish();buildEmDots();return;}if(rem<=3&&rem!==emLastBeepAt){emLastBeepAt=rem;soundCountdown(rem);}document.getElementById('emDisplay').textContent=fmtCD(rem);document.getElementById('emDisplay').className='timer-display running';document.getElementById('emSublabel').textContent='Round '+emRoundCurrent+' of '+emRounds+'  ·  '+fmtCD(rem)+' left';}
+function emReset(){
+  clearInterval(emInterval);emInterval=null;
+  emRunning=false;emRoundCurrent=1;emLastBeepAt=-1;
+  document.getElementById('emDisplay').textContent=fmtCD(emMins*60);
+  document.getElementById('emDisplay').className='timer-display';
+  document.getElementById('emSublabel').textContent='Every minute on the minute';
+  document.getElementById('emPlayBtn').textContent='Start';
+  document.getElementById('emConfig').style.opacity='1';
+  buildEmDots();
+}
+
+/* ── COUNTDOWN ── */
+var cdTotal=180,cdRemaining=180,cdRunning=false,cdInterval=null,cdEndTime=0,cdMode='work',cdLastBeepAt=-1;
+function cdSetMode(mode){if(cdRunning)return;cdMode=mode;var iw=mode==='work';document.getElementById('cdModeWork').style.cssText='flex:1;padding:7px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;'+(iw?'border:1px solid rgba(97,197,153,.35);background:rgba(97,197,153,.12);color:#61C599;':'border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);');document.getElementById('cdModeRest').style.cssText='flex:1;padding:7px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;'+(!iw?'border:1px solid rgba(119,143,221,.35);background:rgba(119,143,221,.12);color:#778FDD;':'border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);');document.getElementById('cdSublabel').textContent='Set duration & press Start';document.getElementById('cdDisplay').className='timer-display';document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);}
+function adjCd(d){if(cdRunning)return;cdTotal=Math.max(10,cdTotal+d);cdRemaining=cdTotal;document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);document.getElementById('cdVal').textContent=fmtCD(cdTotal);}
+function cdToggle(){if(cdRunning){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdPlayBtn').textContent='Resume';document.getElementById('cdDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(cdRemaining<=0){cdRemaining=cdTotal;}cdLastBeepAt=-1;cdRunning=true;cdEndTime=Date.now()+cdRemaining*1000;document.getElementById('cdPlayBtn').textContent='Pause';document.getElementById('cdDisplay').classList.add(cdMode==='work'?'running':'resting');cdInterval=setInterval(cdTick,250);cdTick();}}
+function cdTick(){var rem=Math.ceil((cdEndTime-Date.now())/1000),iw=cdMode==='work';if(rem<=0){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdDisplay').textContent=iw?'Rest!':'Go!';document.getElementById('cdDisplay').className='timer-display finished';document.getElementById('cdSublabel').textContent=iw?'Work complete — rest up':'Rest complete — get to work';document.getElementById('cdPlayBtn').textContent='Start';cdRemaining=0;soundFanfare();return;}if(rem<=3&&rem!==cdLastBeepAt){cdLastBeepAt=rem;soundCountdown(rem);}cdRemaining=rem;document.getElementById('cdDisplay').textContent=fmtCD(rem);document.getElementById('cdSublabel').textContent=rem<=3?'':(iw?'Working':'Resting');if(rem<=10){document.getElementById('cdDisplay').classList.remove('running','resting');document.getElementById('cdDisplay').classList.add('finished');}}
+function cdReset(){
+  clearInterval(cdInterval);cdInterval=null;
+  cdRunning=false;cdRemaining=cdTotal;cdLastBeepAt=-1;
+  document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);
+  document.getElementById('cdDisplay').className='timer-display';
+  document.getElementById('cdSublabel').textContent='Set duration & press Start';
+  document.getElementById('cdPlayBtn').textContent='Start';
+}
+
+/* ── UTILS ── */
+function pad(n){return n<10?'0'+n:''+n;}
+function fmtCD(s){var m=Math.floor(s/60),sec=s%60;return pad(m)+':'+pad(sec);}
+
+/* ── AUDIO ── */
+var audioCtx=null,audioUnlocked=false;
+function unlockAudio(){if(audioUnlocked)return;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();var buf=audioCtx.createBuffer(1,1,22050),src=audioCtx.createBufferSource();src.buffer=buf;src.connect(audioCtx.destination);src.start(0);audioCtx.resume().then(function(){audioUnlocked=true;});}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:false,passive:true});
+document.addEventListener('mousedown',unlockAudio,{once:false,passive:true});
+function tone(freq,dur,vol,type,offsetSec){try{if(!audioCtx)unlockAudio();if(!audioCtx)return;if(audioCtx.state==='suspended')audioCtx.resume();var ctx=audioCtx,o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=type||'sine';o.frequency.setValueAtTime(freq,ctx.currentTime);var t=ctx.currentTime+(offsetSec||0);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol||0.4,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.05);}catch(e){}}
+function soundStart(){tone(660,0.12,0.4,'sine',0.0);tone(880,0.15,0.4,'sine',0.13);}
+function soundCountdown(n){if(n===3||n===2){tone(440,0.10,0.35,'sine',0);}else if(n===1){tone(660,0.15,0.45,'sine',0);}}
+function soundFinish(){tone(880,0.12,0.5,'sine',0.0);tone(880,0.12,0.5,'sine',0.2);}
+function soundFanfare(){tone(523,0.15,0.4,'sine',0.0);tone(659,0.15,0.35,'sine',0.0);tone(784,0.15,0.30,'sine',0.0);tone(1047,0.30,0.35,'sine',0.18);}
+function beep(){soundFinish();}
+
+
+/* ── WEIGHT TRACKER ── */
+var WT_KEY = 'gymgeek_glute_weights';
+
+function wtLoad() {
+  try { return JSON.parse(localStorage.getItem(WT_KEY)) || {}; } catch(e) { return {}; }
+}
+function wtSaveAll(data) {
+  try { localStorage.setItem(WT_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+// Parse a rep string like "10–12" or "10" to a midpoint number
+function parseReps(s) {
+  s = (s || '').trim();
+  if (s.indexOf('–') > -1) {
+    var p = s.split('–');
+    return (parseFloat(p[0]) + parseFloat(p[1])) / 2;
+  }
+  return parseFloat(s) || 10;
+}
+
+// Suggest weight adjustment based on rep difference
+// More reps = lighter (approx 2.5% per rep), fewer reps = heavier
+function suggestWeight(baseWeight, baseReps, targetReps) {
+  var diff = targetReps - baseReps;
+  // ~2.5% per rep difference, rounded to nearest 2.5kg
+  var factor = 1 - (diff * 0.025);
+  var raw = baseWeight * factor;
+  var rounded = Math.round(raw / 2.5) * 2.5;
+  return Math.max(0, rounded);
+}
+
+function wtSave(exId) {
+  var inp = document.getElementById('wt_' + exId);
+  if (!inp) return;
+  var val = parseFloat(inp.value);
+  if (isNaN(val) || val < 0) return;
+  var data = wtLoad();
+  var row = document.querySelector('[data-ex-id="' + exId + '"]');
+  var canon = row ? row.getAttribute('data-ex-canon') : exId;
+  var targetReps = row ? parseFloat(row.getAttribute('data-target-reps')) : 10;
+  if (!data[canon]) data[canon] = [];
+  // Store this entry with reps and timestamp
+  data[canon].push({ weight: val, reps: targetReps, id: exId, ts: Date.now() });
+  // Keep only last 20 entries per exercise
+  if (data[canon].length > 20) data[canon] = data[canon].slice(-20);
+  wtSaveAll(data);
+  inp.classList.add('wt-saved');
+  inp.classList.remove('wt-loaded');
+}
+
+function wtAdj(exId, delta) {
+  var inp = document.getElementById('wt_' + exId);
+  if (!inp) return;
+  var cur = parseFloat(inp.value) || 0;
+  var next = Math.max(0, Math.round((cur + delta) * 10) / 10);
+  inp.value = next;
+  wtSave(exId);
+}
+
+// On page load: populate all inputs from localStorage, show suggestions
+function wtInit() {
+  var data = wtLoad();
+  var rows = document.querySelectorAll('[data-ex-id]');
+  rows.forEach(function(row) {
+    var exId = row.getAttribute('data-ex-id');
+    var canon = row.getAttribute('data-ex-canon');
+    var targetReps = parseFloat(row.getAttribute('data-target-reps')) || 10;
+    var inp = document.getElementById('wt_' + exId);
+    var sugEl = document.getElementById('wts_' + exId);
+    if (!inp) return;
+
+    var history = data[canon] || [];
+    // Find the most recent saved entry for this exact exercise id (same week/session)
+    var exact = null;
+    for (var i = history.length - 1; i >= 0; i--) {
+      if (history[i].id === exId) { exact = history[i]; break; }
+    }
+    // Find the most recent entry from ANY other week for this canonical exercise
+    var prev = null;
+    for (var i = history.length - 1; i >= 0; i--) {
+      if (history[i].id !== exId) { prev = history[i]; break; }
+    }
+
+    if (exact) {
+      // Restore exactly what was saved for this slot
+      inp.value = exact.weight;
+      inp.classList.add('wt-saved');
+    } else if (prev) {
+      // Suggest based on previous performance + rep difference
+      var suggested = suggestWeight(prev.weight, prev.reps, targetReps);
+      inp.value = suggested;
+      inp.classList.add('wt-loaded');
+      var repDiff = targetReps - prev.reps;
+      if (sugEl && Math.abs(repDiff) >= 0.5) {
+        var dir = repDiff > 0 ? '↓' : '↑';
+        var label = repDiff > 0 ? 'more reps' : 'fewer reps';
+        sugEl.textContent = dir + ' adj from ' + prev.weight + 'kg (' + label + ')';
+      } else if (sugEl) {
+        sugEl.textContent = 'from prev: ' + prev.weight + 'kg';
+      }
+    }
+  });
+}
+
+function exportWeights() {
+  var data = wtLoad();
+  var lines = ['GYMGEEK · Glute Hypertrophy · Weight Log', 'Exported: ' + new Date().toLocaleString(), ''];
+  // Build a readable summary
+  var rows = document.querySelectorAll('[data-ex-id]');
+  rows.forEach(function(row) {
+    var exId = row.getAttribute('data-ex-id');
+    var name = row.getAttribute('data-ex-name');
+    var canon = row.getAttribute('data-ex-canon');
+    var inp = document.getElementById('wt_' + exId);
+    var val = inp ? inp.value : '';
+    if (val) {
+      lines.push(exId + ' | ' + name + ' | ' + val + 'kg');
+    }
+  });
+  lines.push('');
+  lines.push('--- RAW JSON (paste into notes / GitHub gist) ---');
+  lines.push(JSON.stringify(data, null, 2));
+
+  var blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'gymgeek-glute-weights.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ── INIT ── */
+buildRoundDots();buildEmDots();
+document.getElementById('ivWorkVal').textContent=ivWork+'s';
+document.getElementById('ivRestVal').textContent=ivRest+'s';
+document.getElementById('ivRoundsVal').textContent=ivRounds;
+document.getElementById('ivDisplay').textContent=fmtCD(ivWork);
+document.getElementById('emDisplay').textContent=fmtCD(emMins*60);
+document.getElementById('emMinsVal').textContent=emMins;
+document.getElementById('emRoundsVal').textContent=emRounds;
+document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);
+document.getElementById('cdVal').textContent=fmtCD(cdTotal);
+cdSetMode('work');
+wtInit();
+</script>
+</body>
+</html>
