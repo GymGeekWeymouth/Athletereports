@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK &middot; Alfie&#39;s Program &middot; Off Season Footballer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #61C599; --yellow: #FFC11E; --blue: #778FDD; --red: #ff6363;
+    --rose: #E87FA0; --rose-soft: rgba(232,127,160,.15); --rose-border: rgba(232,127,160,.35);
+    --card-bg: #27292B; --card-inner: #2f3235; --border: #3a3d40;
+    --border-soft: rgba(255,255,255,0.06); --text: #f0f4ff; --muted: #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #2A2D30; font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; padding: 28px 20px 80px; overflow-x: hidden; }
+
+  .toolbar { max-width: 1600px; margin: 0 auto 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .club-wordmark { color: rgba(255,255,255,.45); font-family: 'Jost', sans-serif; font-style: normal; font-weight: 200; font-size: 16px; letter-spacing: .45em; margin-left: 8px; text-transform: uppercase; }
+  .toolbar-sub { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+  .light-toggle { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: rgba(255,255,255,.5); font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; transition: all .2s; }
+  .light-toggle:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+
+  /* SECTION HEADERS */
+  .section-header { max-width: 1600px; margin: 0 auto 18px; display: flex; align-items: center; gap: 14px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: .04em; color: #fff; line-height: 1; flex-shrink: 0; }
+  .section-note { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; flex-shrink: 0; }
+  .section-divider { flex: 1; height: 1px; background: linear-gradient(to right, #3a3d40, transparent); }
+
+  /* GRIDS */
+  .day-grid { max-width: 1600px; margin: 0 auto 48px; display: grid; gap: 14px; }
+  .day-grid.four { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 1200px) { .day-grid.four { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 640px) { .day-grid.four { grid-template-columns: 1fr; } }
+
+  /* CARD */
+  .sc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+  .sc-head { padding: 14px 18px 10px; border-bottom: 1px solid var(--border-soft); }
+  .sc-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .sc-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .sc-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+  .sc-session-label { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .06em; color: #fff; line-height: 1; }
+  .sc-session-sub { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+  .sc-footer { padding: 8px 16px 10px; font-size: 9px; color: rgba(255,255,255,.2); letter-spacing: .06em; text-transform: uppercase; border-top: 1px solid var(--border-soft); margin-top: auto; }
+
+  .superset-block { margin: 10px 14px; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; overflow: hidden; }
+  .superset-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 7px 13px 5px; border-bottom: 1px solid var(--border-soft); background: rgba(255,255,255,.02); }
+  .superset-label.rose { color: var(--rose); }
+  .standalone-block { margin: 10px 14px; }
+
+  .ex-row { display: flex; align-items: flex-start; padding: 8px 13px; border-bottom: 1px solid rgba(255,255,255,.04); gap: 8px; }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-code { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; color: var(--muted); flex-shrink: 0; width: 22px; padding-top: 1px; }
+  .ex-name { font-size: 11px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.3; }
+  .ex-stats { display: flex; gap: 4px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+  .ex-chip { font-size: 9px; padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); color: var(--muted); white-space: nowrap; border: 1px solid var(--border-soft); }
+  .ex-chip-val { color: var(--text); font-weight: 500; }
+  .ex-note { font-size: 9px; color: var(--muted); margin-top: 2px; line-height: 1.4; font-style: italic; }
+  .standalone-block .ex-row { background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 8px; margin-bottom: 6px; }
+
+  .live-clock { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: rgba(255,255,255,.7); letter-spacing: .04em; display: flex; align-items: center; gap: 2px; }
+  .live-clock .clock-seconds { font-size: 12px; color: rgba(255,255,255,.35); align-self: flex-end; margin-bottom: 1px; }
+
+  /* LIGHT MODE */
+  body.light-mode { background: #f0f2f4; color: #1a1c1e; }
+  body.light-mode { --rose: #c0456e; --rose-soft: rgba(192,69,110,.1); --rose-border: rgba(192,69,110,.25); --green: #1a9e6a; --blue: #4a62b8; --card-bg: #ffffff; --card-inner: #f5f7f9; --border: #d8dde3; --border-soft: rgba(0,0,0,0.07); --text: #1a1c1e; --muted: #5a6a7a; }
+  body.light-mode .sc { box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+  body.light-mode .sc-brand, body.light-mode .sc-session-label, body.light-mode .section-title { color: #1a1c1e; }
+  body.light-mode .toolbar-brand { color: #1a1c1e; }
+  body.light-mode .club-wordmark { color: #555; }
+  body.light-mode .toolbar-sub { color: #5a6a7a; }
+  body.light-mode .light-toggle { border-color: rgba(0,0,0,.15); color: rgba(0,0,0,.45); background: rgba(0,0,0,.04); }
+  body.light-mode .light-toggle:hover { border-color: rgba(0,0,0,.3); color: rgba(0,0,0,.7); }
+  body.light-mode .superset-label { background: rgba(0,0,0,.02); }
+  body.light-mode .ex-chip { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.08); }
+  body.light-mode .live-clock { color: rgba(0,0,0,.55); }
+  body.light-mode .live-clock .clock-seconds { color: rgba(0,0,0,.3); }
+  body.light-mode .section-divider { background: linear-gradient(to right, #d0d5db, transparent); }
+
+  /* FAB */
+  .fab-group { position: fixed; bottom: 28px; right: 24px; z-index: 800; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .timer-fab { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 50px; background: #FFC11E; color: #1a1c1e; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(255,193,30,.45); transition: transform .15s, box-shadow .15s; }
+  .timer-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 26px rgba(255,193,30,.55); }
+
+  .export-btn { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(119,143,221,.4); background: rgba(119,143,221,.1); color: var(--blue); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .export-btn:hover { background: rgba(119,143,221,.2); }
+  body.light-mode .export-btn { border-color: rgba(74,98,184,.3); background: rgba(74,98,184,.08); color: var(--blue); }
+
+  /* WEIGHT TRACKER */
+  .wt-widget { display: flex; align-items: center; gap: 3px; margin-left: 3px; }
+  .wt-input { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; width: 48px; padding: 2px 4px; border-radius: 6px; border: 1px solid rgba(119,143,221,.4); background: rgba(119,143,221,.08); color: var(--blue); text-align: center; outline: none; transition: border-color .15s; -moz-appearance: textfield; }
+  .wt-input::-webkit-outer-spin-button, .wt-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .wt-input:focus { border-color: var(--blue); background: rgba(119,143,221,.14); }
+  .wt-input.wt-loaded { border-color: rgba(97,197,153,.5); background: rgba(97,197,153,.08); color: var(--green); }
+  .wt-input.wt-saved { border-color: rgba(97,197,153,.7); background: rgba(97,197,153,.12); color: var(--green); }
+  .wt-btn { width: 17px; height: 17px; border-radius: 4px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .1s; line-height: 1; padding: 0; }
+  .wt-btn:hover { background: rgba(255,255,255,.14); color: #fff; }
+  .wt-suggest { font-size: 9px; color: var(--blue); font-style: italic; white-space: nowrap; margin-left: 3px; opacity: .8; }
+  body.light-mode .wt-input { border-color: rgba(74,98,184,.35); background: rgba(74,98,184,.06); color: var(--blue); }
+  body.light-mode .wt-input.wt-loaded { border-color: rgba(26,158,106,.5); background: rgba(26,158,106,.08); color: var(--green); }
+  body.light-mode .wt-input.wt-saved { border-color: rgba(26,158,106,.7); background: rgba(26,158,106,.1); color: var(--green); }
+  body.light-mode .wt-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: #5a6a7a; }
+  body.light-mode .wt-btn:hover { background: rgba(0,0,0,.12); color: #1a1c1e; }
+
+  /* TIMER */
+  .timer-backdrop { display: none; position: fixed; inset: 0; background: transparent; z-index: 900; pointer-events: none; }
+  .timer-backdrop.open { display: block; }
+  .timer-panel { pointer-events: all; background: #1e2022; border: 1px solid #3a3d40; border-radius: 16px; width: 380px; min-width: 280px; min-height: 260px; padding: 0 0 20px; box-shadow: 0 8px 40px rgba(0,0,0,.6); font-family: 'DM Sans', sans-serif; animation: popIn .2s ease; position: fixed; top: 80px; right: 28px; resize: both; overflow: auto; z-index: 901; }
+  @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .timer-drag-handle { width: 100%; padding: 10px 16px 8px; cursor: grab; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.06); user-select: none; background: rgba(255,255,255,.02); border-radius: 16px 16px 0 0; }
+  .timer-drag-handle:active { cursor: grabbing; }
+  .timer-drag-title { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.3); }
+  .timer-drag-bar { width: 32px; height: 3px; background: rgba(255,255,255,.15); border-radius: 2px; }
+  .timer-tabs { display: flex; margin: 12px 16px 0; gap: 5px; }
+  .timer-tab { flex: 1; padding: 6px 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: all .15s; }
+  .timer-tab.active { background: rgba(255,193,30,.12); border-color: rgba(255,193,30,.35); color: #FFC11E; }
+  .timer-face { text-align: center; padding: 18px 16px 0; }
+  .timer-display { font-family: 'DM Mono', monospace; font-size: 58px; font-weight: 500; letter-spacing: .04em; line-height: 1; color: #fff; transition: color .2s; }
+  .timer-display.running { color: #FFC11E; } .timer-display.resting { color: #778FDD; } .timer-display.finished { color: #FFC11E; }
+  .timer-sublabel { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; min-height: 14px; }
+  .interval-config { display: flex; gap: 7px; margin: 12px 16px 0; align-items: center; }
+  .cfg-group { flex: 1; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; padding: 7px 8px; }
+  .cfg-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .cfg-row { display: flex; align-items: center; gap: 4px; }
+  .cfg-btn { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .12s; line-height: 1; }
+  .cfg-btn:hover { background: rgba(255,255,255,.14); }
+  .cfg-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: #fff; flex: 1; text-align: center; }
+  .round-track { display: flex; justify-content: center; gap: 5px; margin: 10px 16px 0; flex-wrap: wrap; min-height: 12px; }
+  .round-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.12); transition: background .2s; }
+  .round-dot.done { background: #FFC11E; } .round-dot.active { background: #61C599; }
+  .timer-controls { display: flex; gap: 8px; margin: 14px 16px 0; }
+  .ctrl-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; letter-spacing: .03em; }
+  .ctrl-play { background: #FFC11E; color: #1a1c1e; } .ctrl-play:hover { background: #ffd04f; }
+  .ctrl-reset { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); color: var(--muted); flex: 0 0 52px; font-size: 11px; }
+  .ctrl-reset:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .lap-list { margin: 10px 16px 0; max-height: 90px; overflow-y: auto; }
+  .lap-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 11px; color: var(--muted); }
+  .lap-row:last-child { border-bottom: none; }
+  .lap-row .lap-time { font-family: 'DM Mono', monospace; color: #fff; font-size: 11px; }
+  .timer-close { position: absolute; top: 9px; right: 12px; width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; z-index: 2; }
+  .timer-close:hover { background: rgba(255,255,255,.16); color: #fff; }
+  body.light-mode .timer-panel { background: #f0f2f4; border-color: #d8dde3; }
+  body.light-mode .timer-drag-handle { background: rgba(0,0,0,.02); border-bottom-color: rgba(0,0,0,.07); }
+  body.light-mode .timer-drag-title { color: rgba(0,0,0,.3); }
+  body.light-mode .timer-drag-bar { background: rgba(0,0,0,.15); }
+  body.light-mode .timer-display { color: #1a1c1e; }
+  body.light-mode .timer-display.running { color: #c8900a; }
+  body.light-mode .timer-display.resting { color: #4a62b8; }
+  body.light-mode .cfg-group { background: #fff; border-color: rgba(0,0,0,.1); }
+  body.light-mode .cfg-val { color: #1a1c1e; }
+  body.light-mode .cfg-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: #1a1c1e; }
+  body.light-mode .ctrl-reset { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-close { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-tab { border-color: rgba(0,0,0,.12); color: #5a6a7a; }
+  body.light-mode .round-dot { background: rgba(0,0,0,.1); }
+  body.light-mode .lap-row { color: #5a6a7a; border-bottom-color: rgba(0,0,0,.07); }
+  body.light-mode .lap-row .lap-time { color: #1a1c1e; }
+</style>
+</head>
+<body class="light-mode">
+
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand">GYMGEEK<span class="club-wordmark">Alfie&#39;s Program</span></div>
+    <div class="toolbar-sub">Off Season &middot; General Athletic Prep &middot; Footballer</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="live-clock"><span id="clockHM"></span><span class="clock-seconds" id="clockS"></span></div>
+    <button class="light-toggle" onclick="toggleFullscreen()" id="fsBtn">
+      <svg id="fsIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <span id="fsLabel">Full screen</span>
+    </button>
+    <button class="light-toggle" onclick="toggleLight()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span id="light-label">Dark mode</span>
+    </button>
+    <button class="export-btn" onclick="exportWeights()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Save / Export
+    </button>
+  </div>
+</div>
+
+<div style="max-width:1600px;margin:0 auto 28px;background:rgba(255,193,30,.07);border:1px solid rgba(255,193,30,.25);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:12px;">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFC11E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span style="font-size:11px;color:rgba(255,193,30,.85);line-height:1.5;">Parts of this program are built around your current injuries &mdash; expect some exercises to be adapted or swapped out as things progress.</span>
+</div>
+<div class="section-header"><div class="section-title">Warm-Ups &amp; Prep</div><div class="section-note">Use the appropriate warm-up before each session</div><div class="section-divider"></div></div>
+<div class="day-grid four"><div class="sc" id="iso">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--green)">ISO</span>
+</div>
+<div class="sc-session-label">Iso</div>
+<div class="sc-session-sub">Day 1 &amp; 3 &middot; Prep</div>
+</div>
+<div class="superset-block"><div class="superset-label rose">Superset A</div><div class="ex-row"><span class="ex-code">A1</span><div style="flex:1"><div class="ex-name">Iso Lunge with Reach</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30s</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A2</span><div style="flex:1"><div class="ex-name">Iso Right Angle Copenhagen</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A3</span><div style="flex:1"><div class="ex-name">Iso Hip Flexor</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A4</span><div style="flex:1"><div class="ex-name">Iso Hamstring Bridge</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30s</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="mobility">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--green)">MOBILITY</span>
+</div>
+<div class="sc-session-label">Mobility</div>
+<div class="sc-session-sub">Optional &middot; Recovery Day</div>
+</div>
+<div class="superset-block"><div class="superset-label rose">Superset A</div><div class="ex-row"><span class="ex-code">A1</span><div style="flex:1"><div class="ex-name">Ankle Shuffles</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">1</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A2</span><div style="flex:1"><div class="ex-name">Thoracic Bow &amp; Arrow</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">1</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A3</span><div style="flex:1"><div class="ex-name">Spiderman with Rotation</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">1</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A4</span><div style="flex:1"><div class="ex-name">Kneeling Hip Flexor Stretch</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">1</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A5</span><div style="flex:1"><div class="ex-name">Standing Hip Circles</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">1</span> sets</span><span class="ex-chip"><span class="ex-chip-val">50</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="upper-wu">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--green)">UPPER-WU</span>
+</div>
+<div class="sc-session-label">Upper Warm-Up</div>
+<div class="sc-session-sub">Day 2</div>
+</div>
+<div class="superset-block"><div class="superset-label rose">Superset A</div><div class="ex-row"><span class="ex-code">A1</span><div style="flex:1"><div class="ex-name">Scap Push-Ups</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A2</span><div style="flex:1"><div class="ex-name">Band Pull-Aparts</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">20</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A3</span><div style="flex:1"><div class="ex-name">Wall Slides</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">20</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="plyos">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--green)">PLYOS</span>
+</div>
+<div class="sc-session-label">Plyos</div>
+<div class="sc-session-sub">Day 1 &amp; Before Sprints</div>
+</div>
+<div class="superset-block"><div class="superset-label rose">Superset A</div><div class="ex-row"><span class="ex-code">A1</span><div style="flex:1"><div class="ex-name">Linear Hops</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A2</span><div style="flex:1"><div class="ex-name">Medial Hops</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A3</span><div style="flex:1"><div class="ex-name">Lateral Hops</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A4</span><div style="flex:1"><div class="ex-name">Backwards Hops</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A5</span><div style="flex:1"><div class="ex-name">CMJ</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div></div><div class="section-header"><div class="section-title">Mesocycle A</div><div class="section-note">Sessions A1 &middot; A2 &middot; A3 &middot; Sprint M1</div><div class="section-divider"></div></div>
+<div class="day-grid four"><div class="sc" id="a1">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--blue)">A1</span>
+</div>
+<div class="sc-session-label">A1</div>
+<div class="sc-session-sub">Lower &mdash; Squat Pattern + Posterior Chain</div>
+</div>
+<div class="standalone-block"><div class="ex-row" data-ex-id="d10_r17" data-ex-name="Goblet Squat" data-ex-canon="goblet_squat" data-target-reps="10.0"><span class="ex-code">A</span><div style="flex:1"><div class="ex-name">Goblet Squat</div><div class="ex-note">RIR: 3</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">4</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><div class="wt-widget" data-ex="d10_r17"><button class="wt-btn" onclick="wtAdj('d10_r17',-2.5)">&#8722;</button><input class="wt-input" id="wt_d10_r17" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d10_r17')"><button class="wt-btn" onclick="wtAdj('d10_r17',2.5)">+</button></div><div class="wt-suggest" id="wts_d10_r17"></div></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset B</div><div class="ex-row" data-ex-id="d10_r18" data-ex-name="Single Leg Landmine RDL" data-ex-canon="single_leg_landmine_rdl" data-target-reps="8.0"><span class="ex-code">B1</span><div style="flex:1"><div class="ex-name">Single Leg Landmine RDL</div><div class="ex-note">RIR: 3</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span><div class="wt-widget" data-ex="d10_r18"><button class="wt-btn" onclick="wtAdj('d10_r18',-2.5)">&#8722;</button><input class="wt-input" id="wt_d10_r18" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d10_r18')"><button class="wt-btn" onclick="wtAdj('d10_r18',2.5)">+</button></div><div class="wt-suggest" id="wts_d10_r18"></div></div></div>
+<div class="ex-row"><span class="ex-code">B2</span><div style="flex:1"><div class="ex-name">Step Downs</div><div class="ex-note">Slow controlled — tip toes to floor</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B3</span><div style="flex:1"><div class="ex-name">Dead Bugs</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B4</span><div style="flex:1"><div class="ex-name">Kneeling Pallof Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B5</span><div style="flex:1"><div class="ex-name">Nordics</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">3</span></span></div></div>
+</div>
+<div class="standalone-block"><div class="ex-row"><span class="ex-code">C</span><div style="flex:1"><div class="ex-name">Reverse Sled Walk</div><div class="ex-note">steps</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="a2">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--blue)">A2</span>
+</div>
+<div class="sc-session-label">A2</div>
+<div class="sc-session-sub">Upper &mdash; Power + Push/Pull</div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset A — Plyos</div><div class="ex-row"><span class="ex-code">A1</span><div style="flex:1"><div class="ex-name">Low Box Jumps</div><div class="ex-note">Height 1 red 25kg plate only</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span><span class="ex-chip"><span class="ex-chip-val">0 min</span> rest</span></div></div>
+<div class="ex-row"><span class="ex-code">A2</span><div style="flex:1"><div class="ex-name">Slams</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A3</span><div style="flex:1"><div class="ex-name">Zig Zag Pogo</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A4</span><div style="flex:1"><div class="ex-name">Heiden</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A5</span><div style="flex:1"><div class="ex-name">Rotation Wall Balls</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A6</span><div style="flex:1"><div class="ex-name">Tuck Jumps</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset B</div><div class="ex-row" data-ex-id="d11_r30" data-ex-name="Dumbbell Bench Press" data-ex-canon="dumbbell_bench_press" data-target-reps="8.0"><span class="ex-code">B1</span><div style="flex:1"><div class="ex-name">Dumbbell Bench Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span><div class="wt-widget" data-ex="d11_r30"><button class="wt-btn" onclick="wtAdj('d11_r30',-2.5)">&#8722;</button><input class="wt-input" id="wt_d11_r30" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d11_r30')"><button class="wt-btn" onclick="wtAdj('d11_r30',2.5)">+</button></div><div class="wt-suggest" id="wts_d11_r30"></div></div></div>
+<div class="ex-row" data-ex-id="d11_r31" data-ex-name="Dumbbell Prone Row" data-ex-canon="dumbbell_prone_row" data-target-reps="10.0"><span class="ex-code">B2</span><div style="flex:1"><div class="ex-name">Dumbbell Prone Row</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><div class="wt-widget" data-ex="d11_r31"><button class="wt-btn" onclick="wtAdj('d11_r31',-2.5)">&#8722;</button><input class="wt-input" id="wt_d11_r31" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d11_r31')"><button class="wt-btn" onclick="wtAdj('d11_r31',2.5)">+</button></div><div class="wt-suggest" id="wts_d11_r31"></div></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset C</div><div class="ex-row" data-ex-id="d11_r32" data-ex-name="Single Arm Landmine Press" data-ex-canon="single_arm_landmine_press" data-target-reps="10.0"><span class="ex-code">C1</span><div style="flex:1"><div class="ex-name">Single Arm Landmine Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><div class="wt-widget" data-ex="d11_r32"><button class="wt-btn" onclick="wtAdj('d11_r32',-2.5)">&#8722;</button><input class="wt-input" id="wt_d11_r32" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d11_r32')"><button class="wt-btn" onclick="wtAdj('d11_r32',2.5)">+</button></div><div class="wt-suggest" id="wts_d11_r32"></div></div></div>
+<div class="ex-row"><span class="ex-code">C2</span><div style="flex:1"><div class="ex-name">Cobra Pulldown</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset D</div><div class="ex-row"><span class="ex-code">D1</span><div style="flex:1"><div class="ex-name">Inverted Row</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+<div class="ex-row" data-ex-id="d11_r35" data-ex-name="Face Pull" data-ex-canon="face_pull" data-target-reps="12.0"><span class="ex-code">D2</span><div style="flex:1"><div class="ex-name">Face Pull</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span><div class="wt-widget" data-ex="d11_r35"><button class="wt-btn" onclick="wtAdj('d11_r35',-2.5)">&#8722;</button><input class="wt-input" id="wt_d11_r35" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d11_r35')"><button class="wt-btn" onclick="wtAdj('d11_r35',2.5)">+</button></div><div class="wt-suggest" id="wts_d11_r35"></div></div></div>
+<div class="ex-row"><span class="ex-code">D3</span><div style="flex:1"><div class="ex-name">Press Ups</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="a3">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--blue)">A3</span>
+</div>
+<div class="sc-session-label">A3</div>
+<div class="sc-session-sub">Lower &mdash; Hinge + Hip Thrust</div>
+</div>
+<div class="standalone-block"><div class="ex-row" data-ex-id="d12_r37" data-ex-name="Trap Bar Deadlift" data-ex-canon="trap_bar_deadlift" data-target-reps="10.0"><span class="ex-code">A</span><div style="flex:1"><div class="ex-name">Trap Bar Deadlift</div><div class="ex-note">RIR: 5</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><div class="wt-widget" data-ex="d12_r37"><button class="wt-btn" onclick="wtAdj('d12_r37',-2.5)">&#8722;</button><input class="wt-input" id="wt_d12_r37" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d12_r37')"><button class="wt-btn" onclick="wtAdj('d12_r37',2.5)">+</button></div><div class="wt-suggest" id="wts_d12_r37"></div></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset B</div><div class="ex-row" data-ex-id="d12_r38" data-ex-name="Single Leg Hip Thrust" data-ex-canon="single_leg_hip_thrust" data-target-reps="10.0"><span class="ex-code">B1</span><div style="flex:1"><div class="ex-name">Single Leg Hip Thrust</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><div class="wt-widget" data-ex="d12_r38"><button class="wt-btn" onclick="wtAdj('d12_r38',-2.5)">&#8722;</button><input class="wt-input" id="wt_d12_r38" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d12_r38')"><button class="wt-btn" onclick="wtAdj('d12_r38',2.5)">+</button></div><div class="wt-suggest" id="wts_d12_r38"></div></div></div>
+<div class="ex-row"><span class="ex-code">B2</span><div style="flex:1"><div class="ex-name">Nordics</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">3</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B3</span><div style="flex:1"><div class="ex-name">Dead Bugs</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B4</span><div style="flex:1"><div class="ex-name">Crossover Sled Walk</div><div class="ex-note">steps</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">15</span></span></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset C</div><div class="ex-row" data-ex-id="d12_r42" data-ex-name="Single Arm Bench Press" data-ex-canon="single_arm_bench_press" data-target-reps="8.0"><span class="ex-code">C1</span><div style="flex:1"><div class="ex-name">Single Arm Bench Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span><div class="wt-widget" data-ex="d12_r42"><button class="wt-btn" onclick="wtAdj('d12_r42',-2.5)">&#8722;</button><input class="wt-input" id="wt_d12_r42" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d12_r42')"><button class="wt-btn" onclick="wtAdj('d12_r42',2.5)">+</button></div><div class="wt-suggest" id="wts_d12_r42"></div></div></div>
+<div class="ex-row"><span class="ex-code">C2</span><div style="flex:1"><div class="ex-name">Chin Ups</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="sprint-m1">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--yellow)">SPRINT-M1</span>
+</div>
+<div class="sc-session-label">Sprint M1</div>
+<div class="sc-session-sub">Acceleration &mdash; Mesocycle 1</div>
+</div>
+<div class="standalone-block"><div class="ex-row"><span class="ex-code">A</span><div style="flex:1"><div class="ex-name">10m Sprint</div><div class="ex-note">10m walk to start</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><span class="ex-chip"><span class="ex-chip-val">1 min</span> rest</span></div></div>
+<div class="ex-row"><span class="ex-code">B</span><div style="flex:1"><div class="ex-name">20m Sprint</div><div class="ex-note">Tall and Fall</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">20</span></span><span class="ex-chip"><span class="ex-chip-val">2 min</span> rest</span></div></div>
+<div class="ex-row"><span class="ex-code">C</span><div style="flex:1"><div class="ex-name">30m Sprint</div><div class="ex-note">Left pedal &rarr; right pedal &rarr; back pedal</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div></div><div class="section-header"><div class="section-title">Mesocycle B</div><div class="section-note">Sessions B1 &middot; B2 &middot; B3 &middot; Sprint M2</div><div class="section-divider"></div></div>
+<div class="day-grid four"><div class="sc" id="b1">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--rose)">B1</span>
+</div>
+<div class="sc-session-label">B1</div>
+<div class="sc-session-sub">Lower &mdash; Squat Pattern + Posterior Chain</div>
+</div>
+<div class="standalone-block"><div class="ex-row" data-ex-id="d20_r47" data-ex-name="Goblet Squat" data-ex-canon="goblet_squat" data-target-reps="6.0"><span class="ex-code">A</span><div style="flex:1"><div class="ex-name">Goblet Squat</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">4</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span><div class="wt-widget" data-ex="d20_r47"><button class="wt-btn" onclick="wtAdj('d20_r47',-2.5)">&#8722;</button><input class="wt-input" id="wt_d20_r47" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d20_r47')"><button class="wt-btn" onclick="wtAdj('d20_r47',2.5)">+</button></div><div class="wt-suggest" id="wts_d20_r47"></div></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset B</div><div class="ex-row" data-ex-id="d20_r48" data-ex-name="Single Leg Landmine RDL" data-ex-canon="single_leg_landmine_rdl" data-target-reps="6.0"><span class="ex-code">B1</span><div style="flex:1"><div class="ex-name">Single Leg Landmine RDL</div><div class="ex-note">RIR: 3</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span><div class="wt-widget" data-ex="d20_r48"><button class="wt-btn" onclick="wtAdj('d20_r48',-2.5)">&#8722;</button><input class="wt-input" id="wt_d20_r48" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d20_r48')"><button class="wt-btn" onclick="wtAdj('d20_r48',2.5)">+</button></div><div class="wt-suggest" id="wts_d20_r48"></div></div></div>
+<div class="ex-row"><span class="ex-code">B2</span><div style="flex:1"><div class="ex-name">Walking Lunge</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B3</span><div style="flex:1"><div class="ex-name">Alternate Supermans</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B4</span><div style="flex:1"><div class="ex-name">Kneeling Pallof Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B5</span><div style="flex:1"><div class="ex-name">Sliders</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span></div></div>
+</div>
+<div class="standalone-block"><div class="ex-row"><span class="ex-code">C</span><div style="flex:1"><div class="ex-name">Sled Push</div><div class="ex-note">steps</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">15</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="b2">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--rose)">B2</span>
+</div>
+<div class="sc-session-label">B2</div>
+<div class="sc-session-sub">Upper &mdash; Power + Push/Pull</div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset A — Plyos</div><div class="ex-row"><span class="ex-code">A1</span><div style="flex:1"><div class="ex-name">Box Jump</div><div class="ex-note">Step off the box</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span><span class="ex-chip"><span class="ex-chip-val">0 min</span> rest</span></div></div>
+<div class="ex-row"><span class="ex-code">A2</span><div style="flex:1"><div class="ex-name">Slams</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A3</span><div style="flex:1"><div class="ex-name">Single Leg Zig Zag Hop</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A4</span><div style="flex:1"><div class="ex-name">Rotational Pogo</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A5</span><div style="flex:1"><div class="ex-name">Med Ball Shot Put</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+<div class="ex-row"><span class="ex-code">A6</span><div style="flex:1"><div class="ex-name">Weighted CMJ</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset B</div><div class="ex-row" data-ex-id="d21_r60" data-ex-name="Dumbbell Bench Press" data-ex-canon="dumbbell_bench_press" data-target-reps="6.0"><span class="ex-code">B1</span><div style="flex:1"><div class="ex-name">Dumbbell Bench Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span><div class="wt-widget" data-ex="d21_r60"><button class="wt-btn" onclick="wtAdj('d21_r60',-2.5)">&#8722;</button><input class="wt-input" id="wt_d21_r60" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d21_r60')"><button class="wt-btn" onclick="wtAdj('d21_r60',2.5)">+</button></div><div class="wt-suggest" id="wts_d21_r60"></div></div></div>
+<div class="ex-row" data-ex-id="d21_r61" data-ex-name="Single Arm Row" data-ex-canon="single_arm_row" data-target-reps="6.0"><span class="ex-code">B2</span><div style="flex:1"><div class="ex-name">Single Arm Row</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span><div class="wt-widget" data-ex="d21_r61"><button class="wt-btn" onclick="wtAdj('d21_r61',-2.5)">&#8722;</button><input class="wt-input" id="wt_d21_r61" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d21_r61')"><button class="wt-btn" onclick="wtAdj('d21_r61',2.5)">+</button></div><div class="wt-suggest" id="wts_d21_r61"></div></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset C</div><div class="ex-row" data-ex-id="d21_r62" data-ex-name="Single Arm Landmine Press" data-ex-canon="single_arm_landmine_press" data-target-reps="8.0"><span class="ex-code">C1</span><div style="flex:1"><div class="ex-name">Single Arm Landmine Press</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span><div class="wt-widget" data-ex="d21_r62"><button class="wt-btn" onclick="wtAdj('d21_r62',-2.5)">&#8722;</button><input class="wt-input" id="wt_d21_r62" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d21_r62')"><button class="wt-btn" onclick="wtAdj('d21_r62',2.5)">+</button></div><div class="wt-suggest" id="wts_d21_r62"></div></div></div>
+<div class="ex-row"><span class="ex-code">C2</span><div style="flex:1"><div class="ex-name">Cobra Pulldown</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset D</div><div class="ex-row"><span class="ex-code">D1</span><div style="flex:1"><div class="ex-name">Chin Ups</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span></div></div>
+<div class="ex-row" data-ex-id="d21_r65" data-ex-name="Face Pull" data-ex-canon="face_pull" data-target-reps="12.0"><span class="ex-code">D2</span><div style="flex:1"><div class="ex-name">Face Pull</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span><div class="wt-widget" data-ex="d21_r65"><button class="wt-btn" onclick="wtAdj('d21_r65',-2.5)">&#8722;</button><input class="wt-input" id="wt_d21_r65" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d21_r65')"><button class="wt-btn" onclick="wtAdj('d21_r65',2.5)">+</button></div><div class="wt-suggest" id="wts_d21_r65"></div></div></div>
+<div class="ex-row"><span class="ex-code">D3</span><div style="flex:1"><div class="ex-name">Press Ups</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">18</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="b3">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--rose)">B3</span>
+</div>
+<div class="sc-session-label">B3</div>
+<div class="sc-session-sub">Lower &mdash; Hinge + Hip Thrust</div>
+</div>
+<div class="standalone-block"><div class="ex-row" data-ex-id="d22_r67" data-ex-name="Trap Bar Deadlift" data-ex-canon="trap_bar_deadlift" data-target-reps="6.0"><span class="ex-code">A</span><div style="flex:1"><div class="ex-name">Trap Bar Deadlift</div><div class="ex-note">RIR: 5</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">4</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span><div class="wt-widget" data-ex="d22_r67"><button class="wt-btn" onclick="wtAdj('d22_r67',-2.5)">&#8722;</button><input class="wt-input" id="wt_d22_r67" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d22_r67')"><button class="wt-btn" onclick="wtAdj('d22_r67',2.5)">+</button></div><div class="wt-suggest" id="wts_d22_r67"></div></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset B</div><div class="ex-row" data-ex-id="d22_r68" data-ex-name="Single Leg Hip Thrust" data-ex-canon="single_leg_hip_thrust" data-target-reps="8.0"><span class="ex-code">B1</span><div style="flex:1"><div class="ex-name">Single Leg Hip Thrust</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">8</span></span><div class="wt-widget" data-ex="d22_r68"><button class="wt-btn" onclick="wtAdj('d22_r68',-2.5)">&#8722;</button><input class="wt-input" id="wt_d22_r68" type="number" step="0.5" min="0" placeholder="kg" oninput="wtSave('d22_r68')"><button class="wt-btn" onclick="wtAdj('d22_r68',2.5)">+</button></div><div class="wt-suggest" id="wts_d22_r68"></div></div></div>
+<div class="ex-row"><span class="ex-code">B2</span><div style="flex:1"><div class="ex-name">Nordics</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B3</span><div style="flex:1"><div class="ex-name">Dead Bugs</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">12</span></span></div></div>
+<div class="ex-row"><span class="ex-code">B4</span><div style="flex:1"><div class="ex-name">Crossover Sled Walk</div><div class="ex-note">steps</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">15</span></span></div></div>
+</div>
+<div class="superset-block"><div class="superset-label">Superset C</div><div class="ex-row"><span class="ex-code">C1</span><div style="flex:1"><div class="ex-name">Alternate Incline Dumbbell Bench</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">4</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6</span></span></div></div>
+<div class="ex-row"><span class="ex-code">C2</span><div style="flex:1"><div class="ex-name">Chin Ups</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">4</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div><div class="sc" id="sprint-m2">
+<div class="sc-head">
+<div class="sc-brand-row">
+<span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Alfie&#39;s Program</span></span>
+<span class="sc-type" style="color:var(--yellow)">SPRINT-M2</span>
+</div>
+<div class="sc-session-label">Sprint M2</div>
+<div class="sc-session-sub">Acceleration &mdash; Mesocycle 2</div>
+</div>
+<div class="standalone-block"><div class="ex-row"><span class="ex-code">A</span><div style="flex:1"><div class="ex-name">10m Sprint</div><div class="ex-note">10m walk to start</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">10</span></span><span class="ex-chip"><span class="ex-chip-val">1 min</span> rest</span></div></div>
+<div class="ex-row"><span class="ex-code">B</span><div style="flex:1"><div class="ex-name">20m Sprint</div><div class="ex-note">Tall and Fall</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">20</span></span><span class="ex-chip"><span class="ex-chip-val">2 min</span> rest</span></div></div>
+<div class="ex-row"><span class="ex-code">C</span><div style="flex:1"><div class="ex-name">30m Sprint</div><div class="ex-note">Left pedal &rarr; right pedal &rarr; back pedal</div></div><div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">30</span></span></div></div>
+</div>
+<div class="sc-footer">gymgeekonline.co.uk &middot; Treat Train Perform</div>
+</div></div>
+
+<div class="fab-group">
+  <button class="timer-fab" onclick="openTimer()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Timer
+  </button>
+</div>
+
+<!-- TIMER OVERLAY -->
+<div class="timer-backdrop" id="timerBackdrop">
+<div class="timer-panel" id="timerPanel">
+<div class="timer-drag-handle" id="timerDragHandle">
+  <span class="timer-drag-title">GymGeek Timer</span>
+  <div class="timer-drag-bar"></div>
+  <button class="timer-close" onclick="closeTimer()">&#x2715;</button>
+</div>
+<div class="timer-tabs">
+  <button class="timer-tab active" id="tabStopwatch" onclick="switchTab('stopwatch')">Stopwatch</button>
+  <button class="timer-tab" id="tabInterval" onclick="switchTab('interval')">Interval</button>
+  <button class="timer-tab" id="tabEmom" onclick="switchTab('emom')">EMOM</button>
+  <button class="timer-tab" id="tabCountdown" onclick="switchTab('countdown')">Countdown</button>
+</div>
+<div id="paneStopwatch">
+  <div class="timer-face"><div class="timer-display" id="swDisplay">00:00.0</div><div class="timer-sublabel" id="swSublabel"></div></div>
+
+<script>
+
+setTimeout(function(){location.reload();}, 24*60*60*1000);
+function tickClock(){var now=new Date(),h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();document.getElementById('clockHM').textContent=(h<10?'0'+h:h)+':'+(m<10?'0'+m:m)+' ';document.getElementById('clockS').textContent=(s<10?'0'+s:s);}
+tickClock();setInterval(tickClock,1000);
+function toggleLight(){var b=document.body,l=b.classList.toggle('light-mode');document.getElementById('light-label').textContent=l?'Dark mode':'Light mode';}
+function toggleFullscreen(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(function(){});}else{document.exitFullscreen().catch(function(){});}}
+document.addEventListener('fullscreenchange',function(){var f=!!document.fullscreenElement;document.getElementById('fsLabel').textContent=f?'Exit':'Full screen';var i=document.getElementById('fsIcon');i.innerHTML=f?'<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>':'<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>';});
+function openTimer(){document.getElementById('timerBackdrop').classList.add('open');}
+function closeTimer(){document.getElementById('timerBackdrop').classList.remove('open');}
+(function(){
+  var panel,handle,dragging=false,ox=0,oy=0;
+  document.addEventListener('DOMContentLoaded',function(){panel=document.getElementById('timerPanel');handle=document.getElementById('timerDragHandle');handle.addEventListener('mousedown',startDrag);handle.addEventListener('touchstart',startDragT,{passive:false});});
+  function startDrag(e){if(e.target.closest('.timer-close'))return;dragging=true;var r=panel.getBoundingClientRect();panel.style.right='auto';panel.style.left=r.left+'px';panel.style.top=r.top+'px';ox=e.clientX-r.left;oy=e.clientY-r.top;document.addEventListener('mousemove',onDrag);document.addEventListener('mouseup',stopDrag);e.preventDefault();}
+  function startDragT(e){if(e.target.closest('.timer-close'))return;dragging=true;var t=e.touches[0],r=panel.getBoundingClientRect();panel.style.right='auto';panel.style.left=r.left+'px';panel.style.top=r.top+'px';ox=t.clientX-r.left;oy=t.clientY-r.top;document.addEventListener('touchmove',onDragT,{passive:false});document.addEventListener('touchend',stopDrag);e.preventDefault();}
+  function onDrag(e){if(!dragging)return;clamp(e.clientX-ox,e.clientY-oy);}
+  function onDragT(e){if(!dragging)return;var t=e.touches[0];clamp(t.clientX-ox,t.clientY-oy);e.preventDefault();}
+  function clamp(x,y){var pw=panel.offsetWidth,ph=panel.offsetHeight;panel.style.left=Math.max(0,Math.min(x,window.innerWidth-pw))+'px';panel.style.top=Math.max(0,Math.min(y,window.innerHeight-ph))+'px';}
+  function stopDrag(){dragging=false;document.removeEventListener('mousemove',onDrag);document.removeEventListener('mouseup',stopDrag);document.removeEventListener('touchmove',onDragT);document.removeEventListener('touchend',stopDrag);}
+})();
+var currentTab='stopwatch';
+function switchTab(tab){currentTab=tab;['stopwatch','interval','emom','countdown'].forEach(function(t){document.getElementById('tab'+cap(t)).classList.toggle('active',t===tab);document.getElementById('pane'+cap(t)).style.display=t===tab?'':'none';});}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+var swRunning=false,swStart=0,swElapsed=0,swRaf=null,swLaps=[],swLapStart=0;
+function swToggle(){if(swRunning){swElapsed+=Date.now()-swStart;cancelAnimationFrame(swRaf);swRaf=null;swRunning=false;document.getElementById('swPlayBtn').textContent='Resume';document.getElementById('swDisplay').classList.remove('running');}else{swStart=Date.now();swRunning=true;document.getElementById('swPlayBtn').textContent='Stop';document.getElementById('swDisplay').classList.add('running');swTick();}}
+function swTick(){if(!swRunning)return;document.getElementById('swDisplay').textContent=fmtSW(swElapsed+(Date.now()-swStart));swRaf=requestAnimationFrame(swTick);}
+function swLap(){if(!swRunning&&swElapsed===0)return;var total=swElapsed+(swRunning?Date.now()-swStart:0),split=total-swLapStart;swLapStart=total;swLaps.unshift({n:swLaps.length+1,split:split,total:total});renderLaps();}
+function swReset(){if(swRaf){cancelAnimationFrame(swRaf);swRaf=null;}swRunning=false;swStart=0;swElapsed=0;swLapStart=0;swLaps=[];document.getElementById('swDisplay').textContent='00:00.0';document.getElementById('swDisplay').className='timer-display';document.getElementById('swPlayBtn').textContent='Start';document.getElementById('swSublabel').textContent='';renderLaps();}
+function renderLaps(){var el=document.getElementById('lapList');if(!swLaps.length){el.innerHTML='';return;}el.innerHTML=swLaps.map(function(l){return'<div class="lap-row"><span>Lap '+l.n+'</span><span class="lap-time">'+fmtSW(l.split)+'</span><span class="lap-time" style="color:var(--muted);font-size:10px;">'+fmtSW(l.total)+'</span></div>';}).join('');}
+function fmtSW(ms){var m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),t=Math.floor((ms%1000)/100);return pad(m)+':'+pad(s)+'.'+t;}
+var ivWork=30,ivRest=30,ivRounds=3,ivRunning=false,ivPhase='work',ivRoundCurrent=1,ivInterval=null,ivEndTime=0,ivLastBeepAt=-1,ivRemaining=0;
+function adjIv(f,d){if(ivRunning)return;if(f==='work'){ivWork=Math.max(5,ivWork+d);document.getElementById('ivWorkVal').textContent=ivWork+'s';}if(f==='rest'){ivRest=Math.max(0,ivRest+d);document.getElementById('ivRestVal').textContent=ivRest+'s';}if(f==='rounds'){ivRounds=Math.max(1,ivRounds+d);document.getElementById('ivRoundsVal').textContent=ivRounds;}ivRemaining=ivWork;document.getElementById('ivDisplay').textContent=fmtCD(ivWork);buildRoundDots();}
+function buildRoundDots(){var el=document.getElementById('roundTrack');el.innerHTML='';for(var i=1;i<=ivRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<ivRoundCurrent?' done':i===ivRoundCurrent?' active':'');d.id='dot'+i;el.appendChild(d);}}
+function ivToggle(){if(ivRunning){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivPlayBtn').textContent='Resume';document.getElementById('ivDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(ivRemaining===0){ivPhase='work';ivRoundCurrent=1;ivRemaining=ivWork;}ivRunning=true;document.getElementById('ivPlayBtn').textContent='Pause';document.getElementById('ivConfig').style.opacity='.4';buildRoundDots();ivEndTime=Date.now()+ivRemaining*1000;ivInterval=setInterval(ivTick,250);ivTick();}}
+function ivTick(){var rem=Math.ceil((ivEndTime-Date.now())/1000);if(rem<=0){soundFinish();if(ivPhase==='work'){if(ivRest>0){ivPhase='rest';ivRemaining=ivRest;ivEndTime=Date.now()+ivRest*1000;ivLastBeepAt=-1;}else{ivNextRound();}}else{ivNextRound();}return;}if(rem<=3&&rem!==ivLastBeepAt){ivLastBeepAt=rem;soundCountdown(rem);}ivRemaining=rem;document.getElementById('ivDisplay').textContent=fmtCD(rem);document.getElementById('ivDisplay').className='timer-display '+(ivPhase==='work'?'running':'resting');document.getElementById('ivSublabel').textContent=(ivPhase==='work'?'&#9679; WORK':'&#9675; REST')+'  &middot;  Round '+ivRoundCurrent+' of '+ivRounds;}
+function ivNextRound(){var dot=document.getElementById('dot'+ivRoundCurrent);if(dot)dot.className='round-dot done';if(ivRoundCurrent>=ivRounds){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivDisplay').textContent='Done!';document.getElementById('ivDisplay').className='timer-display finished';document.getElementById('ivSublabel').textContent='All '+ivRounds+' rounds complete';document.getElementById('ivPlayBtn').textContent='Start';document.getElementById('ivConfig').style.opacity='1';ivRemaining=0;soundFanfare();return;}ivRoundCurrent++;ivLastBeepAt=-1;ivPhase='work';ivRemaining=ivWork;ivEndTime=Date.now()+ivWork*1000;buildRoundDots();}
+function ivReset(){clearInterval(ivInterval);ivInterval=null;ivRunning=false;ivPhase='work';ivRoundCurrent=1;ivRemaining=ivWork;ivLastBeepAt=-1;document.getElementById('ivDisplay').textContent=fmtCD(ivWork);document.getElementById('ivDisplay').className='timer-display';document.getElementById('ivSublabel').textContent='Set work time & rounds';document.getElementById('ivPlayBtn').textContent='Start';document.getElementById('ivConfig').style.opacity='1';buildRoundDots();}
+var emMins=1,emRounds=10,emRunning=false,emRoundCurrent=1,emInterval=null,emEndTime=0,emLastBeepAt=-1;
+function adjEm(f,d){if(emRunning)return;if(f==='mins'){emMins=Math.max(1,Math.min(5,emMins+d));document.getElementById('emMinsVal').textContent=emMins;}if(f==='rounds'){emRounds=Math.max(1,Math.min(30,emRounds+d));document.getElementById('emRoundsVal').textContent=emRounds;}document.getElementById('emDisplay').textContent=fmtCD(emMins*60);buildEmDots();}
+function buildEmDots(){var el=document.getElementById('emRoundTrack');el.innerHTML='';for(var i=1;i<=emRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<emRoundCurrent?' done':i===emRoundCurrent?' active':'');d.id='emdot'+i;el.appendChild(d);}}
+function emToggle(){if(emRunning){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emPlayBtn').textContent='Resume';document.getElementById('emDisplay').classList.remove('running');}else{unlockAudio();soundStart();if(emRoundCurrent>emRounds){emRoundCurrent=1;}emRunning=true;document.getElementById('emPlayBtn').textContent='Pause';document.getElementById('emConfig').style.opacity='.4';buildEmDots();emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;emInterval=setInterval(emTick,250);emTick();}}
+function emTick(){var rem=Math.ceil((emEndTime-Date.now())/1000);if(rem<=0){var dot=document.getElementById('emdot'+emRoundCurrent);if(dot)dot.className='round-dot done';if(emRoundCurrent>=emRounds){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emDisplay').textContent='Done!';document.getElementById('emDisplay').className='timer-display finished';document.getElementById('emSublabel').textContent='All '+emRounds+' rounds complete';document.getElementById('emPlayBtn').textContent='Start';document.getElementById('emConfig').style.opacity='1';soundFanfare();return;}emRoundCurrent++;emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;soundFinish();buildEmDots();return;}if(rem<=3&&rem!==emLastBeepAt){emLastBeepAt=rem;soundCountdown(rem);}document.getElementById('emDisplay').textContent=fmtCD(rem);document.getElementById('emDisplay').className='timer-display running';document.getElementById('emSublabel').textContent='Round '+emRoundCurrent+' of '+emRounds+'  &middot;  '+fmtCD(rem)+' left';}
+function emReset(){clearInterval(emInterval);emInterval=null;emRunning=false;emRoundCurrent=1;emLastBeepAt=-1;document.getElementById('emDisplay').textContent=fmtCD(emMins*60);document.getElementById('emDisplay').className='timer-display';document.getElementById('emSublabel').textContent='Every minute on the minute';document.getElementById('emPlayBtn').textContent='Start';document.getElementById('emConfig').style.opacity='1';buildEmDots();}
+var cdTotal=180,cdRemaining=180,cdRunning=false,cdInterval=null,cdEndTime=0,cdMode='work',cdLastBeepAt=-1;
+function cdSetMode(mode){if(cdRunning)return;cdMode=mode;var iw=mode==='work';document.getElementById('cdModeWork').style.cssText='flex:1;padding:7px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;'+(iw?'border:1px solid rgba(97,197,153,.35);background:rgba(97,197,153,.12);color:#61C599;':'border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);');document.getElementById('cdModeRest').style.cssText='flex:1;padding:7px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;'+(!iw?'border:1px solid rgba(119,143,221,.35);background:rgba(119,143,221,.12);color:#778FDD;':'border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);');document.getElementById('cdSublabel').textContent='Set duration & press Start';document.getElementById('cdDisplay').className='timer-display';document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);}
+function adjCd(d){if(cdRunning)return;cdTotal=Math.max(10,cdTotal+d);cdRemaining=cdTotal;document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);document.getElementById('cdVal').textContent=fmtCD(cdTotal);}
+function cdToggle(){if(cdRunning){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdPlayBtn').textContent='Resume';document.getElementById('cdDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(cdRemaining<=0){cdRemaining=cdTotal;}cdLastBeepAt=-1;cdRunning=true;cdEndTime=Date.now()+cdRemaining*1000;document.getElementById('cdPlayBtn').textContent='Pause';document.getElementById('cdDisplay').classList.add(cdMode==='work'?'running':'resting');cdInterval=setInterval(cdTick,250);cdTick();}}
+function cdTick(){var rem=Math.ceil((cdEndTime-Date.now())/1000),iw=cdMode==='work';if(rem<=0){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdDisplay').textContent=iw?'Rest!':'Go!';document.getElementById('cdDisplay').className='timer-display finished';document.getElementById('cdSublabel').textContent=iw?'Work complete — rest up':'Rest complete — get to work';document.getElementById('cdPlayBtn').textContent='Start';cdRemaining=0;soundFanfare();return;}if(rem<=3&&rem!==cdLastBeepAt){cdLastBeepAt=rem;soundCountdown(rem);}cdRemaining=rem;document.getElementById('cdDisplay').textContent=fmtCD(rem);document.getElementById('cdSublabel').textContent=rem<=3?'':(iw?'Working':'Resting');if(rem<=10){document.getElementById('cdDisplay').classList.remove('running','resting');document.getElementById('cdDisplay').classList.add('finished');}}
+function cdReset(){clearInterval(cdInterval);cdInterval=null;cdRunning=false;cdRemaining=cdTotal;cdLastBeepAt=-1;document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);document.getElementById('cdDisplay').className='timer-display';document.getElementById('cdSublabel').textContent='Set duration & press Start';document.getElementById('cdPlayBtn').textContent='Start';}
+function pad(n){return n<10?'0'+n:''+n;}
+function fmtCD(s){var m=Math.floor(s/60),sec=s%60;return pad(m)+':'+pad(sec);}
+var audioCtx=null,audioUnlocked=false;
+function unlockAudio(){if(audioUnlocked)return;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();var buf=audioCtx.createBuffer(1,1,22050),src=audioCtx.createBufferSource();src.buffer=buf;src.connect(audioCtx.destination);src.start(0);audioCtx.resume().then(function(){audioUnlocked=true;});}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:false,passive:true});
+document.addEventListener('mousedown',unlockAudio,{once:false,passive:true});
+function tone(freq,dur,vol,type,offsetSec){try{if(!audioCtx)unlockAudio();if(!audioCtx)return;if(audioCtx.state==='suspended')audioCtx.resume();var ctx=audioCtx,o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=type||'sine';o.frequency.setValueAtTime(freq,ctx.currentTime);var t=ctx.currentTime+(offsetSec||0);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol||0.4,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.05);}catch(e){}}
+function soundStart(){tone(660,0.12,0.4,'sine',0.0);tone(880,0.15,0.4,'sine',0.13);}
+function soundCountdown(n){if(n===3||n===2){tone(440,0.10,0.35,'sine',0);}else if(n===1){tone(660,0.15,0.45,'sine',0);}}
+function soundFinish(){tone(880,0.12,0.5,'sine',0.0);tone(880,0.12,0.5,'sine',0.2);}
+function soundFanfare(){tone(523,0.15,0.4,'sine',0.0);tone(659,0.15,0.35,'sine',0.0);tone(784,0.15,0.30,'sine',0.0);tone(1047,0.30,0.35,'sine',0.18);}
+var WT_KEY='gymgeek_alfie_weights';
+function wtLoad(){try{return JSON.parse(localStorage.getItem(WT_KEY))||{};}catch(e){return {};}}
+function wtSaveAll(data){try{localStorage.setItem(WT_KEY,JSON.stringify(data));}catch(e){}}
+function suggestWeight(base,baseReps,targetReps){var diff=targetReps-baseReps,factor=1-(diff*0.025),raw=base*factor;return Math.max(0,Math.round(raw/2.5)*2.5);}
+function wtSave(exId){var inp=document.getElementById('wt_'+exId);if(!inp)return;var val=parseFloat(inp.value);if(isNaN(val)||val<0)return;var data=wtLoad();var row=document.querySelector('[data-ex-id="'+exId+'"]');var canon=row?row.getAttribute('data-ex-canon'):exId;var targetReps=row?parseFloat(row.getAttribute('data-target-reps')):10;if(!data[canon])data[canon]=[];data[canon].push({weight:val,reps:targetReps,id:exId,ts:Date.now()});if(data[canon].length>20)data[canon]=data[canon].slice(-20);wtSaveAll(data);inp.classList.add('wt-saved');inp.classList.remove('wt-loaded');}
+function wtAdj(exId,delta){var inp=document.getElementById('wt_'+exId);if(!inp)return;var cur=parseFloat(inp.value)||0;inp.value=Math.max(0,Math.round((cur+delta)*10)/10);wtSave(exId);}
+function wtInit(){var data=wtLoad();var rows=document.querySelectorAll('[data-ex-id]');rows.forEach(function(row){var exId=row.getAttribute('data-ex-id');var canon=row.getAttribute('data-ex-canon');var targetReps=parseFloat(row.getAttribute('data-target-reps'))||10;var inp=document.getElementById('wt_'+exId);var sugEl=document.getElementById('wts_'+exId);if(!inp)return;var history=data[canon]||[];var exact=null;for(var i=history.length-1;i>=0;i--){if(history[i].id===exId){exact=history[i];break;}}var prev=null;for(var i=history.length-1;i>=0;i--){if(history[i].id!==exId){prev=history[i];break;}}if(exact){inp.value=exact.weight;inp.classList.add('wt-saved');}else if(prev){var suggested=suggestWeight(prev.weight,prev.reps,targetReps);inp.value=suggested;inp.classList.add('wt-loaded');var repDiff=targetReps-prev.reps;if(sugEl&&Math.abs(repDiff)>=0.5){var dir=repDiff>0?'↓':'↑';sugEl.textContent=dir+' adj from '+prev.weight+'kg';}else if(sugEl){sugEl.textContent='prev: '+prev.weight+'kg';}}}); }
+function exportWeights(){var data=wtLoad();var lines=["GYMGEEK · Alfie's Program · Weight Log","Exported: "+new Date().toLocaleString(),""];var rows=document.querySelectorAll('[data-ex-id]');rows.forEach(function(row){var exId=row.getAttribute('data-ex-id');var name=row.getAttribute('data-ex-name');var inp=document.getElementById('wt_'+exId);var val=inp?inp.value:'';if(val)lines.push(exId+' | '+name+' | '+val+'kg');});lines.push('');lines.push('--- RAW JSON ---');lines.push(JSON.stringify(data,null,2));var blob=new Blob([lines.join('\n')],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gymgeek-alfie-weights.txt';a.click();URL.revokeObjectURL(a.href);}
+buildRoundDots();buildEmDots();
+document.getElementById('ivWorkVal').textContent=ivWork+'s';
+document.getElementById('ivRestVal').textContent=ivRest+'s';
+document.getElementById('ivRoundsVal').textContent=ivRounds;
+document.getElementById('ivDisplay').textContent=fmtCD(ivWork);
+document.getElementById('emDisplay').textContent=fmtCD(emMins*60);
+document.getElementById('emMinsVal').textContent=emMins;
+document.getElementById('emRoundsVal').textContent=emRounds;
+document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);
+document.getElementById('cdVal').textContent=fmtCD(cdTotal);
+cdSetMode('work');
+wtInit();
+
+</script>
+</body>
+</html>
