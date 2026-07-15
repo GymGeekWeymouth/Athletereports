@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK · Jimmy · Goalkeeper Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #61C599; --yellow: #FFC11E; --blue: #778FDD; --red: #ff6363;
+    --card-bg: #27292B; --card-inner: #2f3235; --border: #3a3d40;
+    --border-soft: rgba(255,255,255,0.06); --text: #f0f4ff; --muted: #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #2A2D30; font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; padding: 28px 20px 60px; overflow-x: hidden; }
+
+  /* TOOLBAR */
+  .toolbar { max-width: 760px; margin: 0 auto 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .club-wordmark { color: rgba(255,255,255,.45); font-family: 'Jost', sans-serif; font-style: normal; font-weight: 200; font-size: 16px; letter-spacing: .45em; margin-left: 8px; text-transform: uppercase; }
+  .toolbar-sub { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+  .light-toggle { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: rgba(255,255,255,.5); font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; transition: all .2s; }
+  .light-toggle:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+
+  /* DAY */
+  .day-section { max-width: 760px; margin: 0 auto 40px; position: relative; }
+  .day-header { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .day-number { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: .04em; color: #fff; line-height: 1; flex-shrink: 0; }
+  .day-divider { flex: 1; height: 1px; background: linear-gradient(to right, #3a3d40, transparent); }
+  .day-focus { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px 2px; }
+
+  /* GRID */
+  .program-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+  /* CARD */
+  .sc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .sc-head { padding: 14px 18px 10px; border-bottom: 1px solid var(--border-soft); }
+  .sc-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .sc-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .sc-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+
+  /* SUPERSET */
+  .superset-block { margin: 12px 16px; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; overflow: hidden; }
+  .superset-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 8px 14px 6px; border-bottom: 1px solid var(--border-soft); background: rgba(255,255,255,.02); }
+
+  /* EXERCISE ROW */
+  .ex-row { display: flex; align-items: flex-start; padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,.04); gap: 10px; }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-code { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; color: var(--muted); flex-shrink: 0; width: 22px; padding-top: 1px; }
+  .ex-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.3; }
+  .ex-stats { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; }
+  .ex-chip { font-size: 9px; padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,.06); color: var(--muted); white-space: nowrap; border: 1px solid var(--border-soft); }
+  .ex-chip-val { color: var(--text); font-weight: 500; }
+  .ex-note { font-size: 9px; color: var(--muted); margin-top: 3px; line-height: 1.4; font-style: italic; }
+  .sc-footer { padding: 8px 16px 10px; font-size: 9px; color: rgba(255,255,255,.2); letter-spacing: .06em; text-transform: uppercase; border-top: 1px solid var(--border-soft); }
+
+  /* LIVE CLOCK */
+  .live-clock { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: rgba(255,255,255,.7); letter-spacing: .04em; display: flex; align-items: center; gap: 2px; }
+  .live-clock .clock-seconds { font-size: 12px; color: rgba(255,255,255,.35); align-self: flex-end; margin-bottom: 1px; }
+  body.light-mode .live-clock { color: rgba(0,0,0,.55); }
+  body.light-mode .live-clock .clock-seconds { color: rgba(0,0,0,.3); }
+
+  /* LIGHT MODE */
+  body.light-mode { background: #f0f2f4; color: #1a1c1e; }
+  body.light-mode { --green: #1a9e6a; --yellow: #c8900a; --blue: #4a62b8; --card-bg: #ffffff; --card-inner: #f5f7f9; --border: #d8dde3; --border-soft: rgba(0,0,0,0.07); --text: #1a1c1e; --muted: #5a6a7a; }
+  body.light-mode .sc { box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+  body.light-mode .toolbar-brand { color: #1a1c1e; }
+  body.light-mode .club-wordmark { color: #555; }
+  body.light-mode .toolbar-sub { color: #5a6a7a; }
+  body.light-mode .day-number { color: #1a1c1e; }
+  body.light-mode .day-divider { background: linear-gradient(to right, #d0d5db, transparent); }
+  body.light-mode .sc-brand { color: #1a1c1e; }
+  body.light-mode .light-toggle { border-color: rgba(0,0,0,.15); color: rgba(0,0,0,.45); background: rgba(0,0,0,.04); }
+  body.light-mode .light-toggle:hover { border-color: rgba(0,0,0,.3); color: rgba(0,0,0,.7); }
+  body.light-mode .superset-label { background: rgba(0,0,0,.02); }
+  body.light-mode .ex-chip { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.08); }
+
+  /* ── FAB GROUP ── */
+  .fab-group { position: fixed; bottom: 28px; right: 24px; z-index: 800; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .timer-fab { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 50px; background: #FFC11E; color: #1a1c1e; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(255,193,30,.45); transition: transform .15s, box-shadow .15s, background .15s; }
+  .timer-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 26px rgba(255,193,30,.55); background: #ffd04f; }
+  .timer-fab:active { transform: translateY(0); box-shadow: 0 2px 12px rgba(255,193,30,.35); }
+  body.light-mode .timer-fab { box-shadow: 0 4px 20px rgba(200,144,10,.3); }
+
+  /* TIMER — draggable floating panel */
+  .timer-backdrop { display: none; position: fixed; inset: 0; background: transparent; z-index: 900; pointer-events: none; }
+  .timer-backdrop.open { display: block; }
+  .timer-panel {
+    pointer-events: all;
+    background: #1e2022;
+    border: 1px solid #3a3d40;
+    border-radius: 16px;
+    width: 380px;
+    min-width: 280px;
+    min-height: 260px;
+    padding: 0 0 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.6);
+    font-family: 'DM Sans', sans-serif;
+    animation: popIn .2s ease;
+    position: fixed;
+    top: 80px;
+    right: 28px;
+    resize: both;
+    overflow: auto;
+    z-index: 901;
+  }
+  @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .timer-drag-handle {
+    width: 100%;
+    padding: 10px 16px 8px;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    user-select: none;
+    background: rgba(255,255,255,.02);
+    border-radius: 16px 16px 0 0;
+  }
+  .timer-drag-handle:active { cursor: grabbing; }
+  .timer-drag-title { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.3); }
+  .timer-drag-bar { width: 32px; height: 3px; background: rgba(255,255,255,.15); border-radius: 2px; }
+  .timer-tabs { display: flex; margin: 12px 16px 0; gap: 5px; }
+  .timer-tab { flex: 1; padding: 6px 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: all .15s; }
+  .timer-tab.active { background: rgba(255,193,30,.12); border-color: rgba(255,193,30,.35); color: #FFC11E; }
+  .timer-face { text-align: center; padding: 18px 16px 0; }
+  .timer-display { font-family: 'DM Mono', monospace; font-size: 58px; font-weight: 500; letter-spacing: .04em; line-height: 1; color: #fff; transition: color .2s; }
+  .timer-display.running { color: #FFC11E; }
+  .timer-display.resting { color: #778FDD; }
+  .timer-display.finished { color: #FFC11E; }
+  .timer-sublabel { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; min-height: 14px; }
+  .interval-config { display: flex; gap: 7px; margin: 12px 16px 0; align-items: center; }
+  .cfg-group { flex: 1; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; padding: 7px 8px; }
+  .cfg-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .cfg-row { display: flex; align-items: center; gap: 4px; }
+  .cfg-btn { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .12s; line-height: 1; }
+  .cfg-btn:hover { background: rgba(255,255,255,.14); }
+  .cfg-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: #fff; flex: 1; text-align: center; }
+  .round-track { display: flex; justify-content: center; gap: 5px; margin: 10px 16px 0; flex-wrap: wrap; min-height: 12px; }
+  .round-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.12); transition: background .2s; }
+  .round-dot.done { background: #FFC11E; }
+  .round-dot.active { background: #61C599; }
+  .timer-controls { display: flex; gap: 8px; margin: 14px 16px 0; }
+  .ctrl-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; letter-spacing: .03em; }
+  .ctrl-play { background: #FFC11E; color: #1a1c1e; }
+  .ctrl-play:hover { background: #ffd04f; }
+  .ctrl-play:active { background: #e6ac00; }
+  .ctrl-reset { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); color: var(--muted); flex: 0 0 52px; font-size: 11px; }
+  .ctrl-reset:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .lap-list { margin: 10px 16px 0; max-height: 90px; overflow-y: auto; }
+  .lap-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 11px; color: var(--muted); }
+  .lap-row:last-child { border-bottom: none; }
+  .lap-row .lap-time { font-family: 'DM Mono', monospace; color: #fff; font-size: 11px; }
+  .timer-close { position: absolute; top: 9px; right: 12px; width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; z-index: 2; }
+  .timer-close:hover { background: rgba(255,255,255,.16); color: #fff; }
+  body.light-mode .timer-panel { background: #f0f2f4; border-color: #d8dde3; box-shadow: 0 8px 40px rgba(0,0,0,.18); }
+  body.light-mode .timer-drag-handle { background: rgba(0,0,0,.02); border-bottom-color: rgba(0,0,0,.07); }
+  body.light-mode .timer-drag-title { color: rgba(0,0,0,.3); }
+  body.light-mode .timer-drag-bar { background: rgba(0,0,0,.15); }
+  body.light-mode .timer-display { color: #1a1c1e; }
+  body.light-mode .timer-display.running { color: #c8900a; }
+  body.light-mode .timer-display.resting { color: #4a62b8; }
+  body.light-mode .cfg-group { background: #fff; border-color: rgba(0,0,0,.1); }
+  body.light-mode .cfg-val { color: #1a1c1e; }
+  body.light-mode .cfg-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: #1a1c1e; }
+  body.light-mode .ctrl-reset { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-close { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-tab { border-color: rgba(0,0,0,.12); color: #5a6a7a; }
+  body.light-mode .round-dot { background: rgba(0,0,0,.1); }
+  body.light-mode .lap-row { color: #5a6a7a; border-bottom-color: rgba(0,0,0,.07); }
+  body.light-mode .lap-row .lap-time { color: #1a1c1e; }
+</style>
+</head>
+<body class="light-mode">
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand">GYMGEEK<span class="club-wordmark">Keeper</span></div>
+    <div class="toolbar-sub">Jimmy · Goalkeeper · 2 Days · Plyo Focus</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="live-clock">
+      <span id="clockHM"></span><span class="clock-seconds" id="clockS"></span>
+    </div>
+    <button class="light-toggle" onclick="toggleLight()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span id="light-label">Dark mode</span>
+    </button>
+  </div>
+</div>
+
+<!-- DAY 1 -->
+<div class="day-section" id="day-1">
+  <div class="day-header">
+    <div class="day-number">Day 1</div>
+    <div class="day-divider"></div>
+  </div>
+  <div class="day-focus">Spring &amp; Stick · Learn To Land, Then Jump</div>
+  <div class="program-grid">
+    <div>
+      <div class="sc">
+        <div class="sc-head">
+          <div class="sc-brand-row">
+            <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Keeper</span></span>
+            <span class="sc-type" style="color:var(--blue)">Day 1 · Jimmy</span>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">Warm-Up · Get Buzzing · 4 Minutes</div>
+          <div class="ex-row">
+            <span class="ex-code">W1</span>
+            <div style="flex:1"><div class="ex-name">Bear crawl across the room and back</div></div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> trips</span></div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">W2</span>
+            <div style="flex:1">
+              <div class="ex-name">Marching skips</div>
+              <div class="ex-note">Tall and bouncy, drive the knee up like a puppet on a string</div>
+            </div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">20</span> sec</span></div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">W3</span>
+            <div style="flex:1"><div class="ex-name">Bodyweight squats</div></div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">10</span> reps</span></div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">W4</span>
+            <div style="flex:1">
+              <div class="ex-name">Little ankle bounces</div>
+              <div class="ex-note">Tiny hops, stay tall, imagine the floor is a hot pavement</div>
+            </div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">15</span> sec</span></div>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">A · Landing School — Quiet &amp; Still</div>
+          <div class="ex-row">
+            <span class="ex-code">A1</span>
+            <div style="flex:1">
+              <div class="ex-name">Drop and stick, off a low step</div>
+              <div class="ex-note">Step off, land like a ninja — soft, quiet, freeze for 3 seconds</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">4</span> reps</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">A2</span>
+            <div style="flex:1">
+              <div class="ex-name">Broad jump and stick</div>
+              <div class="ex-note">Jump forward, land silent and hold — no wobble, no falling forward</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">4</span> reps</span>
+              <span class="ex-chip"><span class="ex-chip-val">60s</span> rest</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">B · Springs — Full Effort, Full Rest</div>
+          <div class="ex-row">
+            <span class="ex-code">B1</span>
+            <div style="flex:1">
+              <div class="ex-name">Pogo hops</div>
+              <div class="ex-note">Stiff bouncy ankles, spend as little time on the floor as you can</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">10</span> sec</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">B2</span>
+            <div style="flex:1">
+              <div class="ex-name">Line hops, forward and back</div>
+              <div class="ex-note">Hop over a line on the floor, quick and quiet, stay tall</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">15</span> sec</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">C · A Little Strength</div>
+          <div class="ex-row">
+            <span class="ex-code">C1</span>
+            <div style="flex:1"><div class="ex-name">Bodyweight squat</div></div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">10</span> reps</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">C2</span>
+            <div style="flex:1"><div class="ex-name">Glute bridge</div></div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">12</span> reps</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">C3</span>
+            <div style="flex:1">
+              <div class="ex-name">Front plank</div>
+              <div class="ex-note">Straight as a plank of wood, don't let the hips sag</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">20</span> sec</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 2 -->
+<div class="day-section" id="day-2">
+  <div class="day-header">
+    <div class="day-number">Day 2</div>
+    <div class="day-divider"></div>
+  </div>
+  <div class="day-focus">Quick Feet &amp; Dive Ready · Sideways Spring</div>
+  <div class="program-grid">
+    <div>
+      <div class="sc">
+        <div class="sc-head">
+          <div class="sc-brand-row">
+            <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">Keeper</span></span>
+            <span class="sc-type" style="color:var(--green)">Day 2 · Jimmy</span>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">Warm-Up · Get Buzzing · 4 Minutes</div>
+          <div class="ex-row">
+            <span class="ex-code">W1</span>
+            <div style="flex:1"><div class="ex-name">Side shuffles, low and light</div></div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">30</span> sec</span></div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">W2</span>
+            <div style="flex:1">
+              <div class="ex-name">Grapevine steps (carioca)</div>
+              <div class="ex-note">Cross one foot over the other, both directions, stay relaxed</div>
+            </div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> trips</span></div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">W3</span>
+            <div style="flex:1"><div class="ex-name">Hip openers, gate swings</div></div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">8</span> each leg</span></div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">W4</span>
+            <div style="flex:1">
+              <div class="ex-name">Fast feet on the spot</div>
+              <div class="ex-note">Feet like they're on a hot floor, arms pumping</div>
+            </div>
+            <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">15</span> sec</span></div>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">A · Sideways Spring &amp; Stick — Full Rest</div>
+          <div class="ex-row">
+            <span class="ex-code">A1</span>
+            <div style="flex:1">
+              <div class="ex-name">Skater hop and stick</div>
+              <div class="ex-note">Push sideways off one foot, land quiet on the other, freeze for 2 seconds</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">3</span> each side</span>
+              <span class="ex-chip"><span class="ex-chip-val">60s</span> rest</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">A2</span>
+            <div style="flex:1">
+              <div class="ex-name">Lateral line hops, side to side</div>
+              <div class="ex-note">Hop over a line left and right, quick springy ankles, stay tall</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">15</span> sec</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">B · Keeper Reactions</div>
+          <div class="ex-row">
+            <span class="ex-code">B1</span>
+            <div style="flex:1">
+              <div class="ex-name">Fast feet then freeze into a set position</div>
+              <div class="ex-note">Buzz the feet, then a coach or parent shouts and Jimmy freezes ready to save</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">4</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">5</span> sec</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">B2</span>
+            <div style="flex:1">
+              <div class="ex-name">Step and catch, low and high</div>
+              <div class="ex-note">Someone throws a ball either side, Jimmy takes a quick step and catches with strong hands</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">3</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">6</span> catches</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="superset-block">
+          <div class="superset-label">C · A Little Strength</div>
+          <div class="ex-row">
+            <span class="ex-code">C1</span>
+            <div style="flex:1">
+              <div class="ex-name">Press-ups, hands on a step if needed</div>
+              <div class="ex-note">Body straight, lower slow, push the floor away</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">6–8</span> reps</span>
+              <span class="ex-chip"><span class="ex-chip-val">45s</span> rest</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">C2</span>
+            <div style="flex:1">
+              <div class="ex-name">Side plank</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">15</span> sec each side</span>
+            </div>
+          </div>
+          <div class="ex-row">
+            <span class="ex-code">C3</span>
+            <div style="flex:1">
+              <div class="ex-name">Dead bug</div>
+              <div class="ex-note">Press the lower back into the floor the whole time</div>
+            </div>
+            <div class="ex-stats">
+              <span class="ex-chip"><span class="ex-chip-val">2</span> sets</span>
+              <span class="ex-chip"><span class="ex-chip-val">8</span> each side</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAB GROUP -->
+<div class="fab-group">
+  <button class="timer-fab" onclick="openTimer()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Timer
+  </button>
+</div>
+
+<!-- TIMER OVERLAY -->
+<div class="timer-backdrop" id="timerBackdrop">
+  <div class="timer-panel" id="timerPanel">
+    <div class="timer-drag-handle" id="timerDragHandle">
+      <span class="timer-drag-title">GymGeek Timer</span>
+      <div class="timer-drag-bar"></div>
+      <button class="timer-close" onclick="closeTimer()">✕</button>
+    </div>
+    <div class="timer-tabs">
+      <button class="timer-tab active" id="tabStopwatch" onclick="switchTab('stopwatch')">Stopwatch</button>
+      <button class="timer-tab" id="tabInterval" onclick="switchTab('interval')">Interval</button>
+      <button class="timer-tab" id="tabEmom" onclick="switchTab('emom')">EMOM</button>
+      <button class="timer-tab" id="tabCountdown" onclick="switchTab('countdown')">Countdown</button>
+    </div>
+    <div id="paneStopwatch">
+      <div class="timer-face"><div class="timer-display" id="swDisplay">00:00.0</div><div class="timer-sublabel" id="swSublabel"></div></div>
+      <div class="lap-list" id="lapList"></div>
+      <div class="timer-controls">
+        <button class="ctrl-btn ctrl-reset" onclick="swLap()" style="flex:0 0 64px;font-size:11px;">Lap</button>
+        <button class="ctrl-btn ctrl-play" id="swPlayBtn" onclick="swToggle()">Start</button>
+        <button class="ctrl-btn ctrl-reset" onclick="swReset()">Reset</button>
+      </div>
+    </div>
+    <div id="paneInterval" style="display:none;">
+      <div class="timer-face"><div class="timer-display" id="ivDisplay">00:30</div><div class="timer-sublabel" id="ivSublabel">Set work time &amp; rounds</div></div>
+      <div class="round-track" id="roundTrack"></div>
+      <div class="interval-config" id="ivConfig">
+        <div class="cfg-group"><div class="cfg-label">Work</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('work',-5)">−</button><span class="cfg-val" id="ivWorkVal">30s</span><button class="cfg-btn" onclick="adjIv('work',5)">+</button></div></div>
+        <div class="cfg-group"><div class="cfg-label">Rest</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('rest',-5)">−</button><span class="cfg-val" id="ivRestVal">30s</span><button class="cfg-btn" onclick="adjIv('rest',5)">+</button></div></div>
+        <div class="cfg-group"><div class="cfg-label">Rounds</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('rounds',-1)">−</button><span class="cfg-val" id="ivRoundsVal">3</span><button class="cfg-btn" onclick="adjIv('rounds',1)">+</button></div></div>
+      </div>
+      <div class="timer-controls"><button class="ctrl-btn ctrl-play" id="ivPlayBtn" onclick="ivToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="ivReset()">Reset</button></div>
+    </div>
+    <div id="paneEmom" style="display:none;">
+      <div class="timer-face"><div class="timer-display" id="emDisplay">01:00</div><div class="timer-sublabel" id="emSublabel">Every minute on the minute</div></div>
+      <div class="round-track" id="emRoundTrack"></div>
+      <div class="interval-config" id="emConfig">
+        <div class="cfg-group"><div class="cfg-label">Minutes</div><div class="cfg-row"><button class="cfg-btn" onclick="adjEm('mins',-1)">−</button><span class="cfg-val" id="emMinsVal">1</span><button class="cfg-btn" onclick="adjEm('mins',1)">+</button></div></div>
+        <div class="cfg-group"><div class="cfg-label">Rounds</div><div class="cfg-row"><button class="cfg-btn" onclick="adjEm('rounds',-1)">−</button><span class="cfg-val" id="emRoundsVal">10</span><button class="cfg-btn" onclick="adjEm('rounds',1)">+</button></div></div>
+      </div>
+      <div class="timer-controls"><button class="ctrl-btn ctrl-play" id="emPlayBtn" onclick="emToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="emReset()">Reset</button></div>
+    </div>
+    <div id="paneCountdown" style="display:none;">
+      <div style="display:flex;gap:6px;margin:12px 16px 0;">
+        <button id="cdModeWork" onclick="cdSetMode('work')" style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(97,197,153,.35);background:rgba(97,197,153,.12);color:#61C599;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">● Work</button>
+        <button id="cdModeRest" onclick="cdSetMode('rest')" style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">◎ Rest</button>
+      </div>
+      <div class="timer-face"><div class="timer-display" id="cdDisplay">03:00</div><div class="timer-sublabel" id="cdSublabel">Set duration &amp; press Start</div></div>
+      <div class="interval-config" id="cdConfig">
+        <div class="cfg-group" style="flex:2;"><div class="cfg-label">Duration</div><div class="cfg-row"><button class="cfg-btn" onclick="adjCd(-30)">−30</button><span class="cfg-val" id="cdVal">3:00</span><button class="cfg-btn" onclick="adjCd(30)">+30</button></div></div>
+        <div class="cfg-group" style="flex:1;"><div class="cfg-label">&nbsp;</div><div class="cfg-row" style="justify-content:center;gap:4px;"><button class="cfg-btn" onclick="adjCd(-10)" style="width:auto;padding:0 7px;font-size:10px;">−10</button><button class="cfg-btn" onclick="adjCd(10)" style="width:auto;padding:0 7px;font-size:10px;">+10</button></div></div>
+      </div>
+      <div class="timer-controls"><button class="ctrl-btn ctrl-play" id="cdPlayBtn" onclick="cdToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="cdReset()">Reset</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── LIVE CLOCK ── */
+function tickClock(){var now=new Date(),h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();document.getElementById('clockHM').textContent=(h<10?'0'+h:h)+':'+(m<10?'0'+m:m)+' ';document.getElementById('clockS').textContent=(s<10?'0'+s:s);}
+tickClock();setInterval(tickClock,1000);
+
+/* ── LIGHT MODE ── */
+function toggleLight(){var b=document.body,l=b.classList.toggle('light-mode');document.getElementById('light-label').textContent=l?'Dark mode':'Light mode';}
+
+/* ── TIMER OPEN / CLOSE ── */
+function openTimer(){document.getElementById('timerBackdrop').classList.add('open');}
+function closeTimer(){document.getElementById('timerBackdrop').classList.remove('open');}
+
+/* ── DRAG ── */
+(function(){
+  var panel,handle,dragging=false,ox=0,oy=0;
+  document.addEventListener('DOMContentLoaded',function(){
+    panel=document.getElementById('timerPanel');
+    handle=document.getElementById('timerDragHandle');
+    handle.addEventListener('mousedown',startDrag);
+    handle.addEventListener('touchstart',startDragT,{passive:false});
+  });
+  function startDrag(e){
+    if(e.target.closest('.timer-close'))return;
+    dragging=true;
+    var r=panel.getBoundingClientRect();
+    panel.style.right='auto';
+    panel.style.left=r.left+'px';
+    panel.style.top=r.top+'px';
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    document.addEventListener('mousemove',onDrag);
+    document.addEventListener('mouseup',stopDrag);
+    e.preventDefault();
+  }
+  function startDragT(e){
+    if(e.target.closest('.timer-close'))return;
+    dragging=true;
+    var t=e.touches[0],r=panel.getBoundingClientRect();
+    panel.style.right='auto';
+    panel.style.left=r.left+'px';
+    panel.style.top=r.top+'px';
+    ox=t.clientX-r.left; oy=t.clientY-r.top;
+    document.addEventListener('touchmove',onDragT,{passive:false});
+    document.addEventListener('touchend',stopDrag);
+    e.preventDefault();
+  }
+  function onDrag(e){if(!dragging)return;var x=e.clientX-ox,y=e.clientY-oy;clamp(x,y);}
+  function onDragT(e){if(!dragging)return;var t=e.touches[0],x=t.clientX-ox,y=t.clientY-oy;clamp(x,y);e.preventDefault();}
+  function clamp(x,y){var pw=panel.offsetWidth,ph=panel.offsetHeight,maxX=window.innerWidth-pw,maxY=window.innerHeight-ph;panel.style.left=Math.max(0,Math.min(x,maxX))+'px';panel.style.top=Math.max(0,Math.min(y,maxY))+'px';}
+  function stopDrag(){dragging=false;document.removeEventListener('mousemove',onDrag);document.removeEventListener('mouseup',stopDrag);document.removeEventListener('touchmove',onDragT);document.removeEventListener('touchend',stopDrag);}
+})();
+
+/* ── TABS ── */
+var currentTab='stopwatch';
+function switchTab(tab){currentTab=tab;['stopwatch','interval','emom','countdown'].forEach(function(t){document.getElementById('tab'+cap(t)).classList.toggle('active',t===tab);document.getElementById('pane'+cap(t)).style.display=t===tab?'':'none';});}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+/* ── STOPWATCH ── */
+var swRunning=false,swStart=0,swElapsed=0,swRaf=null,swLaps=[],swLapStart=0;
+function swToggle(){if(swRunning){swElapsed+=Date.now()-swStart;cancelAnimationFrame(swRaf);swRaf=null;swRunning=false;document.getElementById('swPlayBtn').textContent='Resume';document.getElementById('swDisplay').classList.remove('running');}else{swStart=Date.now();swRunning=true;document.getElementById('swPlayBtn').textContent='Stop';document.getElementById('swDisplay').classList.add('running');swTick();}}
+function swTick(){if(!swRunning)return;document.getElementById('swDisplay').textContent=fmtSW(swElapsed+(Date.now()-swStart));swRaf=requestAnimationFrame(swTick);}
+function swLap(){if(!swRunning&&swElapsed===0)return;var total=swElapsed+(swRunning?Date.now()-swStart:0),split=total-swLapStart;swLapStart=total;swLaps.unshift({n:swLaps.length+1,split:split,total:total});renderLaps();}
+function swReset(){
+  if(swRaf){cancelAnimationFrame(swRaf);swRaf=null;}
+  swRunning=false;swStart=0;swElapsed=0;swLapStart=0;swLaps=[];
+  document.getElementById('swDisplay').textContent='00:00.0';
+  document.getElementById('swDisplay').className='timer-display';
+  document.getElementById('swPlayBtn').textContent='Start';
+  document.getElementById('swSublabel').textContent='';
+  renderLaps();
+}
+function renderLaps(){var el=document.getElementById('lapList');if(!swLaps.length){el.innerHTML='';return;}el.innerHTML=swLaps.map(function(l){return'<div class="lap-row"><span>Lap '+l.n+'</span><span class="lap-time">'+fmtSW(l.split)+'</span><span class="lap-time" style="color:var(--muted);font-size:10px;">'+fmtSW(l.total)+'</span></div>';}).join('');}
+function fmtSW(ms){var m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),t=Math.floor((ms%1000)/100);return pad(m)+':'+pad(s)+'.'+t;}
+
+/* ── INTERVAL ── */
+var ivWork=30,ivRest=30,ivRounds=3,ivRunning=false,ivPhase='work',ivRoundCurrent=1,ivInterval=null,ivEndTime=0,ivLastBeepAt=-1,ivRemaining=0;
+function adjIv(f,d){if(ivRunning)return;if(f==='work'){ivWork=Math.max(5,ivWork+d);document.getElementById('ivWorkVal').textContent=ivWork+'s';}if(f==='rest'){ivRest=Math.max(0,ivRest+d);document.getElementById('ivRestVal').textContent=ivRest+'s';}if(f==='rounds'){ivRounds=Math.max(1,ivRounds+d);document.getElementById('ivRoundsVal').textContent=ivRounds;}ivRemaining=ivWork;document.getElementById('ivDisplay').textContent=fmtCD(ivWork);buildRoundDots();}
+function buildRoundDots(){var el=document.getElementById('roundTrack');el.innerHTML='';for(var i=1;i<=ivRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<ivRoundCurrent?' done':i===ivRoundCurrent?' active':'');d.id='dot'+i;el.appendChild(d);}}
+function ivToggle(){if(ivRunning){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivPlayBtn').textContent='Resume';document.getElementById('ivDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(ivRemaining===0){ivPhase='work';ivRoundCurrent=1;ivRemaining=ivWork;}ivRunning=true;document.getElementById('ivPlayBtn').textContent='Pause';document.getElementById('ivConfig').style.opacity='.4';buildRoundDots();ivEndTime=Date.now()+ivRemaining*1000;ivInterval=setInterval(ivTick,250);ivTick();}}
+function ivTick(){var rem=Math.ceil((ivEndTime-Date.now())/1000);if(rem<=0){soundFinish();if(ivPhase==='work'){if(ivRest>0){ivPhase='rest';ivRemaining=ivRest;ivEndTime=Date.now()+ivRest*1000;ivLastBeepAt=-1;}else{ivNextRound();}}else{ivNextRound();}return;}if(rem<=3&&rem!==ivLastBeepAt){ivLastBeepAt=rem;soundCountdown(rem);}ivRemaining=rem;document.getElementById('ivDisplay').textContent=fmtCD(rem);document.getElementById('ivDisplay').className='timer-display '+(ivPhase==='work'?'running':'resting');document.getElementById('ivSublabel').textContent=(ivPhase==='work'?'● WORK':'◎ REST')+'  ·  Round '+ivRoundCurrent+' of '+ivRounds;}
+function ivNextRound(){var dot=document.getElementById('dot'+ivRoundCurrent);if(dot)dot.className='round-dot done';if(ivRoundCurrent>=ivRounds){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivDisplay').textContent='Done!';document.getElementById('ivDisplay').className='timer-display finished';document.getElementById('ivSublabel').textContent='All '+ivRounds+' rounds complete';document.getElementById('ivPlayBtn').textContent='Start';document.getElementById('ivConfig').style.opacity='1';ivRemaining=0;soundFanfare();return;}ivRoundCurrent++;ivLastBeepAt=-1;ivPhase='work';ivRemaining=ivWork;ivEndTime=Date.now()+ivWork*1000;buildRoundDots();}
+function ivReset(){
+  clearInterval(ivInterval);ivInterval=null;
+  ivRunning=false;ivPhase='work';ivRoundCurrent=1;ivRemaining=ivWork;ivLastBeepAt=-1;
+  document.getElementById('ivDisplay').textContent=fmtCD(ivWork);
+  document.getElementById('ivDisplay').className='timer-display';
+  document.getElementById('ivSublabel').textContent='Set work time & rounds';
+  document.getElementById('ivPlayBtn').textContent='Start';
+  document.getElementById('ivConfig').style.opacity='1';
+  buildRoundDots();
+}
+
+/* ── EMOM ── */
+var emMins=1,emRounds=10,emRunning=false,emRoundCurrent=1,emInterval=null,emEndTime=0,emLastBeepAt=-1;
+function adjEm(f,d){if(emRunning)return;if(f==='mins'){emMins=Math.max(1,Math.min(5,emMins+d));document.getElementById('emMinsVal').textContent=emMins;}if(f==='rounds'){emRounds=Math.max(1,Math.min(30,emRounds+d));document.getElementById('emRoundsVal').textContent=emRounds;}document.getElementById('emDisplay').textContent=fmtCD(emMins*60);buildEmDots();}
+function buildEmDots(){var el=document.getElementById('emRoundTrack');el.innerHTML='';for(var i=1;i<=emRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<emRoundCurrent?' done':i===emRoundCurrent?' active':'');d.id='emdot'+i;el.appendChild(d);}}
+function emToggle(){if(emRunning){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emPlayBtn').textContent='Resume';document.getElementById('emDisplay').classList.remove('running');}else{unlockAudio();soundStart();if(emRoundCurrent>emRounds){emRoundCurrent=1;}emRunning=true;document.getElementById('emPlayBtn').textContent='Pause';document.getElementById('emConfig').style.opacity='.4';buildEmDots();emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;emInterval=setInterval(emTick,250);emTick();}}
+function emTick(){var rem=Math.ceil((emEndTime-Date.now())/1000);if(rem<=0){var dot=document.getElementById('emdot'+emRoundCurrent);if(dot)dot.className='round-dot done';if(emRoundCurrent>=emRounds){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emDisplay').textContent='Done!';document.getElementById('emDisplay').className='timer-display finished';document.getElementById('emSublabel').textContent='All '+emRounds+' rounds complete';document.getElementById('emPlayBtn').textContent='Start';document.getElementById('emConfig').style.opacity='1';soundFanfare();return;}emRoundCurrent++;emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;soundFinish();buildEmDots();return;}if(rem<=3&&rem!==emLastBeepAt){emLastBeepAt=rem;soundCountdown(rem);}document.getElementById('emDisplay').textContent=fmtCD(rem);document.getElementById('emDisplay').className='timer-display running';document.getElementById('emSublabel').textContent='Round '+emRoundCurrent+' of '+emRounds+'  ·  '+fmtCD(rem)+' left';}
+function emReset(){
+  clearInterval(emInterval);emInterval=null;
+  emRunning=false;emRoundCurrent=1;emLastBeepAt=-1;
+  document.getElementById('emDisplay').textContent=fmtCD(emMins*60);
+  document.getElementById('emDisplay').className='timer-display';
+  document.getElementById('emSublabel').textContent='Every minute on the minute';
+  document.getElementById('emPlayBtn').textContent='Start';
+  document.getElementById('emConfig').style.opacity='1';
+  buildEmDots();
+}
+
+/* ── COUNTDOWN ── */
+var cdTotal=180,cdRemaining=180,cdRunning=false,cdInterval=null,cdEndTime=0,cdMode='work',cdLastBeepAt=-1;
+function cdSetMode(mode){if(cdRunning)return;cdMode=mode;var iw=mode==='work';document.getElementById('cdModeWork').style.cssText='flex:1;padding:7px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;'+(iw?'border:1px solid rgba(97,197,153,.35);background:rgba(97,197,153,.12);color:#61C599;':'border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);');document.getElementById('cdModeRest').style.cssText='flex:1;padding:7px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;'+(!iw?'border:1px solid rgba(119,143,221,.35);background:rgba(119,143,221,.12);color:#778FDD;':'border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);');document.getElementById('cdSublabel').textContent='Set duration & press Start';document.getElementById('cdDisplay').className='timer-display';document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);}
+function adjCd(d){if(cdRunning)return;cdTotal=Math.max(10,cdTotal+d);cdRemaining=cdTotal;document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);document.getElementById('cdVal').textContent=fmtCD(cdTotal);}
+function cdToggle(){if(cdRunning){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdPlayBtn').textContent='Resume';document.getElementById('cdDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(cdRemaining<=0){cdRemaining=cdTotal;}cdLastBeepAt=-1;cdRunning=true;cdEndTime=Date.now()+cdRemaining*1000;document.getElementById('cdPlayBtn').textContent='Pause';document.getElementById('cdDisplay').classList.add(cdMode==='work'?'running':'resting');cdInterval=setInterval(cdTick,250);cdTick();}}
+function cdTick(){var rem=Math.ceil((cdEndTime-Date.now())/1000),iw=cdMode==='work';if(rem<=0){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdDisplay').textContent=iw?'Rest!':'Go!';document.getElementById('cdDisplay').className='timer-display finished';document.getElementById('cdSublabel').textContent=iw?'Work complete — rest up':'Rest complete — get to work';document.getElementById('cdPlayBtn').textContent='Start';cdRemaining=0;soundFanfare();return;}if(rem<=3&&rem!==cdLastBeepAt){cdLastBeepAt=rem;soundCountdown(rem);}cdRemaining=rem;document.getElementById('cdDisplay').textContent=fmtCD(rem);document.getElementById('cdSublabel').textContent=rem<=3?'':(iw?'Working':'Resting');if(rem<=10){document.getElementById('cdDisplay').classList.remove('running','resting');document.getElementById('cdDisplay').classList.add('finished');}}
+function cdReset(){
+  clearInterval(cdInterval);cdInterval=null;
+  cdRunning=false;cdRemaining=cdTotal;cdLastBeepAt=-1;
+  document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);
+  document.getElementById('cdDisplay').className='timer-display';
+  document.getElementById('cdSublabel').textContent='Set duration & press Start';
+  document.getElementById('cdPlayBtn').textContent='Start';
+}
+
+/* ── UTILS ── */
+function pad(n){return n<10?'0'+n:''+n;}
+function fmtCD(s){var m=Math.floor(s/60),sec=s%60;return pad(m)+':'+pad(sec);}
+
+/* ── AUDIO ── */
+var audioCtx=null,audioUnlocked=false;
+function unlockAudio(){if(audioUnlocked)return;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();var buf=audioCtx.createBuffer(1,1,22050),src=audioCtx.createBufferSource();src.buffer=buf;src.connect(audioCtx.destination);src.start(0);audioCtx.resume().then(function(){audioUnlocked=true;});}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:false,passive:true});
+document.addEventListener('mousedown',unlockAudio,{once:false,passive:true});
+function tone(freq,dur,vol,type,offsetSec){try{if(!audioCtx)unlockAudio();if(!audioCtx)return;if(audioCtx.state==='suspended')audioCtx.resume();var ctx=audioCtx,o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=type||'sine';o.frequency.setValueAtTime(freq,ctx.currentTime);var t=ctx.currentTime+(offsetSec||0);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol||0.4,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.05);}catch(e){}}
+function soundStart(){tone(660,0.12,0.4,'sine',0.0);tone(880,0.15,0.4,'sine',0.13);}
+function soundCountdown(n){if(n===3||n===2){tone(440,0.10,0.35,'sine',0);}else if(n===1){tone(660,0.15,0.45,'sine',0);}}
+function soundFinish(){tone(880,0.12,0.5,'sine',0.0);tone(880,0.12,0.5,'sine',0.2);}
+function soundFanfare(){tone(523,0.15,0.4,'sine',0.0);tone(659,0.15,0.35,'sine',0.0);tone(784,0.15,0.30,'sine',0.0);tone(1047,0.30,0.35,'sine',0.18);}
+function beep(){soundFinish();}
+
+/* ── INIT ── */
+buildRoundDots();buildEmDots();
+document.getElementById('ivWorkVal').textContent=ivWork+'s';
+document.getElementById('ivRestVal').textContent=ivRest+'s';
+document.getElementById('ivRoundsVal').textContent=ivRounds;
+document.getElementById('ivDisplay').textContent=fmtCD(ivWork);
+document.getElementById('emDisplay').textContent=fmtCD(emMins*60);
+document.getElementById('emMinsVal').textContent=emMins;
+document.getElementById('emRoundsVal').textContent=emRounds;
+document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);
+document.getElementById('cdVal').textContent=fmtCD(cdTotal);
+cdSetMode('work');
+</script>
+
+</body>
+</html>
