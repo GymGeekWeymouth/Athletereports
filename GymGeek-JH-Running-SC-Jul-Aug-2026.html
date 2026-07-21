@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK · JH Running S&C · July / August 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #61C599;
+    --yellow: #FFC11E;
+    --blue: #778FDD;
+    --red: #ff6363;
+    --card-bg: #27292B;
+    --card-inner: #2f3235;
+    --border: #3a3d40;
+    --border-soft: rgba(255,255,255,0.06);
+    --text: #f0f4ff;
+    --muted: #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #2A2D30; font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; padding: 28px 20px 60px; overflow-x: hidden; }
+
+  .toolbar { max-width: 1200px; margin: 0 auto 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .club-wordmark { color: rgba(255,255,255,.45); font-family: 'Jost', sans-serif; font-style: normal; font-weight: 200; font-size: 16px; letter-spacing: .45em; margin-left: 8px; text-transform: uppercase; }
+  .light-toggle { display: flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: rgba(255,255,255,.5); font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; transition: all .2s; }
+  .light-toggle:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+
+  .section-header { max-width: 1200px; margin: 0 auto 14px; display: flex; align-items: center; gap: 14px; }
+  .section-label { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .04em; color: #fff; line-height: 1; flex-shrink: 0; }
+  .section-divider { flex: 1; height: 1px; background: linear-gradient(to right, #3a3d40, transparent); }
+
+  .three-grid { max-width: 1200px; margin: 0 auto 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .two-grid   { max-width: 1200px; margin: 0 auto 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .program-col-head { margin-bottom: 10px; }
+  .program-col-title { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 6px 2px 5px; }
+  .title-rack1 { color: var(--yellow); border-bottom: 2px solid rgba(255,193,30,.4); }
+  .title-rack2 { color: var(--blue);   border-bottom: 2px solid rgba(119,143,221,.4); }
+  .title-rack3 { color: var(--green);  border-bottom: 2px solid rgba(97,197,153,.4); }
+  .title-plyo  { color: var(--red);    border-bottom: 2px solid rgba(255,99,99,.4); }
+  .title-med   { color: #c084fc;       border-bottom: 2px solid rgba(192,132,252,.4); }
+
+  .sc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .sc-head { padding: 14px 18px 10px; border-bottom: 1px solid var(--border-soft); }
+  .sc-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .sc-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .sc-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+
+  .superset-block { margin: 12px 16px 14px; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; overflow: hidden; }
+  .superset-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 8px 14px 6px; border-bottom: 1px solid var(--border-soft); background: rgba(255,255,255,.02); }
+
+  .ex-row { display: flex; align-items: flex-start; padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,.04); gap: 10px; }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-code { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; color: var(--muted); flex-shrink: 0; width: 22px; padding-top: 1px; }
+  .ex-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.3; }
+  .ex-stats { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; }
+  .ex-chip { font-size: 9px; padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,.06); color: var(--muted); white-space: nowrap; border: 1px solid var(--border-soft); }
+  .ex-chip-val { color: var(--text); font-weight: 500; }
+  .rir-chip { font-size: 9px; padding: 2px 6px; border-radius: 5px; background: rgba(255,193,30,.08); color: #FFC11E; border: 1px solid rgba(255,193,30,.2); white-space: nowrap; }
+  .sc-footer { padding: 8px 16px 10px; font-size: 9px; color: rgba(255,255,255,.2); letter-spacing: .06em; text-transform: uppercase; border-top: 1px solid var(--border-soft); }
+
+  body.light-mode { background: #f0f2f4; color: #1a1c1e; --green: #1a9e6a; --yellow: #c8900a; --blue: #4a62b8; --card-bg: #ffffff; --card-inner: #f5f7f9; --border: #d8dde3; --border-soft: rgba(0,0,0,0.07); --text: #1a1c1e; --muted: #5a6a7a; }
+  body.light-mode .sc { box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+  body.light-mode .toolbar-brand, body.light-mode .section-label, body.light-mode .sc-brand { color: #1a1c1e; }
+  body.light-mode .club-wordmark { color: #555; }
+  body.light-mode .section-divider { background: linear-gradient(to right, #d0d5db, transparent); }
+  body.light-mode .light-toggle { border-color: rgba(0,0,0,.15); color: rgba(0,0,0,.45); background: rgba(0,0,0,.04); }
+  body.light-mode .light-toggle:hover { border-color: rgba(0,0,0,.3); color: rgba(0,0,0,.7); }
+  body.light-mode .superset-label { background: rgba(0,0,0,.02); }
+  body.light-mode .ex-chip { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.08); }
+
+  @media (max-width: 900px) { .three-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 580px) { .three-grid, .two-grid { grid-template-columns: 1fr; } }
+
+  .timer-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 900; align-items: flex-end; justify-content: center; }
+  .timer-backdrop.open { display: flex; }
+  .timer-panel { background: #1e2022; border: 1px solid #3a3d40; border-bottom: none; border-radius: 20px 20px 0 0; width: 100%; max-width: 420px; padding: 0 0 32px; box-shadow: 0 -8px 40px rgba(0,0,0,.5); animation: slideUp .25s ease; position: relative; }
+  @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .timer-drag-bar { width: 36px; height: 4px; background: rgba(255,255,255,.15); border-radius: 2px; margin: 12px auto 0; cursor: pointer; }
+  .timer-tabs { display: flex; margin: 16px 20px 0; gap: 6px; }
+  .timer-tab { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: all .15s; }
+  .timer-tab.active { background: rgba(97,197,153,.12); border-color: rgba(97,197,153,.35); color: #61C599; }
+  .timer-face { text-align: center; padding: 24px 20px 0; }
+  .timer-display { font-family: 'DM Mono', monospace; font-size: 64px; font-weight: 500; letter-spacing: .04em; line-height: 1; color: #fff; transition: color .2s; }
+  .timer-display.running { color: #61C599; } .timer-display.resting { color: #778FDD; } .timer-display.finished { color: #FFC11E; }
+  .timer-sublabel { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; min-height: 14px; }
+  .interval-config { display: flex; gap: 8px; margin: 16px 20px 0; }
+  .cfg-group { flex: 1; background: var(--card-inner); border: 1px solid var(--border-soft); border-radius: 10px; padding: 8px 10px; }
+  .cfg-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .cfg-row { display: flex; align-items: center; gap: 4px; }
+  .cfg-btn { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .12s; line-height: 1; }
+  .cfg-btn:hover { background: rgba(255,255,255,.14); }
+  .cfg-val { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: #fff; flex: 1; text-align: center; }
+  .round-track { display: flex; justify-content: center; gap: 5px; margin: 14px 20px 0; flex-wrap: wrap; min-height: 12px; }
+  .round-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.12); transition: background .2s; }
+  .round-dot.done { background: #61C599; } .round-dot.active { background: #FFC11E; }
+  .timer-controls { display: flex; gap: 8px; margin: 18px 20px 0; }
+  .ctrl-btn { flex: 1; padding: 13px; border-radius: 12px; border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; letter-spacing: .03em; }
+  .ctrl-play { background: #61C599; color: #1a1c1e; } .ctrl-play:hover { background: #7dd4af; }
+  .ctrl-reset { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); color: var(--muted); flex: 0 0 52px; font-size: 11px; }
+  .ctrl-reset:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .timer-close { position: absolute; top: 14px; right: 16px; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; }
+  .timer-close:hover { background: rgba(255,255,255,.16); color: #fff; }
+  .cd-config { display: flex; gap: 8px; margin: 16px 20px 0; }
+  .cd-mode-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: all .15s; }
+  .cd-mode-btn.active-work { background: rgba(97,197,153,.12); border-color: rgba(97,197,153,.35); color: #61C599; }
+  .cd-mode-btn.active-rest { background: rgba(119,143,221,.12); border-color: rgba(119,143,221,.35); color: #778FDD; }
+  .cd-time-row { display: flex; gap: 8px; margin: 10px 20px 0; }
+  .em-config { display: flex; gap: 8px; margin: 16px 20px 0; }
+  body.light-mode .timer-panel { background: #f0f2f4; border-color: #d8dde3; }
+  body.light-mode .timer-display { color: #1a1c1e; } body.light-mode .timer-display.running { color: #1a9e6a; } body.light-mode .timer-display.resting { color: #4a62b8; }
+  body.light-mode .cfg-group { background: #fff; border-color: rgba(0,0,0,.1); }
+  body.light-mode .cfg-val { color: #1a1c1e; }
+  body.light-mode .cfg-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: #1a1c1e; }
+  body.light-mode .ctrl-reset { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-close { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.1); color: #5a6a7a; }
+  body.light-mode .timer-tab { border-color: rgba(0,0,0,.12); color: #5a6a7a; }
+  body.light-mode .round-dot { background: rgba(0,0,0,.1); }
+</style>
+</head>
+<body class="light-mode">
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand">GYMGEEK<span class="club-wordmark">JH Running S&amp;C</span></div>
+  </div>
+  <button class="light-toggle" onclick="openTimer()" style="margin-right:6px;">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span>Timer</span>
+  </button>
+  <button class="light-toggle" onclick="toggleLight()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span id="light-label">Dark mode</span>
+  </button>
+</div>
+
+
+<!-- ═══ PLYOMETRICS + MED BALL ═══ -->
+<!-- SLOT: plyo_section_header -->
+<div class="section-header">
+  <div class="section-label">Plyometrics &amp; Med Ball</div>
+  <div class="section-divider"></div>
+</div>
+
+<div class="two-grid">
+
+  <!-- PLYO CARD — fill P1, P2, P3. Sets = 2. -->
+  <!-- SLOT: plyo_card -->
+  <div>
+    <div class="program-col-head"><div class="program-col-title title-plyo">Plyometrics</div></div>
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-brand-row">
+          <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">JH Running S&amp;C</span></span>
+          <span class="sc-type">Plyometrics</span>
+        </div>
+      </div>
+      <div class="superset-block">
+        <div class="superset-label">Circuit — All Together · 90 sec rest</div>
+
+        <div class="ex-row">
+          <span class="ex-code">P1</span>
+          <div style="flex:1"><div class="ex-name">2 Squat → Broad Jump</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5 reps</span></span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">P2</span>
+          <div style="flex:1"><div class="ex-name">Depth Jump</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5 reps</span></span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">P3</span>
+          <div style="flex:1"><div class="ex-name">Sled Sprint 15m</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">2 reps</span></span></div>
+        </div>
+
+      </div>
+      <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+    </div>
+  </div>
+
+  <!-- MED BALL CARD — fill M1, M2, M3. Sets = 2. -->
+  <!-- SLOT: medball_card -->
+  <div>
+    <div class="program-col-head"><div class="program-col-title title-plyo">Astro Run Combos</div></div>
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-brand-row">
+          <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">JH Running S&amp;C</span></span>
+          <span class="sc-type">Astro Run</span>
+        </div>
+      </div>
+      <div class="superset-block">
+        <div class="superset-label">Circuit — 2 Squats &amp; 10m Astro · All Together</div>
+
+        <div class="ex-row">
+          <span class="ex-code">M1</span>
+          <div style="flex:1"><div class="ex-name">2 Squat → 10m Astro Sprint</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">4 reps</span></span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">M2</span>
+          <div style="flex:1"><div class="ex-name">Lateral Bound → 10m Astro Sprint</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">4 ea</span></span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">M3</span>
+          <div style="flex:1"><div class="ex-name">Med Ball Scoop Toss</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">2</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6 reps</span></span></div>
+        </div>
+
+      </div>
+      <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+    </div>
+  </div>
+
+</div><!-- /plyo+med ball -->
+
+
+<!-- ═══ RACK WORK ═══ -->
+<!-- SLOT: rack_section_header -->
+<div class="section-header">
+  <div class="section-label">Rack Work</div>
+  <div class="section-divider"></div>
+</div>
+
+<div class="three-grid">
+
+  <!-- RACK 1 — fill A1, A2. Sets = 3. -->
+  <!-- SLOT: rack1_card -->
+  <div>
+    <div class="program-col-head"><div class="program-col-title title-rack1">Rack 1 · Quad Focus</div></div>
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-brand-row">
+          <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">JH Running S&amp;C</span></span>
+          <span class="sc-type">Rack 1</span>
+        </div>
+      </div>
+      <div class="superset-block">
+        <div class="superset-label">Superset A</div>
+
+        <div class="ex-row">
+          <span class="ex-code">A1</span>
+          <div style="flex:1"><div class="ex-name">Front Squat</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">4 reps</span></span><span class="rir-chip">RIR 1</span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">A2</span>
+          <div style="flex:1"><div class="ex-name">Barbell Walking Lunge</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">20m</span></span><span class="rir-chip">RIR 1</span></div>
+        </div>
+
+      </div>
+      <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+    </div>
+  </div>
+
+  <!-- RACK 2 — fill B1, B2. Sets = 3. -->
+  <!-- SLOT: rack2_card -->
+  <div>
+    <div class="program-col-head"><div class="program-col-title title-rack2">Rack 2 · Upper Body</div></div>
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-brand-row">
+          <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">JH Running S&amp;C</span></span>
+          <span class="sc-type">Rack 2</span>
+        </div>
+      </div>
+      <div class="superset-block">
+        <div class="superset-label">Superset B</div>
+
+        <div class="ex-row">
+          <span class="ex-code">B1</span>
+          <div style="flex:1"><div class="ex-name">Chin-Up (Weighted)</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5 reps</span></span><span class="rir-chip">RIR 1</span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">B2</span>
+          <div style="flex:1"><div class="ex-name">Landmine Press (Single Arm)</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6 ea</span></span><span class="rir-chip">RIR 1</span></div>
+        </div>
+
+      </div>
+      <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+    </div>
+  </div>
+
+  <!-- RACK 3 — fill C1, C2. Sets = 3. -->
+  <!-- SLOT: rack3_card -->
+  <div>
+    <div class="program-col-head"><div class="program-col-title title-rack3">Rack 3 · Posterior Chain</div></div>
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-brand-row">
+          <span class="sc-brand">GYMGEEK<span class="club-wordmark" style="font-size:8px;letter-spacing:.38em;margin-left:4px;">JH Running S&amp;C</span></span>
+          <span class="sc-type">Rack 3</span>
+        </div>
+      </div>
+      <div class="superset-block">
+        <div class="superset-label">Superset C</div>
+
+        <div class="ex-row">
+          <span class="ex-code">C1</span>
+          <div style="flex:1"><div class="ex-name">Barbell Romanian Deadlift</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">5 reps</span></span><span class="rir-chip">RIR 1</span></div>
+        </div>
+
+        <div class="ex-row">
+          <span class="ex-code">C2</span>
+          <div style="flex:1"><div class="ex-name">Glute Ham Raise</div></div>
+          <div class="ex-stats"><span class="ex-chip"><span class="ex-chip-val">3</span> sets</span><span class="ex-chip"><span class="ex-chip-val">6 reps</span></span></div>
+        </div>
+
+      </div>
+      <div class="sc-footer">gymgeekonline.co.uk · Treat Train Perform</div>
+    </div>
+  </div>
+
+</div><!-- /rack work -->
+
+
+<!-- TIMER OVERLAY -->
+<div class="timer-backdrop" id="timerBackdrop" onclick="closeTimerBackdrop(event)">
+  <div class="timer-panel">
+    <div class="timer-drag-bar" onclick="closeTimer()"></div>
+    <button class="timer-close" onclick="closeTimer()">✕</button>
+    <div class="timer-tabs">
+      <button class="timer-tab active" id="tab-interval" onclick="switchTab('interval')">Interval</button>
+      <button class="timer-tab" id="tab-cd" onclick="switchTab('cd')">Countdown</button>
+      <button class="timer-tab" id="tab-emom" onclick="switchTab('emom')">EMOM</button>
+    </div>
+    <div id="pane-interval">
+      <div class="timer-face"><div class="timer-display" id="ivDisplay">00:30</div><div class="timer-sublabel" id="ivSublabel">Set work &amp; rest, then press Start</div></div>
+      <div class="interval-config" id="ivConfig">
+        <div class="cfg-group"><div class="cfg-label">Work</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('work',-5)">−</button><div class="cfg-val" id="ivWorkVal">30s</div><button class="cfg-btn" onclick="adjIv('work',5)">+</button></div></div>
+        <div class="cfg-group"><div class="cfg-label">Rest</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('rest',-5)">−</button><div class="cfg-val" id="ivRestVal">30s</div><button class="cfg-btn" onclick="adjIv('rest',5)">+</button></div></div>
+        <div class="cfg-group"><div class="cfg-label">Rounds</div><div class="cfg-row"><button class="cfg-btn" onclick="adjIv('rounds',-1)">−</button><div class="cfg-val" id="ivRoundsVal">5</div><button class="cfg-btn" onclick="adjIv('rounds',1)">+</button></div></div>
+      </div>
+      <div class="round-track" id="ivRoundTrack"></div>
+      <div class="timer-controls"><button class="ctrl-btn ctrl-play" id="ivPlayBtn" onclick="ivToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="ivReset()">Reset</button></div>
+    </div>
+    <div id="pane-cd" style="display:none">
+      <div class="timer-face"><div class="timer-display" id="cdDisplay">01:30</div><div class="timer-sublabel" id="cdSublabel">Set duration &amp; press Start</div></div>
+      <div class="cd-config"><button class="cd-mode-btn active-work" id="cdWorkBtn" onclick="cdSetMode('work')">Work</button><button class="cd-mode-btn" id="cdRestBtn" onclick="cdSetMode('rest')">Rest</button></div>
+      <div class="cd-time-row"><div class="cfg-group"><div class="cfg-label">Duration</div><div class="cfg-row"><button class="cfg-btn" onclick="adjCD(-15)">−</button><div class="cfg-val" id="cdVal">01:30</div><button class="cfg-btn" onclick="adjCD(15)">+</button></div></div></div>
+      <div class="timer-controls"><button class="ctrl-btn ctrl-play" id="cdPlayBtn" onclick="cdToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="cdReset()">Reset</button></div>
+    </div>
+    <div id="pane-emom" style="display:none">
+      <div class="timer-face"><div class="timer-display" id="emDisplay">01:00</div><div class="timer-sublabel" id="emSublabel">Every minute on the minute</div></div>
+      <div class="em-config" id="emConfig">
+        <div class="cfg-group"><div class="cfg-label">Minutes</div><div class="cfg-row"><button class="cfg-btn" onclick="adjEm('mins',-1)">−</button><div class="cfg-val" id="emMinsVal">1</div><button class="cfg-btn" onclick="adjEm('mins',1)">+</button></div></div>
+        <div class="cfg-group"><div class="cfg-label">Rounds</div><div class="cfg-row"><button class="cfg-btn" onclick="adjEm('rounds',-1)">−</button><div class="cfg-val" id="emRoundsVal">10</div><button class="cfg-btn" onclick="adjEm('rounds',1)">+</button></div></div>
+      </div>
+      <div class="round-track" id="emRoundTrack"></div>
+      <div class="timer-controls"><button class="ctrl-btn ctrl-play" id="emPlayBtn" onclick="emToggle()">Start</button><button class="ctrl-btn ctrl-reset" onclick="emReset()">Reset</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLight(){var b=document.body;b.classList.toggle("light-mode");document.getElementById("light-label").textContent=b.classList.contains("light-mode")?"Dark mode":"Light mode";}
+document.addEventListener("DOMContentLoaded",function(){document.getElementById("light-label").textContent=document.body.classList.contains("light-mode")?"Dark mode":"Light mode";});
+function _unused(){var b=document.body;b.classList.toggle('light-mode');document.getElementById('light-label').textContent=b.classList.contains('light-mode')?'Dark mode':'Light mode';}
+function openTimer(){document.getElementById('timerBackdrop').classList.add('open');}
+function closeTimer(){document.getElementById('timerBackdrop').classList.remove('open');}
+function closeTimerBackdrop(e){if(e.target===document.getElementById('timerBackdrop'))closeTimer();}
+function switchTab(t){['interval','cd','emom'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('active',x===t);document.getElementById('pane-'+x).style.display=x===t?'':'none';});}
+var ivWork=30,ivRest=30,ivRounds=5,ivRunning=false,ivMode='work',ivRoundCurrent=1,ivInterval=null,ivEndTime=0,ivLastBeepAt=-1;
+function adjIv(f,d){if(ivRunning)return;if(f==='work'){ivWork=Math.max(5,Math.min(300,ivWork+d));document.getElementById('ivWorkVal').textContent=ivWork+'s';}if(f==='rest'){ivRest=Math.max(5,Math.min(300,ivRest+d));document.getElementById('ivRestVal').textContent=ivRest+'s';}if(f==='rounds'){ivRounds=Math.max(1,Math.min(20,ivRounds+d));document.getElementById('ivRoundsVal').textContent=ivRounds;}document.getElementById('ivDisplay').textContent=fmtCD(ivWork);buildRoundDots();}
+function buildRoundDots(){var el=document.getElementById('ivRoundTrack');el.innerHTML='';for(var i=1;i<=ivRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<ivRoundCurrent?' done':i===ivRoundCurrent?' active':'');d.id='ivdot'+i;el.appendChild(d);}}
+function ivToggle(){if(ivRunning){clearInterval(ivInterval);ivInterval=null;ivRunning=false;document.getElementById('ivPlayBtn').textContent='Resume';document.getElementById('ivDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();if(ivRoundCurrent>ivRounds)ivRoundCurrent=1;ivRunning=true;document.getElementById('ivPlayBtn').textContent='Pause';document.getElementById('ivConfig').style.opacity='.4';buildRoundDots();var dur=ivMode==='work'?ivWork:ivRest;ivEndTime=Date.now()+dur*1000;ivLastBeepAt=-1;ivInterval=setInterval(ivTick,250);ivTick();}}
+function ivTick(){var rem=Math.ceil((ivEndTime-Date.now())/1000);var isWork=ivMode==='work';document.getElementById('ivDisplay').className='timer-display '+(isWork?'running':'resting');if(rem<=0){clearInterval(ivInterval);ivInterval=null;ivRunning=false;if(isWork){ivMode='rest';soundFinish();document.getElementById('ivSublabel').textContent='Rest — Round '+ivRoundCurrent+' of '+ivRounds;ivEndTime=Date.now()+ivRest*1000;ivLastBeepAt=-1;ivRunning=true;ivInterval=setInterval(ivTick,250);}else{if(ivRoundCurrent>=ivRounds){document.getElementById('ivDisplay').textContent='Done!';document.getElementById('ivDisplay').className='timer-display finished';document.getElementById('ivSublabel').textContent='All '+ivRounds+' rounds complete';document.getElementById('ivPlayBtn').textContent='Start';document.getElementById('ivConfig').style.opacity='1';soundFanfare();return;}ivRoundCurrent++;ivMode='work';soundStart();var dot=document.getElementById('ivdot'+(ivRoundCurrent-1));if(dot)dot.className='round-dot done';var dotc=document.getElementById('ivdot'+ivRoundCurrent);if(dotc)dotc.className='round-dot active';ivEndTime=Date.now()+ivWork*1000;ivLastBeepAt=-1;ivRunning=true;ivInterval=setInterval(ivTick,250);}return;}if(rem<=3&&rem!==ivLastBeepAt){ivLastBeepAt=rem;soundCountdown(rem);}document.getElementById('ivDisplay').textContent=fmtCD(rem);document.getElementById('ivSublabel').textContent=(isWork?'Work':'Rest')+' — Round '+ivRoundCurrent+' of '+ivRounds;}
+function ivReset(){clearInterval(ivInterval);ivInterval=null;ivRunning=false;ivMode='work';ivRoundCurrent=1;ivLastBeepAt=-1;document.getElementById('ivDisplay').textContent=fmtCD(ivWork);document.getElementById('ivDisplay').className='timer-display';document.getElementById('ivSublabel').textContent='Set work & rest, then press Start';document.getElementById('ivPlayBtn').textContent='Start';document.getElementById('ivConfig').style.opacity='1';buildRoundDots();}
+var cdMode='work',cdTotal=90,cdRemaining=90,cdRunning=false,cdInterval=null,cdEndTime=0,cdLastBeepAt=-1;
+function cdSetMode(m){cdMode=m;document.getElementById('cdWorkBtn').className='cd-mode-btn'+(m==='work'?' active-work':'');document.getElementById('cdRestBtn').className='cd-mode-btn'+(m==='rest'?' active-rest':'');}
+function adjCD(d){if(cdRunning)return;cdTotal=Math.max(15,Math.min(600,cdTotal+d));cdRemaining=cdTotal;document.getElementById('cdVal').textContent=fmtCD(cdTotal);document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);}
+function cdToggle(){if(cdRunning){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdPlayBtn').textContent='Resume';document.getElementById('cdDisplay').classList.remove('running','resting');}else{unlockAudio();soundStart();cdRunning=true;cdEndTime=Date.now()+cdRemaining*1000;document.getElementById('cdPlayBtn').textContent='Pause';document.getElementById('cdDisplay').classList.add(cdMode==='work'?'running':'resting');cdInterval=setInterval(cdTick,250);cdTick();}}
+function cdTick(){var rem=Math.ceil((cdEndTime-Date.now())/1000);if(rem<=0){clearInterval(cdInterval);cdInterval=null;cdRunning=false;document.getElementById('cdDisplay').textContent=cdMode==='work'?'Rest!':'Go!';document.getElementById('cdDisplay').className='timer-display finished';document.getElementById('cdSublabel').textContent=cdMode==='work'?'Work complete — rest up':'Rest complete — get to work';document.getElementById('cdPlayBtn').textContent='Start';cdRemaining=0;soundFanfare();return;}if(rem<=3&&rem!==cdLastBeepAt){cdLastBeepAt=rem;soundCountdown(rem);}cdRemaining=rem;document.getElementById('cdDisplay').textContent=fmtCD(rem);document.getElementById('cdSublabel').textContent=rem<=3?'':(cdMode==='work'?'Working':'Resting');if(rem<=10){document.getElementById('cdDisplay').classList.remove('running','resting');document.getElementById('cdDisplay').classList.add('finished');}}
+function cdReset(){clearInterval(cdInterval);cdInterval=null;cdRunning=false;cdRemaining=cdTotal;cdLastBeepAt=-1;document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);document.getElementById('cdDisplay').className='timer-display';document.getElementById('cdSublabel').textContent='Set duration & press Start';document.getElementById('cdPlayBtn').textContent='Start';}
+var emMins=1,emRounds=10,emRunning=false,emRoundCurrent=1,emInterval=null,emEndTime=0,emLastBeepAt=-1;
+function adjEm(f,d){if(emRunning)return;if(f==='mins'){emMins=Math.max(1,Math.min(5,emMins+d));document.getElementById('emMinsVal').textContent=emMins;}if(f==='rounds'){emRounds=Math.max(1,Math.min(30,emRounds+d));document.getElementById('emRoundsVal').textContent=emRounds;}document.getElementById('emDisplay').textContent=fmtCD(emMins*60);buildEmDots();}
+function buildEmDots(){var el=document.getElementById('emRoundTrack');el.innerHTML='';for(var i=1;i<=emRounds;i++){var d=document.createElement('div');d.className='round-dot'+(i<emRoundCurrent?' done':i===emRoundCurrent?' active':'');d.id='emdot'+i;el.appendChild(d);}}
+function emToggle(){if(emRunning){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emPlayBtn').textContent='Resume';document.getElementById('emDisplay').classList.remove('running');}else{unlockAudio();soundStart();if(emRoundCurrent>emRounds)emRoundCurrent=1;emRunning=true;document.getElementById('emPlayBtn').textContent='Pause';document.getElementById('emConfig').style.opacity='.4';buildEmDots();emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;emInterval=setInterval(emTick,250);emTick();}}
+function emTick(){var rem=Math.ceil((emEndTime-Date.now())/1000);if(rem<=0){var dot=document.getElementById('emdot'+emRoundCurrent);if(dot)dot.className='round-dot done';if(emRoundCurrent>=emRounds){clearInterval(emInterval);emInterval=null;emRunning=false;document.getElementById('emDisplay').textContent='Done!';document.getElementById('emDisplay').className='timer-display finished';document.getElementById('emSublabel').textContent='All '+emRounds+' rounds complete';document.getElementById('emPlayBtn').textContent='Start';document.getElementById('emConfig').style.opacity='1';soundFanfare();return;}emRoundCurrent++;emEndTime=Date.now()+emMins*60*1000;emLastBeepAt=-1;soundFinish();buildEmDots();return;}if(rem<=3&&rem!==emLastBeepAt){emLastBeepAt=rem;soundCountdown(rem);}document.getElementById('emDisplay').textContent=fmtCD(rem);document.getElementById('emDisplay').className='timer-display running';document.getElementById('emSublabel').textContent='Round '+emRoundCurrent+' of '+emRounds+'  ·  '+fmtCD(rem)+' left';}
+function emReset(){clearInterval(emInterval);emInterval=null;emRunning=false;emRoundCurrent=1;emLastBeepAt=-1;document.getElementById('emDisplay').textContent=fmtCD(emMins*60);document.getElementById('emDisplay').className='timer-display';document.getElementById('emSublabel').textContent='Every minute on the minute';document.getElementById('emPlayBtn').textContent='Start';document.getElementById('emConfig').style.opacity='1';buildEmDots();}
+function pad(n){return n<10?'0'+n:''+n;}
+function fmtCD(s){var m=Math.floor(s/60),sec=s%60;return pad(m)+':'+pad(sec);}
+var audioCtx=null,audioUnlocked=false;
+function unlockAudio(){if(audioUnlocked)return;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();var buf=audioCtx.createBuffer(1,1,22050);var src=audioCtx.createBufferSource();src.buffer=buf;src.connect(audioCtx.destination);src.start(0);audioCtx.resume().then(function(){audioUnlocked=true;});}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:false,passive:true});
+document.addEventListener('mousedown',unlockAudio,{once:false,passive:true});
+function tone(freq,dur,vol,type,off){try{if(!audioCtx)unlockAudio();if(!audioCtx)return;if(audioCtx.state==='suspended')audioCtx.resume();var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=type||'sine';o.frequency.setValueAtTime(freq,audioCtx.currentTime);var t=audioCtx.currentTime+(off||0);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol||0.4,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.05);}catch(e){}}
+function soundStart(){tone(660,0.12,0.4,'sine',0);tone(880,0.15,0.4,'sine',0.13);}
+function soundCountdown(n){if(n>=2)tone(440,0.10,0.35,'sine',0);else tone(660,0.15,0.45,'sine',0);}
+function soundFinish(){tone(880,0.12,0.5,'sine',0);tone(880,0.12,0.5,'sine',0.2);}
+function soundFanfare(){tone(523,0.15,0.4,'sine',0);tone(659,0.15,0.35,'sine',0);tone(784,0.15,0.30,'sine',0);tone(1047,0.30,0.35,'sine',0.18);}
+buildRoundDots();buildEmDots();
+document.getElementById('ivWorkVal').textContent=ivWork+'s';
+document.getElementById('ivRestVal').textContent=ivRest+'s';
+document.getElementById('ivRoundsVal').textContent=ivRounds;
+document.getElementById('ivDisplay').textContent=fmtCD(ivWork);
+document.getElementById('emDisplay').textContent=fmtCD(emMins*60);
+document.getElementById('emMinsVal').textContent=emMins;
+document.getElementById('emRoundsVal').textContent=emRounds;
+document.getElementById('cdDisplay').textContent=fmtCD(cdTotal);
+document.getElementById('cdVal').textContent=fmtCD(cdTotal);
+cdSetMode('work');
+</script>
+</body>
+</html>
