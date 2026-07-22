@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f2f4;font-family:'DM Sans',sans-serif;color:#1a1c1e;padding:16px 12px 100px;min-height:100vh;-webkit-text-size-adjust:100%}
+.page{max-width:820px;margin:0 auto}
+
+.hdr{margin-bottom:16px;padding-bottom:14px;border-bottom:2px solid #d8dde3}
+.hdr-brand{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:17px;color:#1a1c1e;margin-bottom:3px}
+.hdr-brand span{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:300;font-size:10px;letter-spacing:.35em;color:rgba(0,0,0,.35);margin-left:6px;text-transform:uppercase}
+.hdr-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.06em;color:#1a1c1e;line-height:1;margin-bottom:3px}
+.hdr-meta{font-size:11px;color:#4a5568}
+
+.intro{background:#fff;border:1px solid #d8dde3;border-radius:12px;padding:13px 15px;margin-bottom:18px;font-size:12px;color:#3a4a5a;line-height:1.7;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.intro strong{color:#1a1c1e}
+
+.minutes-bar{background:#fff;border:1px solid #d8dde3;border-radius:12px;padding:13px 15px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.minutes-bar-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5568;margin-bottom:10px}
+.minutes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.min-cell{display:flex;flex-direction:column;gap:5px}
+.min-lbl{font-size:11px;font-weight:600;color:#1a1c1e}
+.min-sub{font-size:10px;color:#4a5568}
+.min-input{background:#f5f7f9;border:1px solid #d0d5db;border-radius:7px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:14px;color:#1a1c1e;width:100%;outline:none;text-align:center;-webkit-appearance:none}
+.min-input:focus{border-color:#3a52a0;background:#eef1fb}
+.min-input::placeholder{color:rgba(0,0,0,.28);font-size:12px}
+.fatigue-banner{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:11px;line-height:1.5;font-weight:500}
+.fatigue-0{background:rgba(26,122,84,.08);border:1px solid rgba(26,122,84,.25);color:#1a7a54}
+.fatigue-1{background:rgba(200,144,10,.08);border:1px solid rgba(200,144,10,.3);color:#9a6e00}
+.fatigue-2{background:rgba(217,100,20,.08);border:1px solid rgba(217,100,20,.3);color:#a04010}
+.fatigue-3{background:rgba(217,64,64,.08);border:1px solid rgba(217,64,64,.3);color:#b02020}
+
+.session-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.06em;color:#1a1c1e;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #d8dde3;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.session-title span{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:#4a5568}
+.table-wrap{margin-bottom:10px}
+
+/* Desktop table */
+.desktop-table{background:#fff;border:1px solid #d8dde3;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.desktop-table table{width:100%;border-collapse:collapse}
+.desktop-table thead th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5568;padding:9px 12px;text-align:left;border-bottom:1px solid #d8dde3;background:#f8f9fb}
+.desktop-table thead th.wk{text-align:center;color:#3a52a0}
+.desktop-table thead th.sug{text-align:center;color:#1a7a54}
+.desktop-table tbody td{font-size:11px;color:#1a1c1e;padding:7px 12px;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:middle}
+.desktop-table tbody tr:last-child td{border-bottom:none}
+.desktop-table td.ex{font-weight:500}
+.desktop-table td.center{text-align:center}
+.desktop-table .group-row td{background:#f8f9fb;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5568;padding:6px 12px;border-bottom:1px solid rgba(0,0,0,.06)}
+.sug-cell{text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:#1a7a54;font-weight:600}
+.sug-cell.adjusted{color:#9a6e00}
+.sug-cell.empty{color:rgba(0,0,0,.2);font-weight:400;font-size:10px}
+
+/* RIR input row within desktop */
+.rir-row td{background:rgba(74,98,184,.03);border-bottom:1px solid rgba(74,98,184,.08) !important}
+.rir-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3a52a0;padding-left:8px}
+
+/* Mobile cards */
+.mobile-cards{display:none}
+.ex-card{background:#fff;border:1px solid #d8dde3;border-radius:12px;padding:13px 14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.ex-card-group{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5568;margin:14px 0 6px 2px}
+.ex-card-name{font-size:13px;font-weight:600;color:#1a1c1e;margin-bottom:2px}
+.ex-card-scheme{font-size:11px;color:#4a5568;margin-bottom:10px}
+.week-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.week-cell{display:flex;flex-direction:column;gap:4px}
+.week-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3a52a0}
+.rir-section{border-top:1px solid rgba(74,98,184,.12);padding-top:8px;margin-top:4px}
+.rir-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.rir-lbl-m{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3a52a0;margin-bottom:4px}
+.sug-box{background:rgba(26,122,84,.06);border:1px solid rgba(26,122,84,.2);border-radius:7px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:13px;color:#1a7a54;font-weight:600;text-align:center;min-height:34px;display:flex;align-items:center;justify-content:center}
+.sug-box.adjusted{background:rgba(200,144,10,.06);border-color:rgba(200,144,10,.25);color:#9a6e00}
+.sug-box.empty{color:rgba(0,0,0,.25);font-size:11px;font-weight:400;background:#f8f9fb;border-color:#e0e4e8}
+.sug-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1a7a54;margin-bottom:4px}
+.sug-lbl.adjusted{color:#9a6e00}
+
+.tag{font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-left:5px;vertical-align:middle;display:inline-block}
+.tag-r{background:rgba(217,64,64,.1);color:#b02020}
+.tag-y{background:rgba(200,144,10,.1);color:#9a6e00}
+
+.input-cell{width:100%;background:#f5f7f9;border:1px solid #d0d5db;border-radius:7px;padding:8px 6px;font-family:'DM Mono',monospace;font-size:14px;color:#1a1c1e;text-align:center;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.input-cell:focus{border-color:#3a52a0;background:#eef1fb}
+.input-cell::placeholder{color:rgba(0,0,0,.28);font-size:12px}
+.input-cell-sm{width:100%;background:#f5f7f9;border:1px solid rgba(74,98,184,.2);border-radius:6px;padding:6px 6px;font-family:'DM Mono',monospace;font-size:13px;color:#3a52a0;text-align:center;outline:none;-webkit-appearance:none}
+.input-cell-sm:focus{border-color:#3a52a0;background:#eef1fb}
+.input-cell-sm::placeholder{color:rgba(74,98,184,.35);font-size:11px}
+
+@media(max-width:580px){
+  .desktop-table{display:none}
+  .mobile-cards{display:block}
+  body{padding:14px 10px 100px}
+  .minutes-grid{grid-template-columns:1fr 1fr}
+}
+
+footer{text-align:center;margin-top:28px;font-size:9px;color:rgba(0,0,0,.3);letter-spacing:.08em}
+footer strong{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;color:rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hdr">
+  <div class="hdr-brand">ATHLEEK<span>Coaching</span></div>
+  <div class="hdr-title">Stef's Progression Sheet</div>
+  <div class="hdr-meta">Monday / Friday &nbsp;&middot;&nbsp; We'll fill this in together after each session</div>
+</div>
+
+<div class="intro">
+  <strong>How it works:</strong> fill in the weight and your RIR (reps in reserve — how many more reps you could've done) after each set. The sheet suggests next week's load automatically. Also log how many minutes you played that week and it'll adjust the suggested volume — weight stays the same, just sets and reps change based on how much your legs have already done.
+</div>
+
+<!-- MINUTES PLAYED -->
+<div class="minutes-bar">
+  <div class="minutes-bar-title">Minutes played this week</div>
+  <div class="minutes-grid">
+    <div class="min-cell">
+      <div class="min-lbl">Before Week 1 session</div>
+      <div class="min-sub">Any games in the past 5 days?</div>
+      <input class="min-input" id="min-w1" type="number" placeholder="mins" min="0" max="180">
+    </div>
+    <div class="min-cell">
+      <div class="min-lbl">Before Week 2 session</div>
+      <div class="min-sub">Any games in the past 5 days?</div>
+      <input class="min-input" id="min-w2" type="number" placeholder="mins" min="0" max="180">
+    </div>
+    <div class="min-cell">
+      <div class="min-lbl">Before Week 3 session</div>
+      <div class="min-sub">Any games in the past 5 days?</div>
+      <input class="min-input" id="min-w3" type="number" placeholder="mins" min="0" max="180">
+    </div>
+    <div class="min-cell">
+      <div class="min-lbl">Before Week 4 session</div>
+      <div class="min-sub">Any games in the past 5 days?</div>
+      <input class="min-input" id="min-w4" type="number" placeholder="mins" min="0" max="180">
+    </div>
+  </div>
+  <div class="fatigue-banner" id="fatigue-banner"></div>
+</div>
+
+<!-- ═══════ PREHAB ═══════ -->
+<div class="session-title">Knee Prehab <span>Before every session</span></div>
+<div class="table-wrap">
+  <div class="desktop-table">
+    <table>
+      <thead><tr><th>Exercise</th><th>Sets / Reps</th><th class="wk">Week 1</th><th class="wk">Week 2</th><th class="wk">Week 3</th><th class="wk">Week 4</th></tr></thead>
+      <tbody>
+        <tr><td class="ex">Wall sit <span class="tag tag-y">PAIN /10</span></td><td>2 x 30s</td><td class="center"><input class="input-cell" placeholder="pain"></td><td class="center"><input class="input-cell" placeholder="pain"></td><td class="center"><input class="input-cell" placeholder="pain"></td><td class="center"><input class="input-cell" placeholder="pain"></td></tr>
+        <tr><td class="ex">Spanish squats <span class="tag tag-y">PAIN /10</span></td><td>2 x 20s hold</td><td class="center"><input class="input-cell" placeholder="pain"></td><td class="center"><input class="input-cell" placeholder="pain"></td><td class="center"><input class="input-cell" placeholder="pain"></td><td class="center"><input class="input-cell" placeholder="pain"></td></tr>
+        <tr><td class="ex">Morning-after knee pain <span class="tag tag-r">DAILY</span></td><td>Next morning</td><td class="center"><input class="input-cell" placeholder="/10"></td><td class="center"><input class="input-cell" placeholder="/10"></td><td class="center"><input class="input-cell" placeholder="/10"></td><td class="center"><input class="input-cell" placeholder="/10"></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="mobile-cards">
+    <div class="ex-card"><div class="ex-card-name">Wall sit <span class="tag tag-y">PAIN /10</span></div><div class="ex-card-scheme">2 x 30s</div><div class="week-grid"><div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="pain"></div><div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="pain"></div><div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="pain"></div><div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="pain"></div></div></div>
+    <div class="ex-card"><div class="ex-card-name">Spanish squats <span class="tag tag-y">PAIN /10</span></div><div class="ex-card-scheme">2 x 20s hold</div><div class="week-grid"><div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="pain"></div><div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="pain"></div><div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="pain"></div><div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="pain"></div></div></div>
+    <div class="ex-card"><div class="ex-card-name">Morning-after knee pain <span class="tag tag-r">DAILY</span></div><div class="ex-card-scheme">Rate it before you get out of bed</div><div class="week-grid"><div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="/10"></div><div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="/10"></div><div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="/10"></div><div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="/10"></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════ MONDAY ═══════ -->
+<div class="session-title">Monday <span>Movement + upper body</span></div>
+<div class="table-wrap">
+  <div class="desktop-table">
+    <table>
+      <thead><tr><th>Exercise</th><th>Base scheme</th><th class="wk">Wk 1 &nbsp;kg</th><th class="wk">Wk 2 &nbsp;kg</th><th class="wk">Wk 3 &nbsp;kg</th><th class="wk">Wk 4 &nbsp;kg</th><th class="sug">Next suggestion</th></tr></thead>
+      <tbody>
+        <tr class="group-row"><td colspan="7">Plyometrics</td></tr>
+        <tr>
+          <td class="ex">B4 Single-leg drop jump <span class="tag tag-r">PAIN /10</span></td><td>2 x 5</td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b4" data-wk="1" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b4" data-wk="2" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b4" data-wk="3" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b4" data-wk="4" data-type="pain"></td>
+          <td class="sug-cell empty" id="sug-b4">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="b4" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="b4" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="b4" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="b4" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr class="group-row"><td colspan="7">Upper body</td></tr>
+        <tr>
+          <td class="ex">C1 DB bench press</td><td>3 x 10</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c1" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c1" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c1" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c1" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-c1">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c1" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c1" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c1" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c1" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="ex">C2 High cable row</td><td>3 x 10</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c2" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c2" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c2" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c2" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-c2">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c2" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c2" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c2" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c2" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="ex">C3 Lat pulldown</td><td>3 x 10</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c3" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c3" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c3" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c3" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-c3">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c3" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c3" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c3" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c3" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="ex">C4 DB overhead press</td><td>3 x 10</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c4" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c4" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c4" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="c4" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-c4">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c4" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c4" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c4" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="c4" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr class="group-row"><td colspan="7">Hip dominant</td></tr>
+        <tr>
+          <td class="ex">D1 Hip thrust</td><td>3 x 10</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d1" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d1" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d1" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d1" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-d1">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d1" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d1" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d1" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d1" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="ex">D2 Single-leg RDL</td><td>3 x 8</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d2" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d2" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d2" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="d2" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-d2">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d2" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d2" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d2" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="d2" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Monday -->
+  <div class="mobile-cards">
+    <div class="ex-card-group">Plyometrics</div>
+    <div class="ex-card" data-exid="b4m" data-base-sets="2" data-base-reps="5">
+      <div class="ex-card-name">B4 Single-leg drop jump <span class="tag tag-r">PAIN /10</span></div>
+      <div class="ex-card-scheme">2 x 5</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="pain" data-exid="b4m" data-wk="1" data-type="pain"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="pain" data-exid="b4m" data-wk="2" data-type="pain"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="pain" data-exid="b4m" data-wk="3" data-type="pain"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="pain" data-exid="b4m" data-wk="4" data-type="pain"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="b4m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="b4m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="b4m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="b4m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-b4m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-b4m">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card-group">Upper body</div>
+    <div class="ex-card" data-exid="c1m" data-base-sets="3" data-base-reps="10">
+      <div class="ex-card-name">C1 DB bench press</div><div class="ex-card-scheme">3 x 10</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="c1m" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="c1m" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="c1m" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="c1m" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="c1m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="c1m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="c1m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="c1m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-c1m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-c1m">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card" data-exid="c2m" data-base-sets="3" data-base-reps="10">
+      <div class="ex-card-name">C2 High cable row</div><div class="ex-card-scheme">3 x 10</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="c2m" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="c2m" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="c2m" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="c2m" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="c2m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="c2m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="c2m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="c2m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-c2m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-c2m">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card" data-exid="c3m" data-base-sets="3" data-base-reps="10">
+      <div class="ex-card-name">C3 Lat pulldown</div><div class="ex-card-scheme">3 x 10</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="c3m" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="c3m" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="c3m" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="c3m" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="c3m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="c3m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="c3m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="c3m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-c3m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-c3m">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card" data-exid="c4m" data-base-sets="3" data-base-reps="10">
+      <div class="ex-card-name">C4 DB overhead press</div><div class="ex-card-scheme">3 x 10</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="c4m" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="c4m" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="c4m" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="c4m" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="c4m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="c4m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="c4m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="c4m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-c4m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-c4m">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card-group">Hip dominant</div>
+    <div class="ex-card" data-exid="d1m" data-base-sets="3" data-base-reps="10">
+      <div class="ex-card-name">D1 Hip thrust</div><div class="ex-card-scheme">3 x 10</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="d1m" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="d1m" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="d1m" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="d1m" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="d1m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="d1m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="d1m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="d1m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-d1m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-d1m">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card" data-exid="d2m" data-base-sets="3" data-base-reps="8">
+      <div class="ex-card-name">D2 Single-leg RDL</div><div class="ex-card-scheme">3 x 8</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="d2m" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="d2m" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="d2m" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="d2m" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="d2m" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="d2m" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="d2m" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="d2m" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-d2m">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-d2m">fill in week first</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ FRIDAY ═══════ -->
+<div class="session-title">Friday <span>Power + lower body strength</span></div>
+<div class="table-wrap">
+  <div class="desktop-table">
+    <table>
+      <thead><tr><th>Exercise</th><th>Base scheme</th><th class="wk">Wk 1 &nbsp;kg</th><th class="wk">Wk 2 &nbsp;kg</th><th class="wk">Wk 3 &nbsp;kg</th><th class="wk">Wk 4 &nbsp;kg</th><th class="sug">Next suggestion</th></tr></thead>
+      <tbody>
+        <tr class="group-row"><td colspan="7">Plyometrics</td></tr>
+        <tr>
+          <td class="ex">B1 Pogos <span class="tag tag-y">PAIN /10</span></td><td>2 x 20</td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b1" data-wk="1" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b1" data-wk="2" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b1" data-wk="3" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b1" data-wk="4" data-type="pain"></td>
+          <td class="sug-cell empty" id="sug-b1">—</td>
+        </tr>
+        <tr>
+          <td class="ex">B2 Squat jump <span class="tag tag-y">PAIN /10</span></td><td>2 x 5</td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b2" data-wk="1" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b2" data-wk="2" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b2" data-wk="3" data-type="pain"></td>
+          <td class="center"><input class="input-cell" placeholder="pain" data-exid="b2" data-wk="4" data-type="pain"></td>
+          <td class="sug-cell empty" id="sug-b2">—</td>
+        </tr>
+        <tr class="group-row"><td colspan="7">Lower strength</td></tr>
+        <tr>
+          <td class="ex">D Box squat <span class="tag tag-y">PAIN /10</span></td><td>4 x 6</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="ds" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="ds" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="ds" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="ds" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-ds">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="ds" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="ds" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="ds" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="ds" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="ex">E Barbell RDL</td><td>4 x 6</td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="er" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="er" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="er" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="kg" data-exid="er" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-er">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="er" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="er" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="er" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="er" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="ex">F Nordics</td><td>4 x 6</td>
+          <td class="center"><input class="input-cell" placeholder="assisted?" data-exid="fn" data-wk="1" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="assisted?" data-exid="fn" data-wk="2" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="assisted?" data-exid="fn" data-wk="3" data-type="kg"></td>
+          <td class="center"><input class="input-cell" placeholder="assisted?" data-exid="fn" data-wk="4" data-type="kg"></td>
+          <td class="sug-cell empty" id="sug-fn">—</td>
+        </tr>
+        <tr class="rir-row"><td colspan="2"><span class="rir-lbl">RIR after last set</span></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="fn" data-wk="1" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="fn" data-wk="2" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="fn" data-wk="3" data-type="rir"></td>
+          <td class="center"><input class="input-cell-sm" placeholder="RIR" data-exid="fn" data-wk="4" data-type="rir"></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Friday -->
+  <div class="mobile-cards">
+    <div class="ex-card-group">Plyometrics</div>
+    <div class="ex-card"><div class="ex-card-name">B1 Pogos <span class="tag tag-y">PAIN /10</span></div><div class="ex-card-scheme">2 x 20</div><div class="week-grid"><div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="pain" data-exid="b1m" data-wk="1" data-type="pain"></div><div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="pain" data-exid="b1m" data-wk="2" data-type="pain"></div><div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="pain" data-exid="b1m" data-wk="3" data-type="pain"></div><div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="pain" data-exid="b1m" data-wk="4" data-type="pain"></div></div></div>
+    <div class="ex-card"><div class="ex-card-name">B2 Squat jump <span class="tag tag-y">PAIN /10</span></div><div class="ex-card-scheme">2 x 5</div><div class="week-grid"><div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="pain" data-exid="b2m" data-wk="1" data-type="pain"></div><div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="pain" data-exid="b2m" data-wk="2" data-type="pain"></div><div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="pain" data-exid="b2m" data-wk="3" data-type="pain"></div><div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="pain" data-exid="b2m" data-wk="4" data-type="pain"></div></div></div>
+
+    <div class="ex-card-group">Lower strength</div>
+    <div class="ex-card" data-exid="dsm" data-base-sets="4" data-base-reps="6">
+      <div class="ex-card-name">D Box squat <span class="tag tag-y">PAIN /10</span></div><div class="ex-card-scheme">4 x 6</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="dsm" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="dsm" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="dsm" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="dsm" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="dsm" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="dsm" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="dsm" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="dsm" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-dsm">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-dsm">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card" data-exid="erm" data-base-sets="4" data-base-reps="6">
+      <div class="ex-card-name">E Barbell RDL</div><div class="ex-card-scheme">4 x 6</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="kg" data-exid="erm" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="kg" data-exid="erm" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="kg" data-exid="erm" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="kg" data-exid="erm" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="erm" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="erm" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="erm" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="erm" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-erm">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-erm">fill in week first</div>
+      </div>
+    </div>
+
+    <div class="ex-card" data-exid="fnm" data-base-sets="4" data-base-reps="6">
+      <div class="ex-card-name">F Nordics</div><div class="ex-card-scheme">4 x 6</div>
+      <div class="week-grid">
+        <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell" placeholder="assisted?" data-exid="fnm" data-wk="1" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell" placeholder="assisted?" data-exid="fnm" data-wk="2" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell" placeholder="assisted?" data-exid="fnm" data-wk="3" data-type="kg"></div>
+        <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell" placeholder="assisted?" data-exid="fnm" data-wk="4" data-type="kg"></div>
+      </div>
+      <div class="rir-section">
+        <div class="rir-lbl-m">RIR after last set</div>
+        <div class="rir-grid">
+          <div class="week-cell"><div class="week-lbl">Week 1</div><input class="input-cell-sm" placeholder="RIR" data-exid="fnm" data-wk="1" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 2</div><input class="input-cell-sm" placeholder="RIR" data-exid="fnm" data-wk="2" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 3</div><input class="input-cell-sm" placeholder="RIR" data-exid="fnm" data-wk="3" data-type="rir"></div>
+          <div class="week-cell"><div class="week-lbl">Week 4</div><input class="input-cell-sm" placeholder="RIR" data-exid="fnm" data-wk="4" data-type="rir"></div>
+        </div>
+        <div class="sug-lbl" id="sug-lbl-fnm">Next session suggestion</div>
+        <div class="sug-box empty" id="sug-fnm">fill in week first</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><strong>ATHLEEK</strong> &nbsp;&middot;&nbsp; gymgeekonline.co.uk &nbsp;&middot;&nbsp; athleek.co.uk</footer>
+</div>
+
+<script>
+(function(){
+  var KEY='stef_prog_v3';
+
+  // ── Exercise config: baseSets, baseReps, increment ──
+  var EX={
+    b4:{sets:2,reps:5,inc:0,isPain:true},
+    c1:{sets:3,reps:10,inc:2.5,isPain:false},
+    c2:{sets:3,reps:10,inc:2.5,isPain:false},
+    c3:{sets:3,reps:10,inc:2.5,isPain:false},
+    c4:{sets:3,reps:10,inc:2.5,isPain:false},
+    d1:{sets:3,reps:10,inc:5,isPain:false},
+    d2:{sets:3,reps:8,inc:2.5,isPain:false},
+    b1:{sets:2,reps:20,inc:0,isPain:true},
+    b2:{sets:2,reps:5,inc:0,isPain:true},
+    ds:{sets:4,reps:6,inc:5,isPain:false},
+    er:{sets:4,reps:6,inc:5,isPain:false},
+    fn:{sets:4,reps:6,inc:0,isPain:false},
+    // mobile
+    b4m:{sets:2,reps:5,inc:0,isPain:true},
+    c1m:{sets:3,reps:10,inc:2.5,isPain:false},
+    c2m:{sets:3,reps:10,inc:2.5,isPain:false},
+    c3m:{sets:3,reps:10,inc:2.5,isPain:false},
+    c4m:{sets:3,reps:10,inc:2.5,isPain:false},
+    d1m:{sets:3,reps:10,inc:5,isPain:false},
+    d2m:{sets:3,reps:8,inc:2.5,isPain:false},
+    b1m:{sets:2,reps:20,inc:0,isPain:true},
+    b2m:{sets:2,reps:5,inc:0,isPain:true},
+    dsm:{sets:4,reps:6,inc:5,isPain:false},
+    erm:{sets:4,reps:6,inc:5,isPain:false},
+    fnm:{sets:4,reps:6,inc:0,isPain:false},
+  };
+
+  // ── Fatigue thresholds ──
+  // Returns {setSub, repMult, label, cls}
+  function fatigueFromMins(mins){
+    if(!mins||mins<=30) return {setSub:0,repMult:1,label:'Full volume — no game load to worry about.',cls:'fatigue-0'};
+    if(mins<=60) return {setSub:1,repMult:1,label:'Slight reduction: drop 1 set per exercise. Weight stays the same.',cls:'fatigue-1'};
+    if(mins<=90) return {setSub:1,repMult:0.8,label:'Moderate reduction: drop 1 set and reps down ~20%. Keep the weight.',cls:'fatigue-2'};
+    return {setSub:2,repMult:0.6,label:'Big reduction: drop 2 sets and reps down ~40%. Weight unchanged — just less volume.',cls:'fatigue-3'};
+  }
+
+  // ── Get latest filled week for an exercise ──
+  function getLatestWeek(exid){
+    var latest=null,latestWk=0;
+    for(var w=1;w<=4;w++){
+      var kg=val(exid,'kg',w)||val(exid,'pain',w);
+      if(kg){latest={kg:parseFloat(kg)||0,wk:w};latestWk=w;}
+    }
+    return latest?{kg:latest.kg,wk:latestWk,rir:parseFloat(val(exid,'rir',latestWk))||null}:null;
+  }
+
+  function val(exid,type,wk){
+    var el=document.querySelector('[data-exid="'+exid+'"][data-type="'+type+'"][data-wk="'+wk+'"]');
+    return el?el.value.trim():'';
+  }
+
+  // ── RIR → load adjustment ──
+  // RIR 0-1: increase weight. RIR 2-3: same. RIR 4+: decrease.
+  function suggestKg(currentKg,rir,inc){
+    if(rir===null||isNaN(rir)) return currentKg;
+    if(rir<=1) return Math.round((currentKg+inc)*2)/2;
+    if(rir<=3) return currentKg;
+    return Math.max(0,Math.round((currentKg-inc)*2)/2);
+  }
+
+  // ── Format suggestion text ──
+  function formatSug(sets,reps,kg,adjusted,isPain,painVal){
+    if(isPain){
+      if(painVal===null) return {text:'—',adj:false};
+      var p=parseFloat(painVal);
+      if(isNaN(p)) return {text:'—',adj:false};
+      if(p<=2) return {text:'Continue ✓',adj:false};
+      if(p<=4) return {text:'Monitor closely',adj:true};
+      return {text:'Pull this exercise',adj:true};
+    }
+    if(!kg||kg===0) return {text:'—',adj:false};
+    return {text:sets+'×'+reps+' @ '+kg+'kg',adj:adjusted};
+  }
+
+  // ── Get next-week minutes (wk+1) ──
+  function getMinsForNextWk(latestWk){
+    var nextWk=latestWk+1;
+    if(nextWk>4) return null;
+    var el=document.getElementById('min-w'+nextWk);
+    return el&&el.value?parseFloat(el.value):null;
+  }
+
+  // ── Update all suggestions ──
+  function updateAllSuggestions(){
+    Object.keys(EX).forEach(function(exid){
+      var cfg=EX[exid];
+      var latest=getLatestWeek(exid);
+      var sugEl=document.getElementById('sug-'+exid);
+      var sugLblEl=document.getElementById('sug-lbl-'+exid);
+      if(!sugEl) return;
+
+      if(!latest){
+        sugEl.textContent='fill in week first';
+        sugEl.className='sug-box empty';
+        if(sugLblEl){sugLblEl.textContent='Next session suggestion';sugLblEl.className='sug-lbl';}
+        // desktop
+        var dEl=document.getElementById('sug-'+exid.replace(/m$/,''));
+        if(dEl&&dEl!==sugEl){dEl.textContent='—';dEl.className='sug-cell empty';}
+        return;
+      }
+
+      var nextMins=getMinsForNextWk(latest.wk);
+      var fatigue=fatigueFromMins(nextMins);
+      var sugKg=suggestKg(latest.kg,latest.rir,cfg.inc);
+      var adjSets=Math.max(1,cfg.sets-fatigue.setSub);
+      var adjReps=Math.max(1,Math.round(cfg.reps*fatigue.repMult));
+      var isAdj=fatigue.setSub>0||fatigue.repMult<1;
+
+      var result=formatSug(adjSets,adjReps,sugKg,isAdj,cfg.isPain,cfg.isPain?val(exid,'pain',latest.wk):null);
+
+      // Mobile sug box
+      sugEl.textContent=result.text;
+      sugEl.className=result.text==='—'||result.text==='fill in week first'?'sug-box empty':(result.adj?'sug-box adjusted':'sug-box');
+      if(sugLblEl){
+        sugLblEl.textContent=isAdj?'Next session (adjusted for game load)':'Next session suggestion';
+        sugLblEl.className=isAdj?'sug-lbl adjusted':'sug-lbl';
+      }
+
+      // Desktop sug cell (strip trailing 'm')
+      var desktopId='sug-'+exid.replace(/m$/,'');
+      var dEl=document.getElementById(desktopId);
+      if(dEl&&dEl!==sugEl){
+        dEl.textContent=result.text;
+        dEl.className=result.text==='—'?'sug-cell empty':(result.adj?'sug-cell adjusted':'sug-cell');
+      }
+    });
+  }
+
+  // ── Minutes banner ──
+  function updateFatigueBanner(){
+    var banner=document.getElementById('fatigue-banner');
+    if(!banner) return;
+    var any=false;
+    for(var w=1;w<=4;w++){
+      var el=document.getElementById('min-w'+w);
+      if(el&&el.value){any=true;break;}
+    }
+    if(!any){banner.style.display='none';return;}
+    // Show the most recently filled week's fatigue
+    var lastMins=null;
+    for(var w=1;w<=4;w++){
+      var el=document.getElementById('min-w'+w);
+      if(el&&el.value) lastMins=parseFloat(el.value);
+    }
+    var f=fatigueFromMins(lastMins);
+    banner.className='fatigue-banner '+f.cls;
+    banner.textContent=f.label;
+    banner.style.display='block';
+  }
+
+  // ── Storage ──
+  function inputs(){return document.querySelectorAll('input.input-cell,input.input-cell-sm,input.min-input')}
+  function assignIds(){inputs().forEach(function(el,i){if(!el.id)el.setAttribute('data-sid','c'+i)})}
+  function save(){
+    var d={};
+    inputs().forEach(function(el){
+      var k=el.getAttribute('data-sid')||el.id;
+      if(k) d[k]=el.value;
+    });
+    try{localStorage.setItem(KEY,JSON.stringify(d));flash('Saved','#1a7a54')}catch(e){flash('Failed','#b02020')}
+  }
+  function load(){
+    try{
+      var r=localStorage.getItem(KEY);if(!r)return;
+      var d=JSON.parse(r);
+      inputs().forEach(function(el){
+        var k=el.getAttribute('data-sid')||el.id;
+        if(k&&d[k]!==undefined&&d[k]!=='') el.value=d[k];
+      });
+    }catch(e){}
+  }
+  function clear(){
+    if(!confirm('Clear all data?'))return;
+    try{localStorage.removeItem(KEY);inputs().forEach(function(el){el.value=''});updateAllSuggestions();updateFatigueBanner();flash('Cleared','#9a6e00')}catch(e){}
+  }
+  function flash(msg,col){
+    var el=document.getElementById('ss');if(!el)return;
+    el.textContent=msg;el.style.color=col;el.style.opacity='1';
+    setTimeout(function(){el.style.opacity='0'},2000);
+  }
+  function toolbar(){
+    var b=document.createElement('div');
+    b.style.cssText='position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:10px;z-index:999;background:#fff;border-top:1px solid #d0d5db;padding:10px 16px;box-shadow:0 -2px 10px rgba(0,0,0,.08)';
+    var lbl=document.createElement('span');lbl.style.cssText='font-family:DM Sans,sans-serif;font-size:10px;color:rgba(0,0,0,.35)';lbl.textContent='Auto-saves';
+    var st=document.createElement('span');st.id='ss';st.style.cssText='font-family:DM Sans,sans-serif;font-size:11px;font-weight:600;transition:opacity .5s;opacity:0;min-width:44px';
+    var sv=document.createElement('button');sv.textContent='Save now';
+    sv.style.cssText='font-family:DM Sans,sans-serif;font-size:13px;font-weight:600;padding:9px 20px;border-radius:8px;border:1px solid rgba(26,122,84,.4);background:rgba(26,122,84,.08);color:#1a7a54;cursor:pointer;-webkit-tap-highlight-color:transparent';
+    sv.onclick=save;
+    var cl=document.createElement('button');cl.textContent='Clear';
+    cl.style.cssText='font-family:DM Sans,sans-serif;font-size:13px;padding:9px 16px;border-radius:8px;border:1px solid #d0d5db;background:#f5f7f9;color:#4a5568;cursor:pointer;-webkit-tap-highlight-color:transparent';
+    cl.onclick=clear;
+    b.appendChild(lbl);b.appendChild(st);b.appendChild(sv);b.appendChild(cl);
+    document.body.appendChild(b);
+  }
+
+  var t;
+  function onChange(){
+    clearTimeout(t);
+    t=setTimeout(function(){save();updateAllSuggestions();updateFatigueBanner();},600);
+  }
+
+  window.addEventListener('DOMContentLoaded',function(){
+    assignIds();
+    load();
+    toolbar();
+    updateAllSuggestions();
+    updateFatigueBanner();
+    inputs().forEach(function(el){el.addEventListener('input',onChange)});
+    // Also trigger on minutes inputs
+    for(var w=1;w<=4;w++){
+      var el=document.getElementById('min-w'+w);
+      if(el) el.addEventListener('input',onChange);
+    }
+  });
+})();
+</script>
+</body>
+</html>
