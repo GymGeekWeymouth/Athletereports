@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lloyd — Income Breakdown 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--paper:#fff;
+    --p:#1d4ed8;--t:#0f766e;--mk:#dc2626;--prov:#f97316;--prov-bg:#ffedd5;--est-bg:#fee2e2;
+    --c-div:#1d4ed8;--c-sal:#0ea5e9;--c-cash:#16a34a;--c-exp:#d97706;--c-mil:#7c3aed;--c-tax:#64748b;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5;padding:0 0 0;}
+  .sheet{max-width:960px;margin:0 auto;padding:0 20px;counter-reset:sec;}
+  .head{padding:34px 0 26px;border-bottom:3px solid var(--ink);margin-bottom:8px;}
+  .h1{font-weight:800;font-size:30px;letter-spacing:-.02em;}
+  .sub{font-family:var(--mono);font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
+  .strip{display:flex;gap:16px;margin:24px 0 6px;}
+  .stat{flex:1;padding:24px 22px;border-radius:8px;color:#fff;}
+  .stat.a{background:var(--p);} .stat.b{background:var(--t);}
+  .stat .num{font-family:var(--mono);font-weight:500;font-size:29px;line-height:1;}
+  .stat .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-top:12px;opacity:.9;}
+  section{margin-top:58px;border-top:2px solid var(--ink);padding-top:36px;}
+  .h2{font-weight:800;font-size:23px;letter-spacing:-.01em;display:flex;align-items:center;gap:14px;line-height:1.2;}
+  .h2::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);font-family:var(--mono);font-weight:500;font-size:14px;color:#fff;background:var(--p);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none;}
+  .h2.teal::before{background:var(--t);} .h2.slate::before{background:var(--muted);}
+  .lead{color:var(--muted);max-width:680px;margin-top:14px;font-size:15px;}
+
+  .plot{display:flex;align-items:flex-end;gap:16px;height:290px;padding-top:52px;position:relative;overflow:visible;margin-top:26px;}
+  .plot.short,.axis.short{max-width:460px;}
+  .col,.scol{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;position:relative;}
+  .colbar{width:100%;background:var(--p);border-radius:4px 4px 0 0;}
+  .colbar.tr{background:var(--t);}
+  .colbar.prov{background:var(--prov);}
+  .cval{position:absolute;top:-26px;left:-6px;right:-6px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink);white-space:nowrap;}
+  .marker{flex:0 0 2px;height:100%;background:var(--mk);position:relative;}
+  .mtag{position:absolute;top:-46px;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;}
+  .mtag b{display:inline-block;background:var(--mk);color:#fff;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;}
+  .mtag em{display:block;font-style:normal;color:var(--muted);font-size:9px;margin-top:4px;font-family:var(--mono);}
+  .sbar{width:100%;display:flex;flex-direction:column;border-radius:4px 4px 0 0;overflow:hidden;}
+  .seg{width:100%;box-shadow:inset 0 1px 0 rgba(255,255,255,.7);}
+  .g-div{background:var(--c-div);} .g-sal{background:var(--c-sal);} .g-cash{background:var(--c-cash);}
+  .g-exp{background:var(--c-exp);} .g-mil{background:var(--c-mil);} .g-tax{background:var(--c-tax);}
+  .axis{display:flex;gap:16px;margin-top:12px;}
+  .axis .ax{flex:1;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);}
+  .axis .axsp{flex:0 0 2px;}
+  .slegend{display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:24px;}
+  .slegend span{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
+  .slegend i{width:14px;height:14px;display:inline-block;flex:none;border-radius:3px;}
+
+  .caption{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:26px 0 12px;}
+  .legend{font-family:var(--mono);font-size:11px;color:var(--muted);margin:22px 0 12px;display:flex;align-items:center;gap:10px;}
+  .legend .sw{width:22px;height:13px;background:var(--prov-bg);border:1px solid var(--prov);display:inline-block;flex:none;border-radius:2px;}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;}
+  table{width:100%;border-collapse:collapse;}
+  .mtx{min-width:720px;}
+  .mtx th{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 12px;text-align:right;border-bottom:1px solid var(--line);background:#f9fafb;}
+  .mtx th:first-child{text-align:left;}
+  .mtx td{font-family:var(--mono);font-size:12.5px;padding:12px;text-align:right;white-space:nowrap;border-bottom:1px solid #f1f2f4;}
+  .mtx td.acc{text-align:left;color:var(--ink);font-weight:500;}
+  .mtx td.yr{font-weight:600;border-left:1px solid var(--line);}
+  .mtx td.empty{color:#cbd0d6;}
+  .mtx td.prov{background:var(--prov-bg);color:#9a3412;font-weight:600;}
+  .mtx td.est{background:var(--est-bg);}
+  .mtx tr.total td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:15px;}
+  .mtx tr.subt td{border-top:1px solid var(--line);font-weight:600;color:var(--ink);}
+  .esttag{font-family:var(--mono);font-size:9px;letter-spacing:.04em;background:#dc2626;color:#fff;padding:2px 6px;margin-left:8px;text-transform:uppercase;border-radius:3px;}
+
+  .plain{}
+  .plain thead th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:15px 20px;border-bottom:1px solid var(--line);background:#f9fafb;}
+  .plain thead th:last-child{text-align:right;}
+  .plain tbody td{padding:14px 20px;border-bottom:1px solid #f1f2f4;font-size:14px;}
+  .plain tbody tr:last-child td{border-bottom:none;}
+  .gdate{font-family:var(--mono);color:var(--ink);white-space:nowrap;}
+  .gdetail{color:var(--muted);}
+  .gamt{font-family:var(--mono);font-weight:600;text-align:right;white-space:nowrap;}
+  .flag{font-size:10px;color:var(--muted);margin-left:6px;}
+  tfoot td{padding:16px 20px;border-top:2px solid var(--ink);font-family:var(--mono);font-weight:700;}
+  tfoot .tl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  tfoot .tr2{text-align:right;font-size:18px;}
+  .note{font-size:13.5px;color:var(--muted);margin-top:16px;line-height:1.65;max-width:720px;}
+  .callout{margin-top:20px;padding:18px 20px;background:#f9fafb;border:1px solid var(--line);border-left:4px solid var(--t);border-radius:6px;font-size:14px;color:#374151;line-height:1.6;max-width:760px;}
+  .foot{margin-top:60px;padding:22px 0 40px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted);}
+  .metanote{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;}
+  .sumrow{display:flex;gap:16px;margin-top:26px;flex-wrap:wrap;}
+  .sumcard{flex:1;min-width:200px;padding:22px 20px;border:1px solid var(--line);border-radius:8px;background:#f9fafb;}
+  .sumcard .sv{font-family:var(--mono);font-weight:600;font-size:24px;color:var(--ink);}
+  .sumcard .sl{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5;}
+  .sumcard.hi{background:var(--ink);border-color:var(--ink);}
+  .sumcard.hi .sv{color:#fff;} .sumcard.hi .sl{color:rgba(255,255,255,.72);}
+  .sumcard.minus{border-style:dashed;}
+  .opline{display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--muted);font-size:20px;flex:0 0 auto;padding-bottom:36px;}
+  .keylist{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:18px;}
+  .keylist span{font-size:12.5px;color:var(--muted);}
+  .keylist b{color:var(--ink);font-weight:600;}
+  .intro{margin-top:24px;padding:22px 24px;border:1px solid var(--line);border-radius:10px;background:#f9fafb;}
+  .intro .it{font-weight:700;font-size:15px;margin-bottom:8px;}
+  .intro p{font-size:14px;color:#374151;margin:8px 0;line-height:1.55;}
+  .intro ul{margin:10px 0 4px;padding-left:0;list-style:none;}
+  .intro li{font-size:14px;color:#374151;margin:9px 0;line-height:1.5;padding-left:16px;position:relative;}
+  .intro li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--t);}
+  .intro b{color:var(--ink);}
+  .gplot{display:flex;align-items:flex-end;gap:26px;height:280px;padding-top:40px;margin-top:24px;}
+  .mgroup{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:6px;}
+  .gb{width:38px;max-width:31%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;position:relative;}
+  .gbar{width:100%;border-radius:4px 4px 0 0;}
+  .gin{background:var(--t);} .ghome{background:var(--ink);} .gadj{background:var(--prov);}
+  .gjoe{background:var(--p);} .glloyd{background:var(--t);}
+  .gval{position:absolute;top:-22px;left:-6px;right:-6px;text-align:center;font-family:var(--mono);font-size:9.5px;color:var(--ink);white-space:nowrap;}
+  .colbar.cin{background:var(--t);} .colbar.cleft{background:var(--prov);} .colbar.chome{background:var(--ink);}
+  .formula{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin-top:24px;}
+  .fbox{flex:1;min-width:150px;padding:16px 18px;border:1px solid var(--line);border-radius:8px;background:#f9fafb;text-align:center;}
+  .fbox.res{background:var(--t);border-color:var(--t);color:#fff;}
+  .fbox .fl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .fbox.res .fl{color:rgba(255,255,255,.85);}
+  .fbox .fs{font-size:12.5px;color:var(--ink);margin-top:6px;font-weight:600;}
+  .fbox.res .fs{color:#fff;}
+  .fop{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:22px;color:var(--muted);flex:0 0 auto;}
+  @media (max-width:640px){ .formula{flex-direction:column;} .fop{padding:2px 0;} }
+  @media (max-width:640px){ .sumrow{flex-direction:column;} .opline{padding:6px 0;} .gplot{gap:12px;} .gb{width:auto;flex:1;} }
+  @media (max-width:640px){ .strip{flex-direction:column;} .plot{gap:8px;} .axis{gap:8px;} .cval{font-size:9px;} }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="head">
+    <div class="h1">Income breakdown</div>
+    <div class="sub">Lloyd · 2026</div>
+  </header>
+
+  <div class="strip">
+    <div class="stat a"><div class="num">£27,211.78</div><div class="lbl">Takes home · paid to Lloyd, Jan–Jul</div></div>
+    <div class="stat b"><div class="num">£10,182.50</div><div class="lbl">Brings in · Lloyd's own clients, May–Jul</div></div>
+  </div>
+
+  <div class="intro">
+    <div class="it">How to read this</div>
+    <p>This document sets out Lloyd's money three ways. Everything comes back to these three ideas:</p>
+    <ul>
+      <li><b>Brings in</b> — money Lloyd earns directly from his own clients, gym sessions and the treatment room. This is his own effort.</li>
+      <li><b>Takes home</b> — everything the business actually pays Lloyd: salary, dividends, cash and expense repayments. This is usually the bigger number, because it includes more than just his own clients.</li>
+      <li><b>The bills</b> — the cost of running the business. Lloyd covers a share of these, and it comes off what he brings in.</li>
+    </ul>
+    <p>The document works through each of these in turn, then the summary near the end brings them together for May, June and July.</p>
+  </div>
+
+  <section>
+    <h2 class="h2">Total paid to Lloyd, month by month</h2>
+    <p class="lead">Everything paid to Lloyd each month, tax, NI and pension included. The new dividends model started on 1 May. July is provisional, recorded but not yet paid.</p>
+    <div class="plot">
+        <div class="col"><span class="cval">£2,457</span><div class="colbar " style="height:42.1%"></div></div>
+        <div class="col"><span class="cval">£3,662</span><div class="colbar " style="height:62.7%"></div></div>
+        <div class="col"><span class="cval">£4,946</span><div class="colbar " style="height:84.7%"></div></div>
+        <div class="col"><span class="cval">£3,517</span><div class="colbar " style="height:60.3%"></div></div>
+        <div class="marker"><span class="mtag"><b>New dividends model</b><em>1 May</em></span></div>
+        <div class="col"><span class="cval">£5,837</span><div class="colbar " style="height:100.0%"></div></div>
+        <div class="col"><span class="cval">£3,116</span><div class="colbar " style="height:53.4%"></div></div>
+        <div class="col"><span class="cval">£3,676</span><div class="colbar prov" style="height:63.0%"></div></div>
+    </div>
+    <div class="axis">
+        <div class="ax">Jan</div>
+        <div class="ax">Feb</div>
+        <div class="ax">Mar</div>
+        <div class="ax">Apr</div>
+        <div class="axsp"></div>
+        <div class="ax">May</div>
+        <div class="ax">Jun</div>
+        <div class="ax">Jul</div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="h2">Lloyd's pay, by account</h2>
+    <p class="lead">Everything paid to Lloyd, broken down by the account it came from. Each row below is one account, each column one month, and the total for the year is on the right.</p>
+    <div class="keylist">
+      <span><b>Online / Dorset</b> — the two dividend accounts</span>
+      <span><b>Milton Abbey</b> — one-off account</span>
+      <span><b>Salary from Online</b> — monthly salary</span>
+      <span><b>Cash</b> — cash payments</span>
+      <span><b>Expenses</b> — reimbursed to Lloyd (Brakes, cricket club, Liam Parsons and similar)</span>
+      <span><b>Tax / NI / Pension</b> — statutory contributions, counted in the total</span>
+    </div>
+    <div class="legend"><span class="sw"></span> Shaded cells are provisional, recorded but not yet paid.</div>
+    <div class="tbl-wrap"><table class="mtx">
+      <thead><tr><th>Account</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th class="yr">Year</th></tr></thead>
+      <tbody>
+          <tr><td class="acc">Online</td><td class="empty">·</td><td class="empty">·</td><td class="empty">·</td><td class="empty">·</td><td class="">£952.00</td><td class="empty">·</td><td class="prov">£900.00</td><td class="yr">£1,852.00</td></tr>
+          <tr><td class="acc">Dorset</td><td class="">£604.00</td><td class="">£1,104.03</td><td class="">£2,227.02</td><td class="">£1,437.33</td><td class="">£3,344.76</td><td class="">£402.00</td><td class="prov">£1,350.00</td><td class="yr">£10,469.14</td></tr>
+          <tr><td class="acc">Milton Abbey</td><td class="empty">·</td><td class="">£1,000.00</td><td class="empty">·</td><td class="empty">·</td><td class="empty">·</td><td class="empty">·</td><td class="empty">·</td><td class="yr">£1,000.00</td></tr>
+          <tr><td class="acc">Salary from Online</td><td class="">£1,309.81</td><td class="">£900.00</td><td class="">£1,719.63</td><td class="">£1,409.81</td><td class="">£1,026.40</td><td class="">£1,026.40</td><td class="prov">£1,026.40</td><td class="yr">£8,418.45</td></tr>
+          <tr><td class="acc">Cash</td><td class="empty">·</td><td class="empty">·</td><td class="">£360.00</td><td class="">£180.00</td><td class="">£290.00</td><td class="">£542.00</td><td class="">£400.00</td><td class="yr">£1,772.00</td></tr>
+          <tr><td class="acc">Expenses</td><td class="">£265.43</td><td class="">£380.80</td><td class="">£361.80</td><td class="">£212.60</td><td class="">£202.80</td><td class="">£1,124.63</td><td class="empty">·</td><td class="yr">£2,548.06</td></tr>
+          <tr><td class="acc">Tax / NI / Pension</td><td class="">£277.49</td><td class="">£277.48</td><td class="">£277.48</td><td class="">£277.48</td><td class="">£21.10</td><td class="">£21.10</td><td class="empty">·</td><td class="yr">£1,152.13</td></tr>
+          <tr class="total"><td class="acc">Total paid</td><td>£2,456.73</td><td>£3,662.31</td><td>£4,945.93</td><td>£3,517.22</td><td>£5,837.06</td><td>£3,116.13</td><td>£3,676.40</td><td class="yr">£27,211.78</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Total paid to Lloyd for the year so far: £27,211.78.</p>
+  </section>
+
+  <section>
+    <h2 class="h2 teal">Lloyd's working month</h2>
+    <p class="lead">This section breaks down what Lloyd brings in across his working month, both gym sessions and the treatment room. It is money Lloyd generates directly, separate from what he is paid above. The money arrives two ways: payments taken for sessions, grouped by how they were paid, and recurring memberships, client by client.</p>
+
+    <div class="caption">Payments taken for sessions, by how they were paid</div>
+    <div class="tbl-wrap"><table class="mtx" style="min-width:420px;">
+      <thead><tr><th>Payment method</th><th>May</th><th>Jun</th><th>Jul</th></tr></thead>
+      <tbody>
+          <tr><td class="acc">SumUp <span class="metanote">card reader, in person</span></td><td class="">£1,360.00</td><td class="">£1,260.00</td><td class="">£1,090.00</td></tr>
+          <tr><td class="acc">Stripe & PayPal <span class="metanote">online card payments</span></td><td class="">£270.00</td><td class="">£180.00</td><td class="">£90.00</td></tr>
+          <tr><td class="acc">BACS <span class="metanote">bank transfer</span></td><td class="">£125.00</td><td class="empty">·</td><td class="">£165.00</td></tr>
+          <tr><td class="acc">Cash <span class="metanote">cash in hand</span></td><td class="">£350.00</td><td class="">£435.00</td><td class="">£270.00</td></tr>
+          <tr class="subt"><td class="acc">Subtotal, payments taken</td><td>£2,105.00</td><td>£1,875.00</td><td>£1,615.00</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">BACS payers: May, Kirsty and Martin Bibby. July, Kirsty, Martin Bibby and Juliet.</p>
+
+    <div class="caption">Recurring memberships</div>
+    <div class="tbl-wrap"><table class="mtx" style="min-width:420px;">
+      <thead><tr><th>Client</th><th>May</th><th>Jun</th><th>Jul</th></tr></thead>
+      <tbody>
+          <tr><td class="acc">Cube & Max</td><td class="">£325.00</td><td class="">£162.50</td><td class="">£325.00</td></tr>
+          <tr><td class="acc">Katie</td><td class="">£150.00</td><td class="">£150.00</td><td class="">£150.00</td></tr>
+          <tr><td class="acc">Lance</td><td class="">£150.00</td><td class="">£150.00</td><td class="">£150.00</td></tr>
+          <tr><td class="acc">Rachel</td><td class="">£150.00</td><td class="">£150.00</td><td class="">£150.00</td></tr>
+          <tr><td class="acc">Juls</td><td class="">£250.00</td><td class="">£250.00</td><td class="">£250.00</td></tr>
+          <tr><td class="acc">Nat</td><td class="">£250.00</td><td class="">£150.00</td><td class="">£150.00</td></tr>
+          <tr><td class="acc">Toby</td><td class="">£150.00</td><td class="empty">·</td><td class="empty">·</td></tr>
+          <tr><td class="acc">Sunil</td><td class="">£150.00</td><td class="">£150.00</td><td class="">£150.00</td></tr>
+          <tr><td class="acc">Jack</td><td class="empty">·</td><td class="">£150.00</td><td class="">£150.00</td></tr>
+          <tr><td class="acc">Claire & Seb, 1 session each</td><td class="">£75.00</td><td class="">£75.00</td><td class="">£75.00</td></tr>
+          <tr class="subt"><td class="acc">Membership subtotal</td><td>£1,650.00</td><td>£1,387.50</td><td>£1,550.00</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Believed 99% accurate, checked against every bank, Stripe and PayPal statement. Excludes JH and other members.</p>
+  </section>
+
+  <section>
+    <h2 class="h2 teal">All Lloyd's working month payments</h2>
+    <p class="lead">This adds everything from Lloyd's working month into one figure: the session payments taken through SumUp, Stripe and PayPal (the website), BACS and cash, plus the recurring one-to-one memberships. In other words, everything from the two tables above combined. It is the headline figure for his direct income each month.</p>
+    <div class="formula">
+      <div class="fbox"><div class="fl">One-off session payments</div><div class="fs">SumUp, Stripe &amp; PayPal, BACS, cash</div></div>
+      <div class="fop">+</div>
+      <div class="fbox"><div class="fl">One-to-one memberships</div><div class="fs">recurring clients</div></div>
+      <div class="fop">=</div>
+      <div class="fbox res"><div class="fl">Working month income</div><div class="fs">Lloyd's headline monthly figure</div></div>
+    </div>
+    <div class="plot short">
+        <div class="col"><span class="cval">£3,755</span><div class="colbar tr" style="height:100.0%"></div></div>
+        <div class="col"><span class="cval">£3,262</span><div class="colbar tr" style="height:86.9%"></div></div>
+        <div class="col"><span class="cval">£3,165</span><div class="colbar tr" style="height:84.3%"></div></div>
+    </div>
+    <div class="axis short">
+        <div class="ax">May</div>
+        <div class="ax">Jun</div>
+        <div class="ax">Jul</div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:26px;"><table class="mtx" style="min-width:420px;">
+      <thead><tr><th>&nbsp;</th><th>May</th><th>Jun</th><th>Jul</th><th class="yr">Total</th></tr></thead>
+      <tbody>
+          <tr class="total"><td class="acc">Total from Lloyd's working month</td><td>£3,755.00</td><td>£3,262.50</td><td>£3,165.00</td><td class="yr">£10,182.50</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2 class="h2 slate">Business expenses</h2>
+    <p class="lead">The running costs of the business, and the larger one-off bills paid in the last 12 months. These feed the bill-split figure in the summary below.</p>
+
+    <div class="caption">Our expenses as a business</div>
+    <div class="tbl-wrap"><table class="mtx" style="min-width:360px;">
+      <thead><tr><th>Item</th><th>Amount</th></tr></thead>
+      <tbody>
+          <tr><td class="acc">Rent & utilities <span class='metanote'>Paid to Hinesy every month</span></td><td>£1,400.00</td></tr>
+          <tr><td class="acc">Kahunas</td><td>£75.00</td></tr>
+          <tr><td class="acc">Website, email, Canva, Spotify and similar</td><td>£135.97</td></tr>
+          <tr><td class="acc">Public liability insurance</td><td>£133.14</td></tr>
+          <tr><td class="acc">Force plates</td><td>£95.00</td></tr>
+          <tr><td class="acc">Basrat</td><td>£31.00</td></tr>
+          <tr><td class="acc">Misc</td><td>£50.00</td></tr>
+          <tr><td class="acc">Card transaction fees</td><td>£200.00</td></tr>
+          <tr class="total"><td class="acc">Total</td><td>£2,120.11</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="caption">Other big bills in the last 12 months</div>
+    <div class="tbl-wrap"><table class="plain">
+      <thead><tr><th>Bill</th><th>Amount</th><th>Date</th></tr></thead>
+      <tbody>
+          <tr><td class="gdetail">Corporation tax</td><td class="gamt">£3,200.93</td><td class="gdate">30/06/2026</td></tr>
+          <tr><td class="gdetail">Corporation tax</td><td class="gamt">£785.23</td><td class="gdate">30/06/2026</td></tr>
+          <tr><td class="gdetail">Rates</td><td class="gamt">£360.00</td><td class="gdate">01/10/2026</td></tr>
+          <tr><td class="gdetail">Rates</td><td class="gamt">£1,080.00</td><td class="gdate">28/07/2026</td></tr>
+      </tbody>
+      <tfoot><tr><td class="tl">Total</td><td class="tr2">£5,426.16</td><td></td></tr></tfoot>
+    </table></div>
+    <p class="note">The running costs total is a monthly figure. The big bills total covers the last 12 months. The summary below converts both to the same three-month period before splitting them.</p>
+  </section>
+
+  <section>
+    <h2 class="h2 teal">Summary · May to July</h2>
+    <p class="lead">Three figures, all for the same three months so they compare fairly: what Lloyd brings in from his own clients, what the business actually pays him, and what he is left with once his share of the bills comes off what he brings in.</p>
+
+    <div class="caption">1 · Each month: what he brings in vs what he takes home</div>
+    <div class="gplot">
+        <div class="mgroup"><div class="gb"><span class="gval">£3,755</span><div class="gbar gin" style="height:64.3%"></div></div><div class="gb"><span class="gval">£5,837</span><div class="gbar ghome" style="height:100.0%"></div></div><div class="gb"><span class="gval">£4,980</span><div class="gbar gadj" style="height:85.3%"></div></div></div>
+        <div class="mgroup"><div class="gb"><span class="gval">£3,262</span><div class="gbar gin" style="height:55.9%"></div></div><div class="gb"><span class="gval">£3,116</span><div class="gbar ghome" style="height:53.4%"></div></div><div class="gb"><span class="gval">£2,259</span><div class="gbar gadj" style="height:38.7%"></div></div></div>
+        <div class="mgroup"><div class="gb"><span class="gval">£3,165</span><div class="gbar gin" style="height:54.2%"></div></div><div class="gb"><span class="gval">£3,676</span><div class="gbar ghome" style="height:63.0%"></div></div><div class="gb"><span class="gval">£2,819</span><div class="gbar gadj" style="height:48.3%"></div></div></div>
+    </div>
+    <div class="axis">
+        <div class="ax">May</div>
+        <div class="ax">June</div>
+        <div class="ax">July</div>
+    </div>
+    <div class="slegend">
+      <span><i style="background:var(--t)"></i>Brings in — his own clients</span>
+      <span><i style="background:var(--ink)"></i>Takes home — paid by the business</span>
+      <span><i style="background:var(--prov)"></i>Take home if he paid his own third of the bills</span>
+    </div>
+    <div class="tbl-wrap" style="margin-top:24px;"><table class="mtx" style="min-width:420px;">
+      <thead><tr><th>Month</th><th>Brings in</th><th>Takes home</th></tr></thead>
+      <tbody>
+          <tr><td class="acc">May</td><td>£3,755.00</td><td>£5,837.06</td></tr>
+          <tr><td class="acc">June</td><td>£3,262.50</td><td>£3,116.13</td></tr>
+          <tr><td class="acc">July</td><td>£3,165.00</td><td>£3,676.40</td></tr>
+          <tr class="total"><td class="acc">Total</td><td>£10,182.50</td><td>£12,629.59</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Takes home is the higher number because it includes money that is not from his own clients: dividends, and expense repayments (Brakes, cricket club, Liam Parsons and similar). The orange bar shows what his take-home would be if the gym did not cover his third of the bills and he paid it himself, £857.43 a month.</p>
+
+    <div class="caption" style="margin-top:40px;">2 · Profit on Lloyd's sessions, after his share of the bills</div>
+    <p class="lead" style="margin-top:8px;">Start from what he brings in, then take off his third of the business bills for the three months. What is left is the profit on Lloyd's own sessions once he has covered his share of the costs.</p>
+    <div class="tbl-wrap"><table class="plain">
+      <tbody>
+          <tr><td class="gdetail">What Lloyd brings in, May to July</td><td class="gamt">£10,182.50</td></tr>
+          <tr><td class="gdetail">Business bills for the same three months</td><td class="gamt">£7,716.87</td></tr>
+          <tr><td class="gdetail">Less Lloyd's third of those bills</td><td class="gamt">− £2,572.29</td></tr>
+      </tbody>
+      <tfoot><tr><td class="tl">Profit on Lloyd's sessions after his third of the bills</td><td class="tr2">£7,610.21</td></tr></tfoot>
+    </table></div>
+
+    <div class="caption" style="margin-top:40px;">3 · The three figures side by side</div>
+    <div class="plot short" style="max-width:600px;">
+        <div class="col"><span class="cval">£10,182</span><div class="colbar cin" style="height:80.6%"></div></div>
+        <div class="col"><span class="cval">£7,610</span><div class="colbar cleft" style="height:60.3%"></div></div>
+        <div class="col"><span class="cval">£12,630</span><div class="colbar chome" style="height:100.0%"></div></div>
+    </div>
+    <div class="axis short" style="max-width:600px;">
+        <div class="ax">Brings in</div>
+        <div class="ax">Profit after his third of bills</div>
+        <div class="ax">Takes home</div>
+    </div>
+    <div class="sumrow">
+      <div class="sumcard"><div class="sv">£10,182.50</div><div class="sl"><b>Brings in</b><br>from his own clients, May–Jul</div></div>
+      <div class="sumcard minus"><div class="sv">£7,610.21</div><div class="sl"><b>Profit on his sessions, after his third of the bills</b><br>£10,182.50 − £2,572.29</div></div>
+      <div class="sumcard hi"><div class="sv">£12,629.59</div><div class="sl"><b>Takes home</b><br>paid by the business, May–Jul</div></div>
+    </div>
+    <p class="note">This assumes the business bills are split three ways, with Lloyd covering a third. Confirm the split before treating the profit figure as final.</p>
+
+    <div class="caption" style="margin-top:40px;">4 · Joe and Lloyd side by side, what each brings in</div>
+    <p class="lead" style="margin-top:8px;">What each director brings in from their own one-to-one work over the same three months. This compares direct client income only, it does not include what either is paid by the business.</p>
+    <div class="gplot">
+        <div class="mgroup"><div class="gb"><span class="gval">£3,285</span><div class="gbar gjoe" style="height:80.6%"></div></div><div class="gb"><span class="gval">£3,755</span><div class="gbar glloyd" style="height:92.1%"></div></div></div>
+        <div class="mgroup"><div class="gb"><span class="gval">£3,835</span><div class="gbar gjoe" style="height:94.1%"></div></div><div class="gb"><span class="gval">£3,262</span><div class="gbar glloyd" style="height:80.1%"></div></div></div>
+        <div class="mgroup"><div class="gb"><span class="gval">£4,075</span><div class="gbar gjoe" style="height:100.0%"></div></div><div class="gb"><span class="gval">£3,165</span><div class="gbar glloyd" style="height:77.7%"></div></div></div>
+    </div>
+    <div class="axis">
+        <div class="ax">May</div>
+        <div class="ax">June</div>
+        <div class="ax">July</div>
+    </div>
+    <div class="slegend">
+      <span><i style="background:var(--p)"></i>Joe brings in</span>
+      <span><i style="background:var(--t)"></i>Lloyd brings in</span>
+    </div>
+    <div class="tbl-wrap" style="margin-top:24px;"><table class="mtx" style="min-width:420px;">
+      <thead><tr><th>Month</th><th>Joe brings in</th><th>Lloyd brings in</th></tr></thead>
+      <tbody>
+          <tr><td class="acc">May</td><td>£3,285.00</td><td>£3,755.00</td></tr>
+          <tr><td class="acc">June</td><td>£3,835.00</td><td>£3,262.50</td></tr>
+          <tr><td class="acc">July</td><td>£4,075.00</td><td>£3,165.00</td></tr>
+          <tr class="total"><td class="acc">Total</td><td>£11,195.00</td><td>£10,182.50</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Over the three months Joe brings in £11,195.00 and Lloyd £10,182.50. After each covers a third of the bills (£2,572.29), that leaves Joe £8,622.71 and Lloyd £7,610.21. Joe's figures cover his one-to-one work only. They do not include anything from group sessions or open gym.</p>
+  </section>
+
+  <section>
+    <h2 class="h2 slate">Granby Exchange</h2>
+    <p class="lead">Payments made into the Granby Exchange across the year.</p>
+    <div class="tbl-wrap"><table class="plain">
+      <thead><tr><th>Date</th><th>Detail</th><th>Amount</th></tr></thead>
+      <tbody>
+          <tr><td class="gdate">02/02/2026</td><td class="gdetail">Payment to Granby Exchange</td><td class="gamt">£1,000</td></tr>
+          <tr><td class="gdate">02/02/2026</td><td class="gdetail">Extra payment</td><td class="gamt">£500</td></tr>
+          <tr><td class="gdate">27/03/2026</td><td class="gdetail">Payment to Granby Exchange</td><td class="gamt">£1,500</td></tr>
+          <tr><td class="gdate">27/03/2026</td><td class="gdetail">Extra payment</td><td class="gamt">£775</td></tr>
+          <tr><td class="gdate">01/04/2026</td><td class="gdetail">Payment to Granby Exchange</td><td class="gamt">£750</td></tr>
+          <tr><td class="gdate">31/05/2026</td><td class="gdetail">Payment to Granby Exchange</td><td class="gamt">£1,175</td></tr>
+          <tr><td class="gdate">10/07/2026</td><td class="gdetail">Paid on gym card</td><td class="gamt">£1,125</td></tr>
+          <tr><td class="gdate">25/11/2025</td><td class="gdetail">Payment to Granby Exchange</td><td class="gamt">£1,250</td></tr>
+      </tbody>
+      <tfoot><tr><td class="tl">Total paid in</td><td></td><td class="tr2">£8,075</td></tr></tfoot>
+    </table></div>
+    <div class="callout">Some of these payments came out of the dividend money shown earlier in this document. That still counts as income to Lloyd. Legally the Granby Exchange is a separate investment and has nothing to do with the gym, so where the money went afterwards does not change the fact that it was paid to Lloyd first.</div>
+  </section>
+
+  <div class="foot">Figures as recorded · 2026</div>
+</div>
+</body>
+</html>
