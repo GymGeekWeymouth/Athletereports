@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GymGeek — Self-Employed Offer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Open+Sans:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#2A2D30;
+    --green:#61C599;
+    --blue:#778FDD;
+    --amber:#FFC11E;
+    --ink:#2A2D30;
+    --paper:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:#3a3d40;
+    font-family:'Open Sans',Arial,Helvetica,sans-serif;
+    color:var(--ink);
+    line-height:1.55;
+    padding:32px 16px;
+  }
+  .sheet{
+    max-width:820px;margin:0 auto;background:var(--paper);
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+
+  /* header band */
+  .band{
+    background:var(--charcoal);
+    padding:30px 48px 26px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .band .logo{height:70px;width:auto;display:block;}
+  .band .meta{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:rgba(255,255,255,.7);text-align:right;text-transform:uppercase;line-height:1.7;
+  }
+
+  .body{padding:44px 48px 40px;}
+
+  h1{
+    font-family:'Open Sans',Arial,sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.1em;font-size:30px;line-height:1.1;
+    color:var(--charcoal);
+  }
+  .lede{
+    font-size:15px;color:rgba(42,45,48,.85);max-width:60ch;margin-top:16px;
+  }
+  .rule{height:3px;background:var(--charcoal);margin:26px 0 4px;width:56px;}
+
+  .terms{margin-top:22px;}
+  .term{
+    display:grid;grid-template-columns:44px 1fr;gap:20px;
+    padding:20px 0;border-bottom:1px solid #e7e7e7;
+  }
+  .term:last-child{border-bottom:0;}
+  .num{
+    font-family:'DM Mono',monospace;font-weight:500;font-size:13px;
+    color:#fff;background:var(--charcoal);width:34px;height:34px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .term h2{
+    font-family:'Montserrat',Arial,sans-serif;font-weight:900;
+    text-transform:uppercase;font-size:15px;letter-spacing:.02em;
+    color:var(--charcoal);margin-bottom:7px;
+  }
+  .term p{font-size:14.5px;color:rgba(42,45,48,.86);max-width:60ch;}
+  .term p + p{margin-top:8px;}
+
+  /* amber chip for key figures (charcoal text on amber block) */
+  .chip{
+    font-family:'DM Mono',monospace;font-weight:500;
+    background:var(--amber);color:var(--charcoal);
+    padding:1px 7px;border-radius:2px;white-space:nowrap;
+    font-size:.95em;
+  }
+  .mono{font-family:'DM Mono',monospace;}
+
+  .tag{
+    display:inline-block;font-family:'DM Mono',monospace;font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal);
+    background:var(--blue);padding:2px 7px;border-radius:2px;margin-left:8px;vertical-align:middle;
+  }
+
+  /* sign-off */
+  .signoff{margin-top:34px;padding-top:26px;border-top:2px solid var(--charcoal);}
+  .signoff p{font-size:14.5px;color:rgba(42,45,48,.86);}
+  .sigrow{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:34px;}
+  .sigbox .line{border-bottom:1.5px solid var(--charcoal);height:40px;}
+  .sigbox .lbl{
+    font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:rgba(42,45,48,.6);margin-top:8px;
+  }
+
+  /* footer */
+  .foot{
+    background:var(--charcoal);padding:22px 48px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .foot .addr{
+    font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.05em;
+    color:rgba(255,255,255,.62);text-transform:uppercase;line-height:1.8;
+  }
+  .foot .rts{
+    font-family:'Arial Black',Arial,sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;letter-spacing:.02em;font-size:16px;
+    color:rgba(255,255,255,.28);
+  }
+
+  @media(max-width:640px){
+    .band,.body,.foot{padding-left:26px;padding-right:26px;}
+    h1{font-size:24px;}
+    .sigrow{grid-template-columns:1fr;}
+  }
+  @media print{
+    body{background:#fff;padding:0;}
+    .sheet{box-shadow:none;max-width:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="sheet">
+
+    <div class="band">
+      <svg class="logo" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1000 383.59" style="enable-background:new 0 0 1000 383.59;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#61C599;}
+	.st2{fill:#778FDD;}
+	.st3{fill:#FFC11E;}
+	.st4{fill:#2A2D30;}
+</style>
+<path class="st0" d="M177.89,157.66c15.9,0,31.8,0,47.7,0c-4.64,21.05-9.27,42.09-13.91,63.14c-9.12,0-18.24,0-27.36,0
+	c0.99-3.28,1.98-6.56,2.98-9.85c-10.34,8.33-24.24,12.07-37.36,10.05c-7.92-1.22-15.61-4.53-21.48-9.99
+	c-6.45-6-10.41-14.29-12.56-22.83c-4.07-16.22-1.82-33.95,6.18-48.64c11.76-21.59,37.03-36.48,61.47-37.73
+	c17.78-0.91,38.75,7.37,44,25.96c-9.39,6.22-18.77,12.43-28.16,18.65c-2.94-7.05-8.03-14-15.48-15.67
+	c-4.18-0.94-8.59-0.06-12.58,1.51c-8.84,3.48-16.24,10.48-20.22,19.11c-3.97,8.63-4.48,18.8-1.38,27.78
+	c1.35,3.9,3.43,7.67,6.68,10.21c5.14,4.02,12.48,4.27,18.66,2.18s11.46-6.19,16.47-10.37c-6.4-0.01-12.8-0.02-19.2-0.02
+	C174.19,173.32,176.04,165.49,177.89,157.66z"/>
+<path class="st0" d="M531.85,157.66c15.9,0,31.8,0,47.7,0c-4.64,21.05-9.27,42.09-13.91,63.14c-9.12,0-18.24,0-27.36,0
+	c0.99-3.28,1.98-6.56,2.98-9.85c-10.34,8.33-24.24,12.07-37.36,10.05c-7.92-1.22-15.61-4.53-21.48-9.99
+	c-6.45-6-10.41-14.29-12.56-22.83c-4.07-16.22-1.82-33.95,6.18-48.64c11.76-21.59,37.03-36.48,61.47-37.73
+	c17.78-0.91,38.75,7.37,44,25.96c-9.39,6.22-18.77,12.43-28.16,18.65c-2.94-7.05-8.03-14-15.48-15.67
+	c-4.18-0.94-8.59-0.06-12.58,1.51c-8.84,3.48-16.24,10.48-20.22,19.11c-3.97,8.63-4.48,18.8-1.38,27.78
+	c1.35,3.9,3.43,7.67,6.68,10.21c5.14,4.02,12.48,4.27,18.66,2.18c6.18-2.08,11.46-6.19,16.47-10.37c-6.4-0.01-12.8-0.02-19.2-0.02
+	C528.14,173.32,530,165.49,531.85,157.66z"/>
+<polygon class="st0" points="233.03,101.76 254.23,181.15 246.08,220.79 279.71,220.79 287.25,182.17 343.3,101.76 306.61,101.76 
+	276.85,153.43 268.29,101.76 "/>
+<polygon class="st0" points="325.47,220.79 351.15,101.76 386.82,101.76 397.22,157.5 432.48,101.76 467.33,101.76 442.57,220.79 
+	408.94,220.79 422.59,160.46 396.4,203.26 377.95,203.26 371.43,160.46 358.79,220.79 "/>
+<polygon class="st0" points="701.54,101.76 675.65,220.79 756.57,220.79 762.69,192.1 714.99,192.1 719.17,173.91 758.2,173.91 
+	764.32,147.21 724.37,147.21 728.03,131.31 774.3,131.31 780.01,101.76 "/>
+<polygon class="st0" points="606.6,101.76 580.72,220.79 661.64,220.79 667.75,192.1 620.05,192.1 624.23,173.91 663.27,173.91 
+	669.38,147.21 629.43,147.21 633.1,131.31 679.37,131.31 685.08,101.76 "/>
+<polygon class="st0" points="797.49,101.76 771.65,220.79 804.68,220.79 812.42,185.74 820.57,177.99 837.29,220.79 875.81,220.79 
+	846.05,155.16 898.85,101.76 861.34,101.76 819.55,147.21 829.54,101.76 "/>
+<rect x="116.13" y="232.82" class="st1" width="209.33" height="58.7"/>
+<rect x="330.61" y="232.82" class="st2" width="215.3" height="58.7"/>
+<rect x="552.13" y="232.82" class="st3" width="327.15" height="58.7"/>
+<polygon class="st4" points="125.08,238.65 122.09,249.08 135.09,249.08 127.14,285 139.06,285 146.71,249.08 159.55,249.08 
+	161.92,238.65 "/>
+<polygon class="st4" points="284.47,238.65 281.49,249.08 294.49,249.08 286.54,285 298.46,285 306.1,249.08 318.95,249.08 
+	321.31,238.65 "/>
+<path class="st4" d="M194.58,263.53c2.45-2.58,4.13-5.74,4.58-9.29c1.16-9.04-4.42-15.08-13.12-15.58h-18.26L157.87,285h11.61
+	l2.91-14.37h4.9l5.04,14.37h12.69c0,0-5.8-16.84-5.81-16.87C189.21,267.96,194.07,264.08,194.58,263.53z M183.44,260.66
+	c-2.03,0.69-8.26,0-8.26,0l1.69-12c0,0,8.79-1.64,9.86,2.45C187.79,255.2,185.46,259.97,183.44,260.66z"/>
+<polygon class="st4" points="210.84,238.65 201.36,285 232.24,285 234.92,274.22 215.12,274.22 216.8,266.12 233.62,266.12 
+	235.37,256.57 218.71,256.57 220.47,248.33 239.35,248.33 241.34,238.65 "/>
+<path class="st4" d="M812.25,251.96c-0.95-9.02-4.21-12.8-13.23-13.3h-18.26L770.84,285h11.61l2.91-14.37h4.9L795.3,285h12.69
+	l-5.81-16.87C802.18,268.13,813.18,260.97,812.25,251.96z M795.24,260.66c-2.03,0.69-8.26,0-8.26,0l1.69-12c0,0,8.79-1.64,9.86,2.45
+	C799.59,255.2,797.26,259.97,795.24,260.66z"/>
+<path class="st4" d="M683.32,251.96c-0.95-9.02-4.21-12.8-13.23-13.3h-18.26L641.92,285h11.61l2.91-14.37h4.9l5.04,14.37h12.69
+	l-5.81-16.87C673.26,268.13,684.26,260.97,683.32,251.96z M666.32,260.66c-2.03,0.69-8.26,0-8.26,0l1.69-12c0,0,8.79-1.64,9.86,2.45
+	C670.67,255.2,668.33,259.97,666.32,260.66z"/>
+<path class="st4" d="M594.93,239.14c-1.1-0.28-2.23-0.42-3.36-0.48h-17.93l-9.92,46.33H575l2.91-14.36c0,0,0.12,0,0.33,0v-0.01h4.9
+	v0.01c8.01-0.13,16.61-5.03,19.14-12.93C604.42,251.03,602.57,241.1,594.93,239.14z M588.12,260.65c-2.03,0.69-8.26,0-8.26,0
+	l1.69-12c0,0,8.79-1.64,9.86,2.45C592.47,255.18,590.14,259.95,588.12,260.65z"/>
+<rect x="578.24" y="270.62" class="st4" width="4.9" height="0.01"/>
+<polygon class="st4" points="612.84,238.65 603.37,285 634.25,285 636.92,274.22 617.12,274.22 618.81,266.12 635.62,266.12 
+	637.38,256.57 620.72,256.57 622.48,248.33 641.36,248.33 643.34,238.65 "/>
+<path class="st4" d="M272.01,238.66H260.7L235.53,285h12.24l4.35-9.22h12.56l0.52,9.22h12.12L272.01,238.66z M255.71,268.15
+	l7.64-16.22l0.9,16.22H255.71z"/>
+<polygon class="st4" points="347.76,238.65 344.78,249.08 357.77,249.08 349.83,285 361.75,285 369.39,249.08 382.23,249.08 
+	384.6,238.65 "/>
+<path class="st4" d="M420.85,257.86c1.83-4.56,1.35-9.75-1.13-13.97c-2.29-3.89-6.77-4.99-10.99-5.23h-18.26L380.55,285h11.61
+	l2.91-14.37h4.9l5.04,14.37h12.69c-1.95-5.63-3.89-11.26-5.84-16.89C415.75,265.6,419.14,262.15,420.85,257.86z M406.13,260.66
+	c-2.03,0.69-8.26,0-8.26,0l1.69-12c0,0,8.79-1.64,9.86,2.45C410.48,255.2,408.14,259.97,406.13,260.66z"/>
+<path class="st4" d="M457.19,238.66h-11.31L420.71,285h12.24l4.35-9.22h12.56l0.52,9.22h12.12L457.19,238.66z M440.89,268.15
+	l7.64-16.22l0.9,16.22H440.89z"/>
+<polygon class="st4" points="467.03,285 478.75,285 488.84,238.65 476.91,238.65 "/>
+<polygon class="st4" points="488.43,285 500.25,285 505.55,260.64 517.88,285 527.16,285 537.04,238.65 525.53,238.65 
+	520.02,263.29 507.13,238.65 498.11,238.65 "/>
+<polygon class="st4" points="694.56,238.65 724.72,238.65 721.77,248.82 704.03,248.82 702.1,258.4 717.49,258.4 714.84,267.78 
+	699.85,267.78 696.19,285 684.77,285 "/>
+<polygon class="st4" points="814.31,285 826.43,285 831.94,258.5 835.5,277.15 841.72,277.15 852.83,259.42 848.04,285 859.56,285 
+	869.44,238.65 856.5,238.65 841.87,261.83 837.24,238.65 823.99,238.65 "/>
+<path class="st4" d="M760.34,241.29c-2.73-1.52-5.56-2.25-8.36-2.38c-6.75-0.29-13.45,2.94-18.85,7.34
+	c-8.64,7.03-14.52,23.22-6.48,32.73c2.44,2.89,6.02,4.69,9.75,5.38c3.72,0.69,7.57,0.34,11.25-0.57c5.17-1.29,10.14-3.72,13.91-7.48
+	c4.73-4.73,7.33-11.46,7.31-18.15C768.86,251.74,766.19,244.54,760.34,241.29z M757.6,261.66c-0.81,5.4-4.49,10.28-9.45,12.56
+	c-2.89,1.34-6.54,1.73-9.15-0.11c-1.86-1.31-2.89-3.54-3.4-5.77c-1.68-7.25,1.59-16.31,8.87-19.2c1.35-0.54,2.81-0.81,4.25-0.74
+	c0.77,0.04,1.54,0.16,2.27,0.41c2.5,0.8,4.52,2.79,5.64,5.16C757.75,256.36,757.99,259.07,757.6,261.66z"/>
+</svg>
+      <div class="meta">Self-Employed Offer<br>Weymouth · 10 August 2026<br>Private &amp; confidential</div>
+    </div>
+
+    <div class="body">
+      <h1>Self-Employed Offer</h1>
+      <p class="lede">The terms I would like to put to you, set out plainly. For Lloyd Beals, starting 1 September 2026.</p>
+      <div class="rule"></div>
+
+      <div class="terms">
+<div class="term">
+          <div class="num">01</div>
+          <div>
+            <h2>Rent</h2>
+            <p><span class="chip">£550 pcm</span> to start. When our own rent goes up, expected in around two years, yours rises to a maximum of <span class="chip">£600 pcm</span>. No increase before then.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">02</div>
+          <div>
+            <h2>Room use</h2>
+            <p>Same as now. No change to how you use it. Monday, Tuesday, Wednesday or Friday, plus weekends, as you currently do.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">03</div>
+          <div>
+            <h2>Gym cover</h2>
+            <p>No cover of the gym is required from you. One of me, Lauren or Connor will take it over from the first week of September.</p>
+          </div>
+        </div>
+        
+<div class="term">
+          <div class="num">04</div>
+          <div>
+            <h2>One-to-one income</h2>
+            <p>You keep <span class="chip">100%</span> of all your one-to-one income. No fee to the gym, all of it is yours, and your clients still get every benefit of being a member here. That way you make up anything you might lose on people who are already members because of you, and fairly quickly.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">05</div>
+          <div>
+            <h2>Open Gym referrals</h2>
+            <p>Anyone you sign up to Open Gym from here on, through your link, earns you <span class="chip">50%</span> of their membership every month, after card fees, for as long as they stay.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">06</div>
+          <div>
+            <h2>Open Gym Plus referrals</h2>
+            <p>Anyone you sign up to Open Gym Plus from here on, through your link, where you write the program and run the check-ins, earns you <span class="chip">66%</span> every month, after card fees, for as long as they stay.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">07</div>
+          <div>
+            <h2>Website booking</h2>
+            <p>We will keep your booking facility on the website for as long as you want it. Say the word if you would rather we took it down.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">08</div>
+          <div>
+            <h2>Seb and Claire</h2>
+            <p>Invoiced at a pro rata rate of <span class="chip">£35</span>.</p>
+          </div>
+        </div>
+
+        
+<div class="term">
+          <div class="num">09</div>
+          <div>
+            <h2>Director and lease</h2>
+            <p>You resign as a director. I take on the liability of the lease in full, so you carry none of it going forward.</p>
+          </div>
+        </div>
+
+
+        
+<div class="term">
+          <div class="num">10</div>
+          <div>
+            <h2>Granby Exchange buy-out<span class="tag">Optional</span></h2>
+            <p>If you want out of the Granby Exchange, I am happy to buy you out. My proposal: I don't charge you rent for the first <span class="mono">18</span> months, which makes the buy-out effectively <span class="chip">£9,900</span>.</p>
+          </div>
+        </div>
+      
+      
+
+      </div>
+
+      <div class="signoff">
+        <p>If this works for you, sign below and we will put it in place. Happy to discuss any of it. Ultimately I just want to sort it as fairly as we possibly can.</p>
+        <div class="sigrow">
+          <div class="sigbox">
+            <div class="line"></div>
+            <div class="lbl">Joe Otton · GymGeek · Date</div>
+          </div>
+          <div class="sigbox">
+            <div class="line"></div>
+            <div class="lbl">Lloyd Beals · Date</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="addr">
+        GymGeek · Unit 1B/2, 15 Cambridge Road, Weymouth, DT4 9TJ<br>
+        gymgeekonline.co.uk
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
