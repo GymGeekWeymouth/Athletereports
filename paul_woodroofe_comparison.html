@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMGEEK · Progress — Paul Woodroofe</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:       #61C599;
+    --yellow:      #FFC11E;
+    --blue:        #778FDD;
+    --red:         #ff6363;
+    --card-bg:     #27292B;
+    --card-inner:  #2f3235;
+    --border:      #3a3d40;
+    --border-soft: rgba(255,255,255,0.06);
+    --text:        #f0f4ff;
+    --muted:       #7a8ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #2A2D30;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 28px 20px 60px;
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    max-width: 960px; margin: 0 auto 28px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .toolbar-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 26px; color: #fff; }
+  .toolbar-sub   { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+  .toolbar-right { text-align: right; }
+  .toolbar-name  { font-size: 15px; font-weight: 600; color: #fff; }
+  .toolbar-date  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── GRID ── */
+  .grid {
+    max-width: 960px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+  }
+  .wide { grid-column: 1 / -1; }
+
+  /* ── BASE CARD ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-head {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 12px; text-transform: uppercase; color: #fff; }
+  .card-type { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .card-title { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+  .card-sub   { font-size: 11px; color: var(--muted); }
+  .card-body  { padding: 16px 20px; flex: 1; }
+
+  .pill {
+    display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: .8px;
+    text-transform: uppercase; padding: 3px 9px; border-radius: 20px;
+  }
+  .pill-green  { border: 1px solid rgba(97,197,153,.4);  color: var(--green);  background: rgba(97,197,153,.08); }
+  .pill-yellow { border: 1px solid rgba(255,193,30,.4);  color: var(--yellow); background: rgba(255,193,30,.08); }
+  .pill-blue   { border: 1px solid rgba(119,143,221,.4); color: var(--blue);   background: rgba(119,143,221,.08); }
+  .pill-red    { border: 1px solid rgba(255,99,99,.4);   color: var(--red);    background: rgba(255,99,99,.08); }
+
+  /* ── CONTEXT BANNER ── */
+  .context-banner {
+    background: rgba(255,193,30,.07);
+    border: 1px solid rgba(255,193,30,.25);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .context-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .context-title { font-size: 12px; font-weight: 600; color: var(--yellow); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .05em; }
+  .context-text  { font-size: 13px; color: #c8d0dc; line-height: 1.6; }
+
+  /* ── METRIC COMPARISON TABLE ── */
+  .metric-table { width: 100%; border-collapse: collapse; }
+  .metric-table th {
+    font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; padding: 0 0 10px;
+    text-align: left;
+  }
+  .metric-table th.right { text-align: right; }
+  .metric-table th.center { text-align: center; }
+  .metric-table tr.metric-row { border-top: 1px solid var(--border-soft); }
+  .metric-table td { padding: 11px 0; vertical-align: middle; }
+  .metric-label { font-size: 12px; color: var(--muted); }
+  .metric-name  { font-size: 14px; font-weight: 500; color: var(--text); }
+  .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px; font-weight: 500;
+    text-align: right;
+  }
+  .val-mar { color: #7a8ba8; }
+  .val-jul { color: #fff; }
+  .delta-cell { text-align: center; min-width: 72px; }
+  .delta-pill {
+    display: inline-block; font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 600; padding: 3px 9px;
+    border-radius: 20px;
+  }
+  .delta-up   { background: rgba(97,197,153,.15);  color: var(--green); }
+  .delta-down { background: rgba(255,99,99,.15);   color: var(--red); }
+  .delta-flat { background: rgba(122,139,168,.15); color: var(--muted); }
+
+  /* ── RING CARDS ── */
+  .ring-row {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .ring-block {
+    flex: 1; min-width: 130px;
+    background: var(--card-inner);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 16px 12px 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .ring-block.faded { opacity: .55; }
+  .ring-label-top {
+    font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); text-align: center;
+  }
+  .ring-wrap { position: relative; width: 76px; height: 76px; }
+  .ring-wrap svg { position: absolute; top: 0; left: 0; }
+  .ring-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0;
+  }
+  .ring-num { font-size: 18px; font-weight: 600; line-height: 1; }
+  .ring-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .ring-display {
+    font-size: 13px; font-weight: 600; text-align: center; line-height: 1.2;
+  }
+  .ring-sub {
+    font-size: 10px; color: var(--muted); text-align: center; line-height: 1.4;
+  }
+  .ring-date {
+    font-size: 9px; color: var(--muted); text-align: center;
+    text-transform: uppercase; letter-spacing: .08em;
+    padding: 3px 8px; border-radius: 10px;
+    background: rgba(255,255,255,.05);
+  }
+
+  /* ── TRIAL TABLE ── */
+  .trial-table { width: 100%; border-collapse: collapse; }
+  .trial-table th {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); font-weight: 500; padding: 0 0 8px; text-align: right;
+  }
+  .trial-table th:first-child { text-align: left; }
+  .trial-table tr.trial-row { border-top: 1px solid var(--border-soft); }
+  .trial-table td { padding: 9px 0; font-family: 'DM Mono', monospace; font-size: 13px; text-align: right; }
+  .trial-table td:first-child { text-align: left; font-family: 'DM Sans', sans-serif; }
+  .trial-name { font-size: 13px; font-weight: 500; color: #fff; }
+  .trial-best { color: var(--green); }
+  .trial-best-badge {
+    display: inline-block; font-family: 'DM Sans', sans-serif;
+    font-size: 8px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; padding: 2px 6px; border-radius: 8px;
+    background: rgba(97,197,153,.15); color: var(--green);
+    margin-left: 6px; vertical-align: middle;
+  }
+
+  /* ── RETEST CTA ── */
+  .retest-card {
+    background: rgba(119,143,221,.06);
+    border: 1px solid rgba(119,143,221,.2);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .retest-icon { font-size: 24px; flex-shrink: 0; }
+  .retest-title { font-size: 14px; font-weight: 600; color: var(--blue); margin-bottom: 6px; }
+  .retest-text  { font-size: 13px; color: #c8d0dc; line-height: 1.65; }
+
+  /* ── FOOTER ── */
+  .footer {
+    max-width: 960px; margin: 36px auto 0;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--border-soft); padding-top: 18px;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer-brand { font-family: 'Raleway', sans-serif; font-style: italic; font-weight: 900; font-size: 13px; color: rgba(255,255,255,.4); }
+  .footer-note  { font-size: 10px; color: var(--muted); }
+
+  @media (max-width: 480px) {
+    .ring-row { gap: 10px; }
+    .ring-block { min-width: 110px; padding: 12px 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── TOOLBAR ── -->
+<div class="toolbar">
+  <div>
+    <div class="toolbar-brand" style="text-transform:uppercase;">GYM GEEK<span style="font-family:'Jost',sans-serif;font-style:normal;font-weight:200;font-size:16px;letter-spacing:.45em;margin-left:8px;text-transform:uppercase;color:rgba(255,255,255,.55);vertical-align:middle;">Analyse</span></div>
+    <div class="toolbar-sub">Progress Report</div>
+  </div>
+  <div class="toolbar-right">
+    <div class="toolbar-name">Paul Woodroofe</div>
+    <div class="toolbar-date">Apr 2026 vs Aug 2026</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- ── CONTEXT BANNER ── -->
+  <div class="wide">
+    <div class="context-banner" style="background:rgba(97,197,153,.07);border-color:rgba(97,197,153,.25);">
+      <div class="context-icon">📈</div>
+      <div>
+        <div class="context-title" style="color:var(--green);">How to Read This Progress Report</div>
+        <div class="context-text">This compares your April baseline with your August retest. The headline is a good one: your jump height, the single number that stood out as your main area to grow last time, has moved up, and your relative strength has held firm on a lighter frame. That is a strong place to be for anyone, and particularly so in your 60s. Two things are worth knowing before the detail. First, you are around 4.9 kg lighter than in April, which lifts every score expressed relative to bodyweight, so a slightly lower raw force can still mean equal or better relative strength. Second, two of the jump metrics, reactive strength and explosive power, look inconsistent between the sessions in a way that usually points to a change in jump technique on the day rather than a real change in you. <strong style="color:#fff;">Those two are best confirmed with a standardised jump next time;</strong> they are shown below for reference rather than scored.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── METRIC COMPARISON CARD ── -->
+  <div class="card wide">
+    <div class="card-head">
+      <div class="brand-row">
+        <span class="brand">GymGeek Analyse</span>
+        <span class="card-type">Full Session · Before vs After</span>
+      </div>
+      <div class="card-title">Session Comparison</div>
+      <div class="card-sub">16 Apr 2026 &nbsp;→&nbsp; 24 Aug 2026 &nbsp;·&nbsp; IMTP from raw CSV, single clean trial</div>
+    </div>
+    <div class="card-body">
+      <table class="metric-table">
+        <thead>
+          <tr>
+            <th style="width:32%">Metric</th>
+            <th class="right" style="width:16%">Apr 2026</th>
+            <th class="right" style="width:16%">Aug 2026</th>
+            <th class="center" style="width:16%">Change</th>
+            <th class="right" style="width:20%">Context</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="metric-row">
+            <td><div class="metric-name">Body Weight</div><div class="metric-label">kg</div></td>
+            <td class="val val-mar">90.5 kg</td>
+            <td class="val val-jul">85.7 kg</td>
+            <td class="delta-cell"><span class="delta-pill delta-flat">−4.9 kg</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--muted)">Lifts relative scores</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Jump Height</div><div class="metric-label">CMJ · cm</div></td>
+            <td class="val val-mar">12.9 cm</td>
+            <td class="val val-jul">15.5 cm</td>
+            <td class="delta-cell"><span class="delta-pill delta-up">+2.6 cm</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--green)">Genuine gain</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Reactive Strength</div><div class="metric-label">RSI Modified</div></td>
+            <td class="val val-mar">0.32</td>
+            <td class="val val-jul">0.12</td>
+            <td class="delta-cell"><span class="delta-pill delta-flat">review</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--muted)">See note below</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Explosive Power</div><div class="metric-label">Peak Power · W/kg</div></td>
+            <td class="val val-mar">35.6 W/kg</td>
+            <td class="val val-jul">31.9 W/kg</td>
+            <td class="delta-cell"><span class="delta-pill delta-flat">descriptive</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--muted)">Basis to confirm</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Maximum Force (raw)</div><div class="metric-label">IMTP · kg absolute</div></td>
+            <td class="val val-mar">203.7 kg</td>
+            <td class="val val-jul">195.5 kg</td>
+            <td class="delta-cell"><span class="delta-pill delta-flat">−8.2 kg</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--muted)">Lighter bodyweight</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Maximum Force (rel.)</div><div class="metric-label">IMTP · ×BW</div></td>
+            <td class="val val-mar">2.25 ×BW</td>
+            <td class="val val-jul">2.28 ×BW</td>
+            <td class="delta-cell"><span class="delta-pill delta-up">+0.03</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--green)">Held firm</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Rate of Force Development</div><div class="metric-label">RFD @ 200ms · N/s</div></td>
+            <td class="val val-mar">3,937 N/s</td>
+            <td class="val val-jul">3,751 N/s</td>
+            <td class="delta-cell"><span class="delta-pill delta-flat">−186</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--muted)">Descriptive · stable</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Leg Symmetry</div><div class="metric-label">CMJ · % difference</div></td>
+            <td class="val val-mar">0.0%</td>
+            <td class="val val-jul">0.9%</td>
+            <td class="delta-cell"><span class="delta-pill delta-flat">flat</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--green)">Both excellent</td>
+          </tr>
+          <tr class="metric-row">
+            <td><div class="metric-name">Postural Stability</div><div class="metric-label">Sway Velocity · mm/s</div></td>
+            <td class="val val-mar">6.83 mm/s</td>
+            <td class="val val-jul">5.0 mm/s</td>
+            <td class="delta-cell"><span class="delta-pill delta-up">−1.8</span></td>
+            <td style="text-align:right;font-size:11px;color:var(--green)">Improved</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border-soft);">
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+          <strong style="color:#c8d0dc;">Note on Reactive Strength and Explosive Power:</strong> Your reactive strength reads lower in August despite a higher jump, which points to a slower or deeper countermovement on the day rather than a real loss of spring. In the same way, both power figures sit high for the jump heights recorded, a pattern typical of a deep countermovement inflating the reading. Both are shown for reference only and are best confirmed with a standardised jump at your next test. Your maximum force is the more reliable strength marker here, and it has held.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PERCENTILE RINGS — vs ACTIVE MALES OVER 50 ── -->
+  <div class="card wide">
+    <div class="card-head">
+      <div class="brand-row">
+        <span class="brand">GymGeek Analyse</span>
+        <span class="card-type">Percentile Shift</span>
+      </div>
+      <div class="card-title">vs Active Males — Over 50</div>
+      <div class="card-sub" style="margin-top:4px;">
+        <span class="pill pill-green">Jump Height</span>
+        &nbsp;<span class="pill pill-green">IMTP Peak Force</span>
+        &nbsp;<span style="font-size:10px;color:var(--muted);">The two most reliable, cleanly comparable metrics</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="ring-row">
+        <div class="ring-block faded">
+          <div class="ring-label-top">April 2026</div>
+          <div class="ring-wrap">
+            <svg width="76" height="76" viewBox="0 0 76 76">
+              <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,99,99,.1)" stroke-width="6"/>
+              <circle id="r-cmj-apr-arc" cx="38" cy="38" r="32" fill="none" stroke="#ff6363" stroke-width="6" stroke-dasharray="201.1" stroke-linecap="round" transform="rotate(-90 38 38)"/>
+            </svg>
+            <div class="ring-inner"><div class="ring-num" style="color:#ff6363">4</div><div class="ring-lbl">pctile</div></div>
+          </div>
+          <div class="ring-display" style="color:#ff6363">Bottom 4%</div>
+          <div class="ring-sub">12.9 cm</div>
+          <div class="ring-date" style="margin-top:2px;"><span class="pill pill-green">Jump Height</span></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted);flex-shrink:0;">→</div>
+        <div class="ring-block">
+          <div class="ring-label-top">August 2026</div>
+          <div class="ring-wrap">
+            <svg width="76" height="76" viewBox="0 0 76 76">
+              <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,193,30,.12)" stroke-width="6"/>
+              <circle id="r-cmj-aug-arc" cx="38" cy="38" r="32" fill="none" stroke="#FFC11E" stroke-width="6" stroke-dasharray="201.1" stroke-linecap="round" transform="rotate(-90 38 38)"/>
+            </svg>
+            <div class="ring-inner"><div class="ring-num" style="color:#FFC11E">11</div><div class="ring-lbl">pctile</div></div>
+          </div>
+          <div class="ring-display" style="color:#FFC11E">Bottom 11%</div>
+          <div class="ring-sub">15.5 cm</div>
+          <div class="ring-date" style="margin-top:2px;"><span class="pill pill-green">Jump Height</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;border-top:1px solid var(--border-soft);padding-top:14px;">
+        <div class="ring-row">
+          <div class="ring-block faded">
+            <div class="ring-label-top">April 2026</div>
+            <div class="ring-wrap">
+              <svg width="76" height="76" viewBox="0 0 76 76">
+                <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(97,197,153,.08)" stroke-width="6"/>
+                <circle id="r-imtp-apr-arc" cx="38" cy="38" r="32" fill="none" stroke="#61C599" stroke-width="6" stroke-dasharray="201.1" stroke-linecap="round" transform="rotate(-90 38 38)"/>
+              </svg>
+              <div class="ring-inner"><div class="ring-num" style="color:#61C599">65</div><div class="ring-lbl">pctile</div></div>
+            </div>
+            <div class="ring-display" style="color:#61C599">Top 35%</div>
+            <div class="ring-sub">2.25 ×BW</div>
+            <div class="ring-date" style="margin-top:2px;"><span class="pill pill-green">IMTP ×BW</span></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted);flex-shrink:0;">→</div>
+          <div class="ring-block">
+            <div class="ring-label-top">August 2026</div>
+            <div class="ring-wrap">
+              <svg width="76" height="76" viewBox="0 0 76 76">
+                <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(97,197,153,.08)" stroke-width="6"/>
+                <circle id="r-imtp-aug-arc" cx="38" cy="38" r="32" fill="none" stroke="#61C599" stroke-width="6" stroke-dasharray="201.1" stroke-linecap="round" transform="rotate(-90 38 38)"/>
+              </svg>
+              <div class="ring-inner"><div class="ring-num" style="color:#61C599">68</div><div class="ring-lbl">pctile</div></div>
+            </div>
+            <div class="ring-display" style="color:#61C599">Top 32%</div>
+            <div class="ring-sub">2.28 ×BW</div>
+            <div class="ring-date" style="margin-top:2px;"><span class="pill pill-green">IMTP ×BW</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;font-size:10px;color:var(--muted);line-height:1.5;">
+        Jump height has climbed off the floor of the group, and your relative strength has edged up despite the lighter bodyweight. Worth keeping in mind as you read these: you are in your 60s, whilst this Active Males Over 50 group is weighted towards men in their 50s, so against true age peers your standing is likely a little stronger than the positions shown here. Rate of force development sits in the top band of this group in both sessions and is tracked descriptively rather than ranked, as it is sensitive to test setup.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AUGUST IMTP RAW ── -->
+  <div class="card wide">
+    <div class="card-head">
+      <div class="brand-row">
+        <span class="brand">GymGeek Analyse</span>
+        <span class="card-type">24 Aug 2026 · Raw CSV</span>
+      </div>
+      <div class="card-title">August IMTP Breakdown</div>
+      <div class="card-sub">Single trial · clean baseline · used for the comparison above</div>
+    </div>
+    <div class="card-body">
+      <table class="trial-table">
+        <thead>
+          <tr>
+            <th>Trial</th>
+            <th class="right">Peak Force (kg)</th>
+            <th class="right">Peak Force (×BW)</th>
+            <th class="right">RFD @ 200ms</th>
+            <th class="right">Onset (s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="trial-row">
+            <td><span class="trial-name trial-best">Trial 1</span><span class="trial-best-badge">Best</span></td>
+            <td class="trial-best">195.5 kg</td>
+            <td class="trial-best">2.28 ×BW</td>
+            <td class="trial-best">3,751 N/s</td>
+            <td class="trial-best">9.10 s</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border-soft);">
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+          <strong style="color:#c8d0dc;">Data quality:</strong> Baseline noise was very low (standard deviation 4.77 N, well inside the 10 N threshold) and onset was detected cleanly, so both peak force and RFD are valid for this trial. Body mass of 85.7 kg was read from the CSV. RFD is reported as a descriptive tracking value rather than a ranked score.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WHAT TO DO NEXT ── -->
+  <div class="card wide">
+    <div class="card-head">
+      <div class="brand-row">
+        <span class="brand">GymGeek Analyse</span>
+        <span class="card-type">Recommendation</span>
+      </div>
+      <div class="card-title">What to Do Next</div>
+    </div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="retest-card" style="background:rgba(97,197,153,.05);border-color:rgba(97,197,153,.2);">
+        <div class="retest-icon">✅</div>
+        <div>
+          <div class="retest-title" style="color:var(--green);">What the Data Shows</div>
+          <div class="retest-text">The picture since April is a positive one. Your jump height, which was the clear outlier last time, has risen from 12.9 cm to 15.5 cm, and that has lifted you off the bottom of the over-50 group. Your lower body strength has held its ground: the raw pull is a touch lower, but you are carrying nearly five kilograms less, so relative to your bodyweight you are a fraction stronger than in April. Your leg symmetry stays excellent, and your balance has improved. In your 60s, and with your hip history, seeing strength maintained and balance moving the right way is exactly what you want to see.</div>
+        </div>
+      </div>
+      <div class="retest-card">
+        <div class="retest-icon">🔄</div>
+        <div>
+          <div class="retest-title">Confirm the Jump Metrics With a Standardised Retest</div>
+          <div class="retest-text">Before we read anything into reactive strength or power, we want a jump done with a consistent countermovement depth and tempo. The August readings for those two look like they came from a deeper or slower jump on the day, which distorts both numbers. A standardised jump at your next visit will give us a clean read and let us track them properly from there. Everything else in this report stands on its own.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  <div class="footer-brand">GymGeek Analyse</div>
+  <div class="footer-note">Paul Woodroofe · Progress · Apr vs Aug 2026 · GymGeek Dorset</div>
+</div>
+
+<script>
+function applyRing(arcId, score) {
+  var circumference = 201.1;
+  var p = Math.min(99, Math.max(1, Math.round(score)));
+  var offset = parseFloat((circumference * (1 - p / 100)).toFixed(1));
+  var el = document.getElementById(arcId);
+  if (el) el.setAttribute('stroke-dashoffset', offset);
+}
+window.addEventListener('load', function() {
+  applyRing('r-cmj-apr-arc', 4);
+  applyRing('r-cmj-aug-arc', 11);
+  applyRing('r-imtp-apr-arc', 65);
+  applyRing('r-imtp-aug-arc', 68);
+});
+</script>
+
+</body>
+</html>
