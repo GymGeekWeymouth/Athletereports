@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GYMGEEK Analyse</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@1,900&family=DM+Sans:wght@400;500;600;700&family=Jost:wght@200&display=swap" rel="stylesheet">
+<script>
+/* ================= EDIT ONLY THIS BLOCK ================= */
+/*REPORT_START*/
+const REPORT = {
+  athlete: { name: "Chris May", first: "Chris", age: 49, height: 172, sport: "Triathlon", position: "" },
+  groups: [
+    { key: "Active Males — Over 40", short: "Active Males 40+", blurb: "Active, regularly training men in your age bracket" },
+    { key: "Competitive Male — Age-Group / National Level", short: "Competitive Age-Group", blurb: "Competitive age-group and national level triathletes" }
+  ],
+  options: { softLowBands: true, descriptive: ["rfd", "sway", "pwr"] },
+  sessions: [
+    { date: "1 Oct 2026", weight: 72.1, cmj: 30.5, rsi: 0.23, pwr: 22.1, imtp: 2.77, rfd: 4249, asym: 1.9, sway: 7.7 }
+  ],
+  notes: { cmj: "", rsi: "Long 1.3 s take-off from a deep dip; endurance athletes often jump this way.", pwr: "Shown as mean concentric power; tracked over time rather than ranked.", imtp: "", rfd: "", asym: "", sway: "" },
+  highlights: {
+    strength: "Your left and right legs share the work almost evenly, well inside the 10% guide. That balance is a real asset for the volume triathlon training demands.",
+    grow: "Your jump took 1.3 seconds to leave the ground, which lowers this score. Endurance athletes often use a deep, slow dip, so expect this to move at retest."
+  },
+  summary: {
+    strengths: "Your strength profile is a real positive. Maximum force sits in the upper third for active men over 40, your rate of force development is strong, and your jump height is also in the upper third for your age. Your legs are almost perfectly balanced, which is excellent news for an endurance athlete handling high training volume.",
+    developing: "Reactive strength is the area to grow. Your countermovement took 1.3 seconds, which is common in triathletes whose training rewards steady, efficient movement rather than fast, springy efforts. Against competitive age-group athletes your jump is still building, and age plays a part at 49. As a first test, expect some of this to improve with familiarity."
+  }
+};
+/*REPORT_END*/
+/* ======================================================== */
+</script>
+<style>
+:root{--bg:#2A2D30;--card:#27292B;--card2:#2f3235;--line:#3a3d40;--soft:rgba(255,255,255,.06);--text:#f0f4ff;--muted:#7a8ba8;--green:#61C599;--yellow:#FFC11E;--blue:#778FDD;--red:#ff6363;--strip:rgba(255,255,255,.05)}
+body.light,body.pdf-export{--bg:#f0f2f4;--card:#fff;--card2:#f5f7f9;--line:#d8dde3;--soft:rgba(0,0,0,.07);--text:#1a1c1e;--muted:#5a6a7a;--green:#1a9e6a;--yellow:#c8900a;--blue:#4a62b8;--red:#d94040;--strip:rgba(0,0,0,.05)}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;padding:24px 16px 48px;min-height:100vh}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+body.pdf-export .wrap{width:900px;max-width:900px}
+.brand{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;color:var(--text)}
+.brand span{font-family:'Jost',sans-serif;font-style:normal;font-weight:200;letter-spacing:.4em;opacity:.55;margin-left:6px;font-size:.6em}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.top>div>.brand{font-size:24px}
+.pby{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.04em}.pby .brand{font-size:11px}
+.btns{display:flex;gap:8px}
+.btn{font:500 12px 'DM Sans',sans-serif;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.hero h1{font:400 44px/1 'Bebas Neue',sans-serif;letter-spacing:.03em}
+.meta{font-size:12px;color:var(--muted);margin-top:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:600 11px 'DM Sans',sans-serif;padding:6px 11px;border-radius:20px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.chip.on{background:var(--green);border-color:var(--green);color:#1a1c1e}
+.banner{font-size:12px;line-height:1.6;color:var(--muted);border-left:3px solid var(--green);padding:10px 14px;background:var(--card);border-radius:0 10px 10px 0}
+.banner b{color:var(--text)}
+.h2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:14px}
+.h2 h2{font:400 26px/1 'Bebas Neue',sans-serif;letter-spacing:.04em}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+body.pdf-export .tiles{grid-template-columns:1fr 1fr}
+.tile{background:var(--card2);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.t-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.t-name{font-size:13px;font-weight:600}
+.badge{font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:4px;white-space:nowrap}
+.t-val{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.num{font:400 42px/1 'Bebas Neue',sans-serif;letter-spacing:.02em}
+.unit{font-size:12px;color:var(--muted)}
+.delta{font-size:11px;font-weight:700;margin-left:auto;padding:2px 7px;border-radius:10px}
+.spark{display:block;width:100%;height:26px}
+.srow{font-size:11px}
+.srow+.srow{margin-top:10px}
+.slab{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.slab span:first-child{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.sg{width:9px;height:9px;border-radius:50%;flex:none}
+.davg{font-size:10px}
+.sx{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);opacity:.7;margin-top:3px}
+.strip{position:relative;height:8px;display:flex;gap:2px}
+.strip s{display:block;flex:none;height:100%;border-radius:2px;opacity:.28}
+.strip i{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--text)}
+.sband{text-align:right;font-weight:600;white-space:nowrap}
+.davg{color:var(--muted)}
+.t-note{font-size:11px;line-height:1.5;color:var(--muted);border-top:1px solid var(--soft);padding-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.two{grid-template-columns:1fr}.hero h1{font-size:36px}}
+.overall{display:flex;gap:12px;align-items:center;margin-bottom:6px}
+.pill{font:400 22px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;padding:8px 12px;border-radius:10px;border:2px solid;text-align:center;min-width:120px}
+.pill small{display:block;font:600 9px 'DM Sans',sans-serif;letter-spacing:.06em;margin-top:3px;opacity:.75}
+.ov-txt{font-size:12px;color:var(--muted);line-height:1.5}
+.ov-txt b{color:var(--text);display:block;font-size:13px;margin-bottom:2px}
+canvas{display:block;max-width:100%;margin:0 auto}
+.hl{display:flex;gap:14px;align-items:flex-start}
+.hl .pill{min-width:104px;font-size:18px}
+.hl p{font-size:12px;line-height:1.6;color:var(--muted)}
+.hl p b{color:var(--text);display:block;font-size:13px;margin-bottom:3px}
+.fvstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;text-align:center}
+.fvstats div b{display:block;font:400 24px/1 'Bebas Neue',sans-serif}
+.fvstats div span{font-size:10px;color:var(--muted)}
+.fvread{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.fvread div{background:var(--card2);border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.5;color:var(--muted)}
+.fvread b{display:block;color:var(--text);font-size:12px;margin-bottom:2px}
+.fvprof{display:grid;grid-template-columns:1fr 1.3fr;gap:18px;align-items:center;background:var(--card2);border-radius:10px;padding:14px 16px;margin-top:12px}
+.fvbal-top{display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:8px}
+.fvtrack{position:relative;height:8px;border-radius:4px;background:var(--line)}
+.fvtrack i{position:absolute;top:50%;transform:translate(-50%,-50%)}
+.fvtrack .bm{width:3px;height:16px;background:var(--muted);border-radius:2px}
+.fvtrack .me{width:16px;height:16px;border-radius:50%;background:var(--green);border:2px solid var(--text)}
+.fvbal-cap{font-size:10px;color:var(--muted);margin-top:8px}
+.fvtxt p{font-size:12px;line-height:1.55;color:var(--muted)}.fvtxt p+p{margin-top:6px}.fvtxt b{color:var(--text)}
+@media(max-width:720px){.fvread,.fvprof{grid-template-columns:1fr}}
+.score{display:grid;grid-template-columns:150px 1fr auto;gap:22px;align-items:center}
+.ring{position:relative;width:150px;height:150px}.ring svg{width:100%;height:100%}
+.ring-n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-n b{font:400 56px/1 'Bebas Neue',sans-serif}.ring-n span{font-size:11px;color:var(--muted)}
+.score-lvl{font:400 22px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;display:flex;align-items:center}
+.score-beat{font-size:13px;margin:10px 0 12px}.score-beat b{color:var(--green)}
+.sc-parts{display:grid;gap:6px;max-width:420px}
+.sc-part{display:grid;grid-template-columns:120px 1fr 34px;gap:8px;align-items:center;font-size:11px;color:var(--muted)}
+.sc-part b{text-align:right;font-weight:500}
+.sc-pbar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.sc-pbar i{display:block;height:100%;background:var(--green)}
+.score-note{font-size:10px;color:var(--muted);margin-top:10px}
+.sc-hist{display:flex;gap:8px;align-items:flex-end;height:130px}
+.sc-hist div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:34px;gap:3px}
+.sc-hist span{display:block;width:100%;background:var(--line);border-radius:4px 4px 0 0}
+.sc-hist .on span{background:var(--green)}.sc-hist em{font-style:normal;font-size:11px;font-weight:600}.sc-hist small{font-size:9px;color:var(--muted)}
+@media(max-width:720px){.score{grid-template-columns:1fr;justify-items:center;text-align:center}.sc-parts{width:100%}}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:8px 6px;text-align:right;border-bottom:1px solid var(--soft);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:10px;color:var(--muted);font-weight:600}
+.tbl{overflow-x:auto}
+.summary p{font-size:13px;line-height:1.7;margin-bottom:10px;max-width:75ch}
+.summary h3{font-size:13px;margin-bottom:4px}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:11px;line-height:1.5;color:var(--muted)}
+.gloss b{color:var(--text)}
+@media(max-width:720px){.gloss{grid-template-columns:1fr}}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:10px;border-top:1px solid var(--soft);font-size:9px;color:var(--muted)}
+.share{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:4px 9px;font:500 10px 'DM Sans',sans-serif;cursor:pointer}
+body.pdf-export .share,body.pdf-export .btns,body.pdf-export .chips{display:none}
+footer{font-size:9px;line-height:1.6;color:var(--muted);text-align:center;opacity:.7;max-width:760px;margin:8px auto 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const NORMS = {"norms":{"Active Males — Over 50":{"CMJ Height":{"mean":21.7,"sd":5.08},"RSI Modified":{"mean":0.32,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":4.5},"IMTP Peak Force":{"mean":2.1,"sd":0.38},"RFD @ 200ms":{"mean":2200.0,"sd":600.0},"Limb Asymmetry":{"mean":9.0,"sd":4.0},"Sway Velocity":{"mean":9.0,"sd":2.4}},"Active Females — Over 50":{"CMJ Height":{"mean":14.8,"sd":2.92},"RSI Modified":{"mean":0.22,"sd":0.06},"Peak Power (rel.)":{"mean":16.0,"sd":3.5},"IMTP Peak Force":{"mean":1.55,"sd":0.3},"RFD @ 200ms":{"mean":1600.0,"sd":500.0},"Limb Asymmetry":{"mean":9.0,"sd":4.0},"Sway Velocity":{"mean":8.5,"sd":2.2}},"Active Males — Under 40":{"CMJ Height":{"mean":36.5,"sd":8.31},"RSI Modified":{"mean":0.45,"sd":0.09},"Peak Power (rel.)":{"mean":31.0,"sd":5.0},"IMTP Peak Force":{"mean":2.9,"sd":0.4},"RFD @ 200ms":{"mean":3200.0,"sd":700.0},"Limb Asymmetry":{"mean":7.5,"sd":3.5},"Sway Velocity":{"mean":6.5,"sd":1.8}},"Active Females — Under 40":{"CMJ Height":{"mean":25.5,"sd":6.61},"RSI Modified":{"mean":0.32,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":4.0},"IMTP Peak Force":{"mean":2.1,"sd":0.3},"RFD @ 200ms":{"mean":2200.0,"sd":550.0},"Limb Asymmetry":{"mean":7.5,"sd":3.5},"Sway Velocity":{"mean":6.8,"sd":1.9}},"Active Males — Over 40":{"CMJ Height":{"mean":26.5,"sd":6.32},"RSI Modified":{"mean":0.38,"sd":0.08},"Peak Power (rel.)":{"mean":26.0,"sd":5.0},"IMTP Peak Force":{"mean":2.5,"sd":0.4},"RFD @ 200ms":{"mean":2700.0,"sd":650.0},"Limb Asymmetry":{"mean":8.0,"sd":4.0},"Sway Velocity":{"mean":7.5,"sd":2.2}},"Active Females — Over 40":{"CMJ Height":{"mean":18.2,"sd":4.28},"RSI Modified":{"mean":0.27,"sd":0.07},"Peak Power (rel.)":{"mean":19.0,"sd":4.0},"IMTP Peak Force":{"mean":1.8,"sd":0.3},"RFD @ 200ms":{"mean":1900.0,"sd":500.0},"Limb Asymmetry":{"mean":8.0,"sd":4.0},"Sway Velocity":{"mean":7.2,"sd":2.0}},"Active Males — Under 16":{"CMJ Height":{"mean":31.0,"sd":7.63},"RSI Modified":{"mean":0.38,"sd":0.08},"Peak Power (rel.)":{"mean":27.0,"sd":4.0},"IMTP Peak Force":{"mean":2.5,"sd":0.35},"RFD @ 200ms":{"mean":2600.0,"sd":600.0},"Limb Asymmetry":{"mean":8.0,"sd":3.5},"Sway Velocity":{"mean":6.5,"sd":1.8}},"Active Females — Under 16":{"CMJ Height":{"mean":24.4,"sd":4.85},"RSI Modified":{"mean":0.28,"sd":0.07},"Peak Power (rel.)":{"mean":20.0,"sd":3.5},"IMTP Peak Force":{"mean":1.9,"sd":0.3},"RFD @ 200ms":{"mean":1800.0,"sd":450.0},"Limb Asymmetry":{"mean":8.5,"sd":3.5},"Sway Velocity":{"mean":6.8,"sd":1.9}},"Elite Male — Academy U16 (PL/EFL Cat. 1)":{"CMJ Height":{"mean":36.5,"sd":4.5},"RSI Modified":{"mean":0.47,"sd":0.08},"Peak Power (rel.)":{"mean":31.0,"sd":5.0},"IMTP Peak Force":{"mean":2.47,"sd":0.38},"RFD @ 200ms":{"mean":3800.0,"sd":750.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Male — Academy U18 (PL/EFL Cat. 1)":{"CMJ Height":{"mean":38.5,"sd":4.5},"RSI Modified":{"mean":0.51,"sd":0.08},"Peak Power (rel.)":{"mean":34.0,"sd":5.0},"IMTP Peak Force":{"mean":2.74,"sd":0.38},"RFD @ 200ms":{"mean":4200.0,"sd":750.0},"Limb Asymmetry":{"mean":6.5,"sd":3.0},"Sway Velocity":{"mean":6.0,"sd":1.5}},"Elite Female — Academy U16 (WSL / FA WSL Academy)":{"CMJ Height":{"mean":25.5,"sd":4.0},"RSI Modified":{"mean":0.35,"sd":0.07},"Peak Power (rel.)":{"mean":20.0,"sd":3.5},"IMTP Peak Force":{"mean":1.85,"sd":0.3},"RFD @ 200ms":{"mean":2600.0,"sd":550.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.3,"sd":1.6}},"Elite Female — Academy U18 (WSL / FA WSL Academy)":{"CMJ Height":{"mean":28.0,"sd":4.0},"RSI Modified":{"mean":0.38,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":3.5},"IMTP Peak Force":{"mean":2.1,"sd":0.3},"RFD @ 200ms":{"mean":3000.0,"sd":600.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.1,"sd":1.5}},"Elite Male — Premier League / EFL Pro":{"CMJ Height":{"mean":43.0,"sd":5.5},"RSI Modified":{"mean":0.58,"sd":0.09},"Peak Power (rel.)":{"mean":38.0,"sd":5.0},"IMTP Peak Force":{"mean":3.55,"sd":0.45},"RFD @ 200ms":{"mean":5500.0,"sd":800.0},"Limb Asymmetry":{"mean":5.5,"sd":2.5},"Sway Velocity":{"mean":5.5,"sd":1.4}},"Competitive Male — Semi-Pro / National League":{"CMJ Height":{"mean":38.0,"sd":5.0},"RSI Modified":{"mean":0.48,"sd":0.09},"Peak Power (rel.)":{"mean":32.0,"sd":5.0},"IMTP Peak Force":{"mean":3.1,"sd":0.4},"RFD @ 200ms":{"mean":4500.0,"sd":750.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Female — WSL / FAWSL":{"CMJ Height":{"mean":31.0,"sd":4.5},"RSI Modified":{"mean":0.4,"sd":0.07},"Peak Power (rel.)":{"mean":26.0,"sd":4.0},"IMTP Peak Force":{"mean":2.6,"sd":0.35},"RFD @ 200ms":{"mean":3800.0,"sd":650.0},"Limb Asymmetry":{"mean":6.0,"sd":2.5},"Sway Velocity":{"mean":5.8,"sd":1.5}},"Competitive Female — Women's Championship / Tier 3":{"CMJ Height":{"mean":26.0,"sd":4.5},"RSI Modified":{"mean":0.33,"sd":0.07},"Peak Power (rel.)":{"mean":21.0,"sd":3.5},"IMTP Peak Force":{"mean":2.2,"sd":0.3},"RFD @ 200ms":{"mean":3100.0,"sd":600.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Tour Level — PGA Tour Bottom / DP World Tour":{"CMJ Height":{"mean":36.0,"sd":5.0},"RSI Modified":{"mean":0.47,"sd":0.09},"Peak Power (rel.)":{"mean":34.0,"sd":5.0},"IMTP Peak Force":{"mean":3.2,"sd":0.45},"RFD @ 200ms":{"mean":3800.0,"sd":700.0},"Limb Asymmetry":{"mean":5.5,"sd":2.5},"Sway Velocity":{"mean":5.2,"sd":1.5}},"Elite Amateur — Category 1 / Scratch (Handicap 0–5)":{"CMJ Height":{"mean":33.0,"sd":5.0},"RSI Modified":{"mean":0.44,"sd":0.09},"Peak Power (rel.)":{"mean":31.0,"sd":5.0},"IMTP Peak Force":{"mean":2.9,"sd":0.4},"RFD @ 200ms":{"mean":3400.0,"sd":650.0},"Limb Asymmetry":{"mean":6.0,"sd":2.8},"Sway Velocity":{"mean":5.5,"sd":1.6}},"Tour Level Female — LPGA / LET":{"CMJ Height":{"mean":27.0,"sd":4.5},"RSI Modified":{"mean":0.35,"sd":0.07},"Peak Power (rel.)":{"mean":24.0,"sd":3.5},"IMTP Peak Force":{"mean":2.4,"sd":0.35},"RFD @ 200ms":{"mean":2800.0,"sd":550.0},"Limb Asymmetry":{"mean":6.0,"sd":2.5},"Sway Velocity":{"mean":5.5,"sd":1.5}},"Elite Amateur Female — Category 1 (Handicap 0–5)":{"CMJ Height":{"mean":25.0,"sd":4.5},"RSI Modified":{"mean":0.32,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":3.5},"IMTP Peak Force":{"mean":2.2,"sd":0.3},"RFD @ 200ms":{"mean":2400.0,"sd":500.0},"Limb Asymmetry":{"mean":6.5,"sd":3.0},"Sway Velocity":{"mean":5.8,"sd":1.6}},"Elite Male — International / GB Squad (800m–10,000m)":{"CMJ Height":{"mean":38.0,"sd":5.0},"RSI Modified":{"mean":0.58,"sd":0.1},"Peak Power (rel.)":{"mean":32.0,"sd":4.0},"IMTP Peak Force":{"mean":2.8,"sd":0.4},"RFD @ 200ms":{"mean":4800.0,"sd":700.0},"Limb Asymmetry":{"mean":6.0,"sd":2.5},"Sway Velocity":{"mean":5.8,"sd":1.5}},"Competitive Male — National / Regional (800m–10,000m)":{"CMJ Height":{"mean":34.0,"sd":5.0},"RSI Modified":{"mean":0.48,"sd":0.09},"Peak Power (rel.)":{"mean":28.0,"sd":4.0},"IMTP Peak Force":{"mean":2.5,"sd":0.4},"RFD @ 200ms":{"mean":4000.0,"sd":650.0},"Limb Asymmetry":{"mean":7.0,"sd":2.5},"Sway Velocity":{"mean":6.0,"sd":1.6}},"Elite Female — International / GB Squad (800m–10,000m)":{"CMJ Height":{"mean":27.0,"sd":4.5},"RSI Modified":{"mean":0.42,"sd":0.08},"Peak Power (rel.)":{"mean":22.0,"sd":3.5},"IMTP Peak Force":{"mean":2.0,"sd":0.3},"RFD @ 200ms":{"mean":3200.0,"sd":550.0},"Limb Asymmetry":{"mean":6.5,"sd":2.5},"Sway Velocity":{"mean":6.0,"sd":1.5}},"Competitive Female — National / Regional (800m–10,000m)":{"CMJ Height":{"mean":23.0,"sd":4.0},"RSI Modified":{"mean":0.34,"sd":0.08},"Peak Power (rel.)":{"mean":19.0,"sd":3.5},"IMTP Peak Force":{"mean":1.8,"sd":0.3},"RFD @ 200ms":{"mean":2700.0,"sd":500.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Male — ITU / PTO World Tour":{"CMJ Height":{"mean":37.0,"sd":5.0},"RSI Modified":{"mean":0.52,"sd":0.09},"Peak Power (rel.)":{"mean":30.0,"sd":4.5},"IMTP Peak Force":{"mean":2.9,"sd":0.4},"RFD @ 200ms":{"mean":4400.0,"sd":700.0},"Limb Asymmetry":{"mean":6.5,"sd":3.0},"Sway Velocity":{"mean":5.8,"sd":1.5}},"Competitive Male — Age-Group / National Level":{"CMJ Height":{"mean":33.0,"sd":5.0},"RSI Modified":{"mean":0.44,"sd":0.09},"Peak Power (rel.)":{"mean":27.0,"sd":4.5},"IMTP Peak Force":{"mean":2.6,"sd":0.4},"RFD @ 200ms":{"mean":3700.0,"sd":650.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Female — ITU / PTO World Tour":{"CMJ Height":{"mean":26.0,"sd":4.5},"RSI Modified":{"mean":0.36,"sd":0.07},"Peak Power (rel.)":{"mean":21.0,"sd":3.5},"IMTP Peak Force":{"mean":2.1,"sd":0.3},"RFD @ 200ms":{"mean":3100.0,"sd":550.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.0,"sd":1.5}},"Competitive Female — Age-Group / National Level":{"CMJ Height":{"mean":22.0,"sd":4.0},"RSI Modified":{"mean":0.3,"sd":0.07},"Peak Power (rel.)":{"mean":18.0,"sd":3.0},"IMTP Peak Force":{"mean":1.9,"sd":0.3},"RFD @ 200ms":{"mean":2600.0,"sd":500.0},"Limb Asymmetry":{"mean":8.0,"sd":3.0},"Sway Velocity":{"mean":6.4,"sd":1.7}}},"fv":{"Active Males — Under 40":{"f0":24.2,"v0":5.39},"Active Females — Under 40":{"f0":17.5,"v0":4.52},"Active Males — Over 40":{"f0":20.8,"v0":4.85},"Active Females — Over 40":{"f0":15.0,"v0":4.06},"Active Males — Under 16":{"f0":20.8,"v0":4.85},"Active Females — Under 16":{"f0":15.8,"v0":4.16},"Elite Male — Premier League / EFL Pro":{"f0":29.6,"v0":5.81},"Competitive Male — Semi-Pro / National League":{"f0":25.8,"v0":5.46},"Elite Female — WSL / FAWSL":{"f0":21.7,"v0":4.93},"Competitive Female — Women's Championship / Tier 3":{"f0":18.3,"v0":4.52},"Tour Level — PGA Tour / DP World Tour":{"f0":26.7,"v0":5.32},"Elite Amateur — Category 1 / Scratch":{"f0":24.2,"v0":5.09},"Tour Level Female — LPGA / LET":{"f0":20.0,"v0":4.6},"Elite Amateur Female — Category 1":{"f0":18.3,"v0":4.43},"Elite Male — International / GB Squad (800m–10,000m)":{"f0":23.3,"v0":5.46},"Competitive Male — National / Regional (800m–10,000m)":{"f0":20.8,"v0":5.17},"Elite Female — International / GB Squad (800m–10,000m)":{"f0":16.7,"v0":4.6},"Competitive Female — National / Regional (800m–10,000m)":{"f0":15.0,"v0":4.25},"Elite Male — ITU / PTO World Tour":{"f0":24.2,"v0":5.39},"Elite Male — Academy U16 (PL/EFL Cat. 1)":{"f0":20.6,"v0":5.35},"Elite Male — Academy U18 (PL/EFL Cat. 1)":{"f0":22.8,"v0":5.5},"Elite Female — Academy U16 (WSL Academy)":{"f0":15.4,"v0":4.47},"Elite Female — Academy U18 (WSL Academy)":{"f0":17.5,"v0":4.69},"Elite Female — Academy U16/U18 (WSL Academy)":{"f0":17.5,"v0":4.69},"Competitive Female — Age-Group / National Level":{"f0":15.8,"v0":4.16},"Active Males — Over 50":{"f0":17.5,"v0":4.52},"Active Females — Over 50":{"f0":12.9,"v0":3.65}}};
+const M = [
+  {k:"cmj",name:"Jump Height",norm:"CMJ Height",unit:"cm",dp:1,desc:"How high you jumped from a dip-and-drive start."},
+  {k:"rsi",name:"Reactive Strength",norm:"RSI Modified",unit:"RSI",dp:2,desc:"Jump height divided by time to take off. Rewards jumping high and fast."},
+  {k:"pwr",name:"Explosive Power",norm:"Peak Power (rel.)",unit:"W/kg",dp:1,desc:"Average power through the push-off phase of the jump, per kg of bodyweight. Tracked over time, not ranked."},
+  {k:"imtp",name:"Maximum Force",norm:"IMTP Peak Force",unit:"× BW",dp:2,desc:"Peak force in a maximal pull against a fixed bar, relative to bodyweight."},
+  {k:"rfd",name:"Rate of Force Development",norm:"RFD @ 200ms",unit:"N/s",dp:0,desc:"How quickly force rises in the first 200 ms of the pull. Tracked over time, not ranked."},
+  {k:"asym",name:"Leg Symmetry",norm:"Limb Asymmetry",unit:"% diff",dp:1,lower:true,desc:"Difference between left and right leg force. Under 10% is well balanced."},
+  {k:"sway",name:"Postural Stability",norm:"Sway Velocity",unit:"mm/s",dp:1,lower:true,desc:"How much you move while standing still. Lower is better. Tracked over time, not ranked."}
+];
+const FV_ALIAS = {"Tour Level — PGA Tour Bottom / DP World Tour":"Tour Level — PGA Tour / DP World Tour","Elite Amateur — Category 1 / Scratch (Handicap 0–5)":"Elite Amateur — Category 1 / Scratch","Elite Amateur Female — Category 1 (Handicap 0–5)":"Elite Amateur Female — Category 1","Elite Female — Academy U16 (WSL / FA WSL Academy)":"Elite Female — Academy U16 (WSL Academy)","Elite Female — Academy U18 (WSL / FA WSL Academy)":"Elite Female — Academy U18 (WSL Academy)"};
+const R = REPORT, S = R.sessions, G = R.groups, DESC = [...new Set(["rfd","sway","pwr"].concat((R.options && R.options.descriptive) || []))], SOFT = !R.options || R.options.softLowBands !== false;
+let cur = S.length - 1;
+// F-V estimate when not supplied: F0 = 0.85 x IMTP (N/kg), V0 = 2 x take-off velocity from CMJ height (same basis as the norm benchmarks)
+S.forEach(s=>{ if(!s.fv && s.imtp && s.cmj) s.fv = { f0: +(0.85*s.imtp*9.81).toFixed(1), v0: +(2*Math.sqrt(2*9.81*s.cmj/100)).toFixed(2) }; });
+
+const css = v => getComputedStyle(document.body).getPropertyValue(v).trim();
+const gcol = i => i === 0 ? css("--yellow") : css("--blue");
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+0.3275911*x);return s*(1-((((1.061405429*t-1.453152027)*t+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x));}
+function pct(m, val, gi){const n=NORMS.norms[G[gi].key]; if(!n||!n[m.norm]||val==null) return null; let z=(val-n[m.norm].mean)/n[m.norm].sd; if(m.lower) z=-z; return Math.min(99,Math.max(1,50*(1+erf(z/Math.SQRT2))));}
+function band(p){
+  if(p==null) return {label:"No norm",cls:"a",bar:50};
+  if(p>=90) return {label:"Top 10%",badge:"EXCELLENT",cls:"g",bar:88};
+  if(p>=67) return {label:"Upper Third",badge:"STRONG",cls:"g",bar:72};
+  if(p>=34) return {label:"Average",badge:"AVERAGE",cls:"a",bar:50};
+  if(p>=10) return {label:SOFT?"Building":"Bottom Third",badge:"DEVELOPING",cls:SOFT?"a":"r",bar:25};
+  return {label:SOFT?"Building":"Bottom 10%",badge:"DEVELOPING",cls:SOFT?"a":"r",bar:8};
+}
+function descLabel(m,p){ if(p==null) return "Baseline"; if(p>=67) return "Strong"; if(p>=34) return "Typical"; return m.k==="sway"?"Elevated":"Developing"; }
+const colOf = c => c==="g"?css("--green"):c==="r"?css("--red"):css("--yellow");
+const badge = (txt,c) => `<span class="badge" style="color:${colOf(c)};background:${colOf(c)}22">${txt}</span>`;
+const fmt = (v,dp) => v==null?"–":Number(v).toLocaleString("en-GB",{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const isDesc = m => DESC.includes(m.k);
+
+// Athleticism Score: 0-100, weighted percentiles vs Group 1 (same reference for every session so scores are comparable)
+const SCORE_W={cmj:35,imtp:30,rsi:25,asym:10};
+function athScore(s){let t=0,w=0;for(const k in SCORE_W){const m=M.find(x=>x.k===k),p=pct(m,s[k],0);if(p!=null){t+=p*SCORE_W[k];w+=SCORE_W[k];}}return w?Math.round(t/w):null;}
+function scoreCard(){
+  const sc=athScore(S[cur]); if(sc==null) return "";
+  const prev=cur>0?athScore(S[cur-1]):null, best=Math.max(...S.slice(0,cur+1).map(athScore).filter(v=>v!=null));
+  const lvl=sc>=90?["Exceptional",css("--green")]:sc>=67?["Strong",css("--green")]:sc>=34?["Solid",css("--yellow")]:["Building",css("--yellow")];
+  const R2=54,C=2*Math.PI*R2,arc=C*sc/100;
+  const d=prev!=null?sc-prev:null, dc=d==null?"":d>0?css("--green"):d<0?css("--yellow"):css("--muted");
+  const hist=S.length>1?`<div class="sc-hist">${S.map((x,i)=>{const v=athScore(x);return `<div class="${i===cur?"on":""}"><em>${v}</em><span style="height:${Math.max(4,v)}%"></span><small>S${i+1}</small></div>`;}).join("")}</div>`:"";
+  const parts=Object.keys(SCORE_W).map(k=>{const m=M.find(x=>x.k===k),p=pct(m,S[cur][k],0);return p==null?"":`<div class="sc-part"><span>${m.name}</span><div class="sc-pbar"><i style="width:${p}%"></i></div><b>${SCORE_W[k]}%</b></div>`;}).join("");
+  return `<section class="card" data-pdf><div class="score">
+    <div class="ring"><svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="${R2}" fill="none" stroke="${css("--line")}" stroke-width="12"/><circle cx="64" cy="64" r="${R2}" fill="none" stroke="${lvl[1]}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${arc} ${C}" transform="rotate(-90 64 64)"/></svg><div class="ring-n"><b>${sc}</b><span>/ 100</span></div></div>
+    <div class="score-txt"><div class="h2" style="margin-bottom:6px"><h2>Athleticism Score</h2></div>
+      <p class="score-lvl" style="color:${lvl[1]}">${lvl[0]}${d!=null?` <span class="delta" style="color:${dc};background:${dc}1f;margin-left:8px">${d>0?"+":""}${d} vs last</span>`:""}</p>
+      <p class="score-beat">🎯 Score to beat next time: <b>${best}</b>${best>sc?" (your best so far)":""}</p>
+      <div class="sc-parts">${parts}</div>
+      <p class="score-note">One number for jump, reactive strength, maximum force and leg symmetry, scored against ${G[0].short}. 50 = the group average.</p>
+    </div>${hist}</div>${foot(true)}</section>`;
+}
+function overall(gi,s){const ps=M.filter(m=>!isDesc(m)).map(m=>pct(m,s[m.k],gi)).filter(p=>p!=null); return ps.length?ps.reduce((a,b)=>a+b)/ps.length:null;}
+
+function autoNote(m,s){
+  if(R.notes && R.notes[m.k]) return R.notes[m.k];
+  const p0=pct(M[0],s.cmj,0), p2=pct(M[2],s.pwr,0);
+  if(m.k==="cmj" && R.athlete.height>185) return "Taller athletes often jump lower in absolute terms even with good power; the norms do not fully account for height.";
+    if(m.k==="rsi" && S.length===1) return "Technique sensitive: one of the metrics most likely to improve at retest.";
+  return "";
+}
+
+function spark(m){
+  const vals=S.map(s=>s[m.k]).filter(v=>v!=null); if(vals.length<2) return "";
+  const mn=Math.min(...vals), mx=Math.max(...vals), rg=(mx-mn)||1, w=200, h=26, n=S.length;
+  const pts=S.map((s,i)=>[6+i*(w-12)/(n-1), h-4-((s[m.k]-mn)/rg)*(h-8)]);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline fill="none" stroke="${css("--muted")}" stroke-width="1.5" points="${pts.map(p=>p.join(",")).join(" ")}"/>${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="${i===cur?3.5:2}" fill="${i===cur?css("--green"):css("--muted")}"/>`).join("")}</svg>`;
+}
+
+function tile(m){
+  const s=S[cur], v=s[m.k], prev=cur>0?S[cur-1][m.k]:null, d=isDesc(m);
+  let delta="";
+  if(prev!=null && v!=null){const df=v-prev, good=m.lower?df<0:df>0, c=Math.abs(df)<1e-9?css("--muted"):good?css("--green"):css("--yellow"); delta=`<span class="delta" style="color:${c};background:${c}1f">${df>0?"+":""}${fmt(df,m.dp)} vs last</span>`;}
+  const p1=pct(m,v,0), b1=band(p1);
+  const head = d ? badge("MONITOR","a") : "";
+  const rows = G.map((g,gi)=>{
+    const p=pct(m,v,gi), n=NORMS.norms[g.key]&&NORMS.norms[g.key][m.norm];
+    const lab=`<span><span class="sg" style="background:${gcol(gi)}"></span>vs ${g.short}</span>`;
+    if(d) return `<div class="srow"><div class="slab">${lab}<span class="sband" style="color:${css("--yellow")}">${descLabel(m,p)}</span></div><div class="davg">Group average ${n?fmt(n.mean,m.dp):"–"} ${m.unit}</div></div>`;
+    const b=band(p);
+    return `<div class="srow"><div class="slab">${lab}<span class="sband" style="color:${colOf(b.cls)}">${b.label}</span></div><div class="strip">${[10,24,33,23,10].map((w,j)=>`<s style="width:calc(${w}% - 2px);background:${j<2?(SOFT?css("--yellow"):css("--red")):j===2?css("--yellow"):css("--green")}"></s>`).join("")}${p!=null?`<i style="left:${Math.min(97,Math.max(3,p))}%;background:${gcol(gi)}"></i>`:""}</div>${gi===G.length-1?`<div class="sx"><span>Lower</span><span>Group average</span><span>Higher</span></div>`:""}</div>`;
+  }).join("");
+  const note=autoNote(m,s);
+  return `<div class="tile"><div class="t-top"><span class="t-name">${m.name}</span>${head}</div><div class="t-val"><span class="num">${fmt(v,m.dp)}</span><span class="unit">${m.unit}</span>${delta}</div>${spark(m)}<div>${rows}</div>${note?`<div class="t-note">${note}</div>`:""}</div>`;
+}
+
+function pick(){
+  const s=S[cur], score=k=>pct(M.find(m=>m.k===k),s[k],0);
+  const strong=["asym","imtp","cmj","pwr","rsi"].filter(k=>!DESC.includes(k)&&s[k]!=null).sort((a,b)=>score(b)-score(a))[0];
+  const grow=["cmj","pwr","imtp","rsi"].filter(k=>!DESC.includes(k)&&s[k]!=null).sort((a,b)=>score(a)-score(b))[0];
+  return {strong:M.find(m=>m.k===strong), grow:M.find(m=>m.k===grow)};
+}
+
+function fvProfile(fv,b){
+  if(!b) return "";
+  const g=G[0].short, bal=Math.log((fv.f0/b.f0)/(fv.v0/b.v0)), size=(fv.f0*fv.v0)/(b.f0*b.v0);
+  const pos=Math.min(94,Math.max(6,50-bal*180));
+  const shape = bal>0.08 ? ["Tractor-leaning","You are relatively stronger than you are fast. More of your future power is likely to come from the speed side."]
+    : bal<-0.08 ? ["F1-leaning","You are relatively faster than you are strong. More of your future power is likely to come from the strength side."]
+    : ["Balanced","Your strength and speed are in a similar mix to the average for "+g+". Gains on either side will lift your power."];
+  const eng = size>1.07 ? ["Bigger engine","Your overall power is above the "+g+" average.",css("--green")]
+    : size<0.93 ? ["Engine still growing","Your overall power is below the "+g+" average for now: plenty of room to build.",css("--yellow")]
+    : ["Average engine","Your overall power is in line with the "+g+" average.",css("--yellow")];
+  return `<div class="fvprof"><div class="fvbal"><div class="fvbal-top"><span>🚜 Strength-led</span><span>Speed-led 🏎️</span></div><div class="fvtrack"><i class="bm" style="left:50%"></i><i class="me" style="left:${pos}%"></i></div><div class="fvbal-cap">Grey tick = ${g} average mix</div></div>
+  <div class="fvtxt"><p><b>${shape[0]}.</b> ${shape[1]}</p><p><b style="color:${eng[2]}">${eng[0]}.</b> ${eng[1]}</p></div></div>`;
+}
+const shareBtn = `<button class="share" onclick="shareBlock(this)">Share</button>`;
+const foot = share => `<div class="foot"><span><span class="brand" style="font-size:10px">GYMGEEK</span> ANALYSE · POWERED BY <span class="brand" style="font-size:10px">ATHLEEK</span> · gymgeekonline.co.uk · athleek.co.uk</span>${share?shareBtn:""}</div>`;
+
+function render(){
+  const A=R.athlete, s=S[cur], first=S.length===1;
+  const label = i => `Session ${i+1}${i===0?" · Baseline":""}`;
+  const chips = S.length>1 ? `<div class="chips">${S.map((x,i)=>`<button class="chip${i===cur?" on":""}" onclick="cur=${i};render()">${label(i)}<br><span style="font-weight:400">${x.date}</span></button>`).join("")}</div>` : "";
+  const ov = G.map((g,gi)=>{const p=overall(gi,s), b=band(p), c=gi===0?css("--yellow"):css("--blue");
+    return `<div><div class="overall"><div class="pill" style="color:${colOf(b.cls)};border-color:${colOf(b.cls)}66">${b.label}<small>Overall</small></div><div class="ov-txt"><b style="color:${c}">vs ${g.short}</b>${g.blurb||""}</div></div></div>`;}).join("");
+  const pk=pick(), hlTxt=(m,t,fallback)=>{const b=band(pct(m,s[m.k],0)); return `<div class="hl"><div class="pill" style="color:${colOf(b.cls)};border-color:${colOf(b.cls)}66">${b.label}<small>${m.name}</small></div><p><b>${fallback} ${fmt(s[m.k],m.dp)} ${m.unit}</b>${t||""}</p></div>`;};
+  const fv=s.fv, fvB=gi=>NORMS.fv[G[gi].key]||NORMS.fv[FV_ALIAS[G[gi].key]];
+  const progress = S.length>1 ? `<section class="card" data-pdf><div class="h2"><h2>Your Progress</h2></div><div class="tbl"><table><tr><th>Metric</th>${S.map((x,i)=>`<th>S${i+1}<br>${x.date}</th>`).join("")}<th>Change</th></tr>${M.map(m=>{const a=S[0][m.k], z=S[S.length-1][m.k], df=(a!=null&&z!=null)?z-a:null, good=df!=null&&(m.lower?df<0:df>0), c=df==null||Math.abs(df)<1e-9?css("--muted"):good?css("--green"):css("--yellow"); return `<tr><td>${m.name} <span style="color:${css("--muted")}">${m.unit}</span></td>${S.map(x=>`<td>${fmt(x[m.k],m.dp)}</td>`).join("")}<td style="color:${c};font-weight:700">${df==null?"–":(df>0?"+":"")+fmt(df,m.dp)}</td></tr>`;}).join("")}</table></div>${foot(true)}</section>` : "";
+
+  document.getElementById("app").innerHTML = `
+  <div class="top"><div><div class="brand">GYMGEEK<span>ANALYSE</span></div><div class="pby">Powered by <span class="brand">ATHLEEK</span></div></div><div class="btns"><button class="btn" id="pdf-btn" onclick="exportPDF()">Download PDF</button><button class="btn" id="lt" onclick="toggleLight()">${document.body.classList.contains("light")?"Dark mode":"Light mode"}</button></div></div>
+  <section class="card" data-pdf><div class="hero"><div><h1>${A.name}</h1><div class="meta">${[A.position,A.sport].filter(Boolean).join(", ")} | Age ${A.age} | ${A.height} cm | ${s.weight} kg | ${s.date}</div></div>${chips}</div></section>
+  ${first?`<div class="banner" data-pdf><b>This is your baseline.</b> First-time force plate scores are often a little below what you can really do, because the jump and pull both have a technique element. Treat today as your starting point; your next session will tell a fuller story.</div>`:""}
+  ${scoreCard()}
+  <section class="card" data-pdf><div class="h2"><h2>Your Numbers</h2><div class="legend">${G.map((g,gi)=>`<span><i style="background:${gcol(gi)}"></i>vs ${g.short}</span>`).join("")}</div></div><div class="tiles">${M.map(tile).join("")}</div>${foot(true)}</section>
+  <section class="card" data-pdf><div class="h2"><h2>Where You Stack Up</h2></div><div class="two"><div>${ov}</div><div><canvas id="radar" width="340" height="280"></canvas><div class="legend" style="justify-content:center;margin-top:6px"><span><i style="background:${css("--green")}"></i>You</span>${G.map((g,gi)=>`<span><i style="background:${gcol(gi)}"></i>${g.short} average</span>`).join("")}${cur>0?`<span><i style="background:${css("--muted")}"></i>Last session</span>`:""}</div><p style="font-size:10px;color:${css("--muted")};text-align:center;margin-top:6px">Further out is better on every axis. Scaled against ${G[0].short}.</p></div></div>${foot(true)}</section>
+  <section class="card" data-pdf><div class="h2"><h2>Standout &amp; Area to Grow</h2></div><div class="two">${hlTxt(pk.strong,R.highlights.strength,"Your standout:")}${hlTxt(pk.grow,R.highlights.grow,"Most room to grow:")}</div>${foot(true)}</section>
+  ${progress}
+  ${fv?`<section class="card" data-pdf><div class="h2"><h2>Force-Velocity Profile</h2><div class="legend"><span><i style="background:${css("--green")}"></i>You</span>${G.map((g,gi)=>fvB(gi)?`<span><i style="background:${gcol(gi)}"></i>${g.short} average</span>`:"").join("")}${cur>0&&S[cur-1].fv?`<span><i style="background:${css("--muted")}"></i>Last session</span>`:""}</div></div>
+  <div class="fvread"><div><b>🚜 Force end</b>Where the line meets the left axis: your strength, like a tractor pulling a heavy load.</div><div><b>🏎️ Speed end</b>Where the line meets the bottom axis: how fast you can move with no load, like an F1 car.</div><div><b>📈 Is my line good?</b>Further out from the corner is better. A line above the dashed averages means more total power.</div></div>
+  <canvas id="fv" width="860" height="280"></canvas>
+  ${fvProfile(fv,fvB(0))}
+  <div class="fvstats"><div><b style="color:${css("--green")}">${fmt(fv.f0,1)}</b><span>🚜 Max force (N/kg)</span></div><div><b style="color:${css("--green")}">${fmt(fv.v0,2)}</b><span>🏎️ Max speed (m/s)</span></div><div><b>${fmt(fv.f0*fv.v0/4,1)}</b><span>Peak power (W/kg)</span></div><div><b>${fmt(-fv.f0/fv.v0,2)}</b><span>Slope</span></div></div><p style="font-size:11px;color:${css("--muted")};margin-top:10px">Estimated from your pull and jump: a directional guide, not a precision measurement.</p>${foot(true)}</section>`:""}
+  <section class="card summary" data-pdf><div class="h2"><h2>${A.first}, here's how you got on</h2></div><h3 style="color:${css("--green")}">What went well</h3><p>${R.summary.strengths}</p><h3 style="color:${css("--yellow")}">What is developing</h3><p>${R.summary.developing}</p><p style="font-size:11px;color:${css("--muted")}">Retest recommended in 3–6 months.</p>${foot(true)}</section>
+  <section class="card" data-pdf><div class="h2"><h2>What We Measured</h2></div><div class="gloss">${M.map(m=>`<div><b>${m.name}.</b> ${m.desc}</div>`).join("")}<div><b>Athleticism Score.</b> One 0–100 number combining jump height (35%), maximum force (30%), reactive strength (25%) and leg symmetry (10%), each scored against your first comparison group. 50 is the group average. Built to track and beat at every retest.</div><div><b>Bands.</b> Top 10%, Upper Third, Average, Building. Banded rather than exact percentiles because norm data varies between equipment and protocols.</div></div>${foot(false)}</section>
+  <footer>Beta software. For performance monitoring only, not medical advice. Bands are calibrated against published normative data and are not precise percentile ranks. RFD, explosive power and postural sway are descriptive only. F-V values are modelled estimates. © ${new Date().getFullYear()} GymGeek Dorset.</footer>`;
+  drawRadar(); drawFV();
+}
+
+function drawRadar(){
+  const c=document.getElementById("radar"); if(!c) return; const x=c.getContext("2d"), W=c.width, H=c.height, cx=W/2, cy=H/2+4, r=Math.min(W,H)/2-44, N=M.length;
+  const lab=["Jump","Reactive","Power","Max Force","RFD","Symmetry","Stability"], ang=i=>Math.PI*2*i/N-Math.PI/2, pt=(i,rr)=>[cx+rr*Math.cos(ang(i)),cy+rr*Math.sin(ang(i))];
+  x.clearRect(0,0,W,H); x.strokeStyle=css("--line"); x.lineWidth=1;
+  [.25,.5,.75,1].forEach(f=>{x.beginPath();for(let i=0;i<=N;i++){const p=pt(i%N,r*f);i?x.lineTo(...p):x.moveTo(...p);}x.stroke();});
+  for(let i=0;i<N;i++){x.beginPath();x.moveTo(cx,cy);x.lineTo(...pt(i,r));x.stroke();}
+  // every axis is scaled against group 1: centre = low, edge = high, middle ring = group 1 average
+  const poly=(vals,col,dash,fill)=>{x.beginPath();x.setLineDash(dash?[5,4]:[]);vals.forEach((v,i)=>{const p=pt(i,r*v/100);i?x.lineTo(...p):x.moveTo(...p);});x.closePath();if(fill){x.fillStyle=col+"30";x.fill();}x.strokeStyle=col;x.lineWidth=dash?1.8:2.5;x.stroke();x.setLineDash([]);};
+  G.forEach((g,gi)=>{const n=NORMS.norms[g.key]; poly(M.map(m=>gi===0?50:(n&&n[m.norm]?pct(m,n[m.norm].mean,0):50)),gcol(gi),true,false);});
+  if(cur>0) poly(M.map(m=>pct(m,S[cur-1][m.k],0)||0),css("--muted"),true,false);
+  const me=M.map(m=>pct(m,S[cur][m.k],0)||0); poly(me,css("--green"),false,true);
+  me.forEach((v,i)=>{const p=pt(i,r*v/100);x.beginPath();x.arc(...p,3.5,0,Math.PI*2);x.fillStyle=css("--green");x.fill();});
+  x.fillStyle=css("--muted"); x.font="10px DM Sans, sans-serif"; x.textBaseline="middle";
+  lab.forEach((l,i)=>{const [px,py]=pt(i,r+18); x.textAlign=px<cx-5?"right":px>cx+5?"left":"center"; x.fillText(l,px,py);});
+}
+
+function drawFV(){
+  const c=document.getElementById("fv"); if(!c) return; const W=Math.max(320,c.parentElement.clientWidth-40||860); c.width=W; const H=c.height, x=c.getContext("2d");
+  const lines=[]; G.forEach((g,gi)=>{const b=NORMS.fv[g.key]||NORMS.fv[FV_ALIAS[g.key]]; if(b) lines.push({f0:b.f0,v0:b.v0,col:gcol(gi),dash:true});});
+  if(cur>0&&S[cur-1].fv) lines.push({f0:S[cur-1].fv.f0,v0:S[cur-1].fv.v0,col:css("--muted"),dash:true,lbl:"Last"});
+  const me=S[cur].fv; lines.push({f0:me.f0,v0:me.v0,col:css("--green"),me:true});
+  const pad={l:44,r:16,t:12,b:34}, pw=W-pad.l-pad.r, ph=H-pad.t-pad.b, mV=Math.max(...lines.map(l=>l.v0))*1.15, mF=Math.max(...lines.map(l=>l.f0))*1.15;
+  const fx=v=>pad.l+v/mV*pw, fy=f=>pad.t+ph-f/mF*ph;
+  x.clearRect(0,0,W,H); x.strokeStyle=css("--line"); x.lineWidth=1; x.fillStyle=css("--muted"); x.font="10px DM Sans, sans-serif";
+  for(let i=0;i<=5;i++){const v=i*mV/5,f=i*mF/5; x.beginPath();x.moveTo(fx(v),pad.t);x.lineTo(fx(v),pad.t+ph);x.stroke(); x.beginPath();x.moveTo(pad.l,fy(f));x.lineTo(pad.l+pw,fy(f));x.stroke(); x.textAlign="center";x.fillText(v.toFixed(1),fx(v),pad.t+ph+13); x.textAlign="right";x.fillText(f.toFixed(0),pad.l-6,fy(f)+3);}
+  x.textAlign="center"; x.fillText("Speed (m/s)",pad.l+pw/2,H-4); x.font="18px sans-serif"; x.textAlign="right"; x.fillText("🏎️",pad.l+pw,pad.t+ph-8); x.textAlign="left"; x.fillText("🚜",pad.l+6,pad.t+14); x.font="10px DM Sans, sans-serif"; x.textAlign="center"; x.save();x.translate(11,pad.t+ph/2);x.rotate(-Math.PI/2);x.fillText("Force (N/kg)",0,0);x.restore();
+  lines.forEach(l=>{x.beginPath();x.setLineDash(l.dash?[6,4]:[]);x.strokeStyle=l.col;x.lineWidth=l.me?3:2;x.moveTo(fx(0),fy(l.f0));x.lineTo(fx(l.v0),fy(0));x.stroke();x.setLineDash([]);});
+  x.beginPath();x.arc(fx(me.v0/2),fy(me.f0/2),6,0,Math.PI*2);x.fillStyle=css("--green");x.fill(); x.textAlign="left";x.fillStyle=css("--text");x.fillText("Your peak power point",fx(me.v0/2)+10,fy(me.f0/2)+3);
+}
+
+function toggleLight(){document.body.classList.toggle("light");render();}
+function fname(ext){const m=["January","February","March","April","May","June","July","August","September","October","November","December"];return R.athlete.name.replace(/\s+/g,"_").replace(/[^\w]/g,"")+"_"+m[new Date().getMonth()]+"_GYMGEEK."+ext;}
+function snap(el){return html2canvas(el,{scale:2,useCORS:true,backgroundColor:css("--bg"),logging:false});}
+function shareBlock(btn){const el=btn.closest("[data-pdf]"); btn.style.visibility="hidden";
+  snap(el).then(cv=>{btn.style.visibility="";cv.toBlob(b=>{const f=new File([b],fname("png"),{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[f]})) navigator.share({files:[f],title:"My GymGeek results",text:"Just got my force plate results at GymGeek Dorset! #GymGeekDorset"}).catch(()=>{});
+    else{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fname("png");a.click();}});});}
+async function exportPDF(){
+  const btn=document.getElementById("pdf-btn"); btn.disabled=true; btn.textContent="Generating…";
+  const wasLight=document.body.classList.contains("light"); document.body.classList.add("pdf-export"); render();
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  const {jsPDF}=window.jspdf, pdf=new jsPDF({unit:"pt",format:"a4"}), PW=595.28, PH=841.89, mg=20, uw=PW-mg*2;
+  const bg=()=>{pdf.setFillColor(240,242,244);pdf.rect(0,0,PW,PH,"F");}; bg(); let y=mg;
+  for(const el of document.querySelectorAll("[data-pdf]")){
+    const cv=await snap(el); let w=uw, h=cv.height/cv.width*uw; if(h>PH-mg*2){h=PH-mg*2;w=cv.width/cv.height*h;}
+    if(y+h>PH-mg){pdf.addPage();bg();y=mg;}
+    pdf.addImage(cv.toDataURL("image/jpeg",0.92),"JPEG",mg+(uw-w)/2,y,w,h); y+=h+10;
+  }
+  pdf.save(fname("pdf"));
+  document.body.classList.remove("pdf-export"); if(wasLight) document.body.classList.add("light"); render();
+}
+window.addEventListener("load",render);
+window.addEventListener("resize",()=>drawFV());
+</script>
+</body>
+</html>
