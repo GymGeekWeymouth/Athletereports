@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GYMGEEK Analyse</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&family=Raleway:ital,wght@1,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* ================= EDIT ONLY THIS BLOCK ================= */
+/*REPORT_START*/
+const REPORT = {
+  athlete: { name: "Chris May", first: "Chris", sex: "Male", age: 49, ageDecimal: 49, height: 172, sittingHeight: null, sport: "Triathlon", position: "", photo: "" },
+  groups: [
+    { key: "Active Males — Over 40", short: "Active Males 40+", blurb: "Active, regularly training men in your age bracket" },
+    { key: "Competitive Male — Age-Group / National Level", short: "Competitive Age-Group", blurb: "Competitive age-group and national level triathletes" }
+  ],
+  options: { softLowBands: true, descriptive: ["rfd", "sway", "pwr"] },
+  sessions: [
+    { date: "1 Oct 2026", weight: 72.1, cmj: 30.5, rsi: 0.23, pwr: 22.1, imtp: 2.77, rfd: 4249, asym: 1.9, sway: 7.7, ttt: 1.3, cmjTrials: 1, cmjCV: null }
+  ],
+  notes: { cmj: "Based on one jump; retest will use the mean of the best three.", rsi: "A deep, slow dip is common in endurance athletes.", pwr: "Shown as mean concentric power; tracked over time rather than ranked.", imtp: "", rfd: "", asym: "", sway: "" },
+  highlights: {
+    strength: "Your left and right legs share the work almost evenly, well inside the 10% guide. That balance is a real asset for the volume triathlon training demands.",
+    grow: "Your jump took 1.3 seconds to leave the ground, which lowers this score. Endurance athletes often use a deep, slow dip, so expect this to move at retest."
+  },
+  summary: {
+    strengths: "Your strength profile is a real positive. Maximum force sits in the upper third for active men over 40, your rate of force development is strong, and your jump height is also in the upper third for your age. Your legs are almost perfectly balanced, which is excellent news for an endurance athlete handling high training volume.",
+    developing: "Reactive strength is the area to grow. Your countermovement took 1.3 seconds, which is common in triathletes whose training rewards steady, efficient movement rather than fast, springy efforts. Against competitive age-group athletes your jump is still building, and age plays a part at 49. As a first test, expect some of this to improve with familiarity."
+  }
+};
+/*REPORT_END*/
+/* ======================================================== */
+</script>
+<style>
+:root{
+  --bg:#1C1E20;--card:#2A2D30;--card2:#33363A;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);
+  --text:#F5F7FA;--muted:#8B97AB;--faint:#5E6878;
+  --green:#61C599;--yellow:#FFC11E;--blue:#778FDD;--red:#ff6363;
+  --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 20px 40px -24px rgba(0,0,0,.6);
+  --display:'Montserrat',system-ui,sans-serif;--body:'Open Sans',system-ui,sans-serif;--mono:'DM Mono',ui-monospace,monospace;
+}
+body.light,body.print{
+  --bg:#F4F5F7;--card:#FFFFFF;--card2:#F1F3F5;--line:rgba(17,19,21,.08);--line2:rgba(17,19,21,.16);
+  --text:#111315;--muted:#5F6B7A;--faint:#98A2B0;
+  --green:#14935F;--yellow:#C08600;--blue:#4A62B8;--red:#D04040;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 12px 32px -16px rgba(16,24,40,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:28px 20px 64px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:0 4px 4px}
+.logo{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;font-size:22px;letter-spacing:.01em;line-height:1}
+.logo span{font-family:var(--display);font-style:normal;font-weight:500;font-size:11px;letter-spacing:.42em;color:var(--muted);margin-left:8px;vertical-align:3px}
+.pby{font-size:10px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-top:5px}
+.pby b{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;color:var(--muted);letter-spacing:.02em}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;font:600 12px var(--body);padding:9px 14px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--text);cursor:pointer;transition:background .2s,border-color .2s}
+.btn:hover{background:var(--card);border-color:var(--muted)}
+.btn.pri{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn .ic{font-size:14px}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* group markers: filled = group 1, ring = group 2 (colour is reserved for meaning) */
+.gm{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none}
+.gm.g0{background:var(--text)}
+.gm.g1{border:2px solid var(--text)}
+.ln{display:inline-block;width:18px;height:0;vertical-align:3px;margin-right:6px}
+.ln.you{border-top:3px solid var(--green);border-radius:2px}
+.ln.g0{border-top:2px dashed var(--text)}
+.ln.g1{border-top:2px dotted var(--muted)}
+.ln.last{border-top:2px dashed var(--green);opacity:.55}
+
+/* cards + section headers */
+.card{background:var(--card);border-radius:22px;padding:28px;box-shadow:var(--shadow);position:relative}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.sh h2{font:800 26px/1.1 var(--display);letter-spacing:-.02em}
+.sh-r{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);flex-wrap:wrap;align-items:center}
+.legend>span{display:inline-flex;align-items:center;gap:7px}
+.share{width:32px;height:32px;border-radius:50%;border:1px solid var(--line2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,border-color .2s;font-size:14px}
+.share:hover{color:var(--text);border-color:var(--muted)}
+.stamp{display:none;margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:10px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.stamp b{font-family:'Raleway',sans-serif;font-style:italic;font-weight:900;color:var(--muted);letter-spacing:.02em}
+body.capturing .stamp{display:block}
+body.capturing .share{display:none}
+
+/* avatar */
+.avatar{width:64px;height:64px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;font:800 22px var(--display);letter-spacing:-.02em;color:#fff;background:linear-gradient(135deg,#61C599,#3E8F86 55%,#4A62B8);box-shadow:0 0 0 3px var(--card),0 0 0 4px var(--line2)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* hero */
+.hero{padding:0;overflow:hidden}
+.hero-main{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;padding:34px 34px 28px;background:radial-gradient(120% 140% at 100% 0%,rgba(97,197,153,.16),transparent 55%)}
+.who{display:flex;align-items:center;gap:16px;margin:12px 0 16px}
+.hero h1{font:900 clamp(32px,5.2vw,56px)/1 var(--display);letter-spacing:-.035em}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{font-size:12px;padding:6px 11px;border-radius:999px;background:var(--card2);color:var(--muted)}
+.fact b{color:var(--text);font-weight:600}
+.seg{display:inline-flex;background:var(--card2);border-radius:999px;padding:4px;gap:2px;margin-top:18px;flex-wrap:wrap}
+.seg button{font:600 12px var(--body);border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer}
+.seg button.on{background:var(--text);color:var(--bg)}
+.seg button small{font-weight:400;opacity:.75;margin-left:6px}
+.ring{position:relative;width:188px;height:188px;flex:none}
+.ring svg{width:100%;height:100%}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ring-c .k{font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ring-c b{font:900 64px/1 var(--display);letter-spacing:-.04em;margin:4px 0 2px}
+.ring-c .lvl{font:700 13px var(--display)}
+.hero-sub{display:grid;grid-template-columns:1fr auto;gap:28px;padding:22px 34px 26px;border-top:1px solid var(--line);align-items:end}
+.parts{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.part .pn{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);margin-bottom:8px;gap:6px}
+.part .pn span{display:inline-flex;align-items:center;gap:6px}
+.part .pn b{font:500 11px var(--mono);color:var(--faint)}
+.pbar{height:6px;border-radius:999px;background:var(--card2);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:999px;background:var(--green);transform-origin:left}
+.beat{display:flex;align-items:center;gap:12px;white-space:nowrap}
+.beat .t{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);text-align:right;line-height:1.35}
+.beat .t .ic{font-size:18px;color:var(--green)}
+.beat .v{font:900 30px/1 var(--display);color:var(--green);letter-spacing:-.02em}
+.delta{display:inline-flex;align-items:center;gap:3px;font:700 11px var(--body);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.hist{display:flex;gap:8px;align-items:flex-end;height:64px}
+.hist div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.hist span{display:block;width:26px;border-radius:6px;background:var(--card2)}
+.hist .on span{background:var(--green)}
+.hist small{font:500 9px var(--mono);color:var(--muted)}
+.note{display:flex;gap:12px;align-items:flex-start;padding:16px 34px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:1.6}
+.note b{color:var(--text)}
+.note .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:7px;box-shadow:0 0 0 4px rgba(97,197,153,.2)}
+
+/* tiles */
+.sub{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0 0 12px}
+.sub+.grid{margin-bottom:26px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+.tile{background:var(--card2);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.t-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.t-name{display:inline-flex;align-items:center;gap:9px;font:700 13px var(--display);letter-spacing:-.005em}
+.t-name .ib{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--card);color:var(--text);font-size:15px}
+.tag{font:500 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line2);padding:3px 7px;border-radius:999px}
+.t-val{display:flex;align-items:baseline;gap:8px}
+.t-val .num{font:800 44px/1 var(--display);letter-spacing:-.035em}
+.grid.three .t-val .num{font-size:34px}
+.t-val .unit{font-size:12px;color:var(--muted)}
+.t-val .delta{margin-left:auto}
+.spark{display:block;width:100%;height:28px}
+.cmp+.cmp{margin-top:12px}
+.cmp-l{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;margin-bottom:7px}
+.cmp-l span:first-child{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.cmp-l b{font-weight:700}
+.strip{position:relative;height:6px;display:flex;gap:3px}
+.strip s{display:block;flex:none;height:100%;border-radius:999px}
+.strip i{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;transform:translate(-50%,-50%)}
+.strip i.g0{background:var(--text);border:3px solid var(--card2)}
+.strip i.g1{background:var(--card2);border:3px solid var(--text)}
+.sx{display:flex;justify-content:space-between;font:500 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:8px}
+.davg{font-size:11.5px;color:var(--muted)}
+.davg b{color:var(--text);font-weight:600}
+.t-note{font-size:11.5px;line-height:1.55;color:var(--muted);padding-top:12px;border-top:1px solid var(--line)}
+
+/* stack up */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.ov{display:flex;flex-direction:column;gap:14px}
+.ov-row{display:flex;gap:16px;align-items:center;padding:18px;border-radius:16px;background:var(--card2)}
+.ov-band{min-width:128px;text-align:center;padding:12px 10px;border-radius:12px}
+.ov-band b{display:block;font:800 18px/1.1 var(--display);letter-spacing:-.01em}
+.ov-band small{font:500 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.ov-txt b{display:flex;align-items:center;gap:8px;font:700 13px var(--display);margin-bottom:3px}
+.ov-txt span{font-size:12px;color:var(--muted)}
+canvas{display:block;max-width:100%;height:auto;margin:0 auto}
+.cap{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+
+/* highlights */
+.hl{background:var(--card2);border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.hl::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+.hl.s::before{background:var(--green)}.hl.g::before{background:var(--yellow)}
+.hl .k{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hl h3{display:flex;align-items:center;gap:9px;font:800 20px/1.2 var(--display);letter-spacing:-.015em;margin:8px 0 4px}
+.hl h3 .ic{font-size:20px;color:var(--muted)}
+.hl .v{font:600 13px var(--body);margin-bottom:10px}
+.hl p{font-size:13px;line-height:1.65;color:var(--muted)}
+
+/* progress table */
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:12px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+td{font-variant-numeric:tabular-nums}
+td:first-child{display:flex;align-items:center;gap:8px}
+td:first-child .ic{color:var(--muted)}
+tr:last-child td{border-bottom:0}
+
+/* force-velocity */
+.fvread{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.fvread div{background:var(--card2);border-radius:14px;padding:14px 16px;font-size:12px;line-height:1.55;color:var(--muted)}
+.fvread b{display:flex;align-items:center;gap:8px;color:var(--text);font:700 13px var(--display);margin-bottom:5px}
+.fvread b .ic{font-size:22px}
+.fvprof{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;align-items:center;background:var(--card2);border-radius:16px;padding:20px 22px;margin-top:18px}
+.fvbal-top{display:flex;justify-content:space-between;font:700 12px var(--display);margin-bottom:10px}
+.fvbal-top span{display:inline-flex;align-items:center;gap:7px}
+.fvbal-top .ic{font-size:20px}
+.fvtrack{position:relative;height:6px;border-radius:999px;background:var(--line2)}
+.fvtrack i{position:absolute;top:50%;transform:translate(-50%,-50%)}
+.fvtrack .bm{width:3px;height:16px;background:var(--muted);border-radius:2px}
+.fvtrack .me{width:16px;height:16px;border-radius:50%;background:var(--green);border:3px solid var(--card2);box-shadow:0 0 0 1.5px var(--green)}
+.fvbal-cap{font-size:11px;color:var(--muted);margin-top:10px}
+.fvtxt p{font-size:13px;line-height:1.6;color:var(--muted)}.fvtxt p+p{margin-top:8px}.fvtxt b{color:var(--text);font-family:var(--display)}
+.fvstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.fvstats div{background:var(--card2);border-radius:14px;padding:14px 16px}
+.fvstats b{display:block;font:800 24px/1 var(--display);letter-spacing:-.02em;margin-bottom:6px}
+.fvstats span{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.fine{font-size:11px;color:var(--faint);margin-top:14px}
+
+/* summary + glossary */
+.summary .lead{font:700 22px/1.35 var(--display);letter-spacing:-.015em;margin-bottom:22px;max-width:30ch}
+.sum-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.sum-cols h3{display:flex;align-items:center;gap:8px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.sum-cols h3 i{width:8px;height:8px;border-radius:50%}
+.sum-cols p{font-size:14px;line-height:1.75}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px}
+.gloss div{font-size:12.5px;line-height:1.6;color:var(--muted)}
+.gloss b{display:flex;align-items:center;gap:8px;color:var(--text);font:700 13px var(--display);margin-bottom:2px}
+.gloss b .ic{color:var(--muted)}
+footer{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:12px;text-align:center}
+footer .logo{font-size:16px}
+footer p{font-size:10.5px;line-height:1.7;color:var(--faint);max-width:720px}
+
+/* growth & maturity */
+.mat{display:grid;grid-template-columns:1fr 1.1fr;gap:32px;align-items:center}
+.mat-pill{display:inline-block;font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+.mat h3{font:800 20px/1.2 var(--display);letter-spacing:-.015em;margin:10px 0 6px}
+.mat p{font-size:13px;line-height:1.65;color:var(--muted)}
+.mat-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.mat-stats div{background:var(--card2);border-radius:14px;padding:14px 16px}
+.mat-stats b{display:block;font:800 26px/1 var(--display);letter-spacing:-.02em;margin-bottom:6px}
+.mat-stats span{font-size:11px;color:var(--muted)}
+.mat-line{position:relative;height:10px;border-radius:999px;background:var(--card2)}
+.mat-win{position:absolute;top:0;bottom:0;border-radius:999px;background:rgba(97,197,153,.28)}
+.mat-line i{position:absolute;top:50%;transform:translate(-50%,-50%);border-radius:50%}
+.mat-phv{width:12px;height:12px;background:var(--green)}
+.mat-now{width:20px;height:20px;background:var(--text);border:4px solid var(--card)}
+.mat-ticks{position:relative;height:18px;margin-top:10px}
+.mat-ticks span{position:absolute;transform:translateX(-50%);font:500 10px var(--mono);color:var(--faint)}
+.mat-k{display:inline-block;width:10px;height:10px;border-radius:50%}
+.mat-k.now{background:var(--text)}.mat-k.phv{background:var(--green)}.mat-k.win{width:16px;border-radius:999px;background:rgba(97,197,153,.35)}
+@media screen and (max-width:820px){.mat{grid-template-columns:1fr}}
+/* cover page: print only */
+.cover{display:none}
+
+/* story card (always dark, 1080 x 1920) */
+.story{position:absolute;left:-20000px;top:0;width:1080px;height:1920px;overflow:hidden;background:#141618;color:#F5F7FA;font-family:var(--body);display:flex;flex-direction:column;padding:110px 96px 96px}
+.story::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 45% at 85% 8%,rgba(97,197,153,.28),transparent 70%),radial-gradient(60% 40% at 0% 100%,rgba(74,98,184,.22),transparent 70%)}
+.story>*{position:relative}
+.st-top{display:flex;justify-content:space-between;align-items:flex-start}
+.st-top .logo{font-size:44px}.st-top .logo span{font-size:20px;color:#8B97AB}
+.st-top .pby{font-size:18px;color:#5E6878;margin-top:10px}.st-top .pby b{color:#8B97AB}
+.st-date{font:500 20px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8B97AB;text-align:right;line-height:1.6}
+.st-who{display:flex;align-items:center;gap:32px;margin-top:120px}
+.st-who .avatar{width:150px;height:150px;font-size:52px;box-shadow:0 0 0 6px #141618,0 0 0 8px rgba(255,255,255,.18)}
+.st-who h1{font:900 92px/0.98 var(--display);letter-spacing:-.04em}
+.st-who p{font-size:26px;color:#8B97AB;margin-top:12px}
+.st-ring{position:relative;width:560px;height:560px;margin:90px auto 0}
+.st-ring svg{width:100%;height:100%}
+.st-ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.st-ring .k{font:500 24px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:#8B97AB}
+.st-ring b{font:900 210px/1 var(--display);letter-spacing:-.05em;margin:10px 0}
+.st-ring .lvl{font:800 38px var(--display)}
+.st-delta{text-align:center;margin-top:26px;font:700 26px var(--body)}
+.st-best{margin:70px auto 0;display:flex;align-items:center;gap:18px;padding:22px 30px;border-radius:999px;background:rgba(97,197,153,.12);font-size:26px;color:#C9D2DE;width:max-content}
+.st-best .ic{font-size:34px;color:#61C599}
+.st-best b{color:#F5F7FA;font-weight:700}
+.st-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:auto}
+.st-stats div{background:rgba(255,255,255,.06);border-radius:28px;padding:30px 28px}
+.st-stats .ic{font-size:40px;color:#8B97AB}
+.st-stats b{display:block;font:800 60px/1 var(--display);letter-spacing:-.03em;margin:22px 0 10px}
+.st-stats b small{font:500 22px var(--body);color:#8B97AB;margin-left:6px;letter-spacing:0}
+.st-stats span{font-size:22px;color:#8B97AB}
+.st-foot{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:30px;border-top:2px solid rgba(255,255,255,.08);font-size:22px;color:#8B97AB}
+.st-foot b{color:#F5F7FA;font-weight:600}
+
+/* motion (screen only) */
+@media screen and (prefers-reduced-motion:no-preference){
+  body:not(.static) .card{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+  body:not(.static) .ring .arc{animation:draw 1.2s cubic-bezier(.2,.7,.2,1) .2s both}
+  body:not(.static) .pbar i{animation:grow 1s cubic-bezier(.2,.7,.2,1) .3s both}
+}
+body.static *{animation:none!important}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes draw{from{stroke-dashoffset:var(--c)}}
+@keyframes grow{from{transform:scaleX(0)}}
+
+@media screen and (max-width:820px){
+  .hero-main,.hero-sub{grid-template-columns:1fr;padding-left:22px;padding-right:22px}
+  .hero-main{padding-top:26px}
+  .ring{margin:0 auto}
+  .parts{grid-template-columns:1fr 1fr}
+  .grid,.grid.three,.two,.fvread,.fvprof,.sum-cols,.gloss{grid-template-columns:1fr}
+  .fvstats{grid-template-columns:1fr 1fr}
+  .card{padding:22px;border-radius:18px}
+  .card.hero{padding:0}
+  .note{padding:14px 22px}
+  .avatar{width:52px;height:52px;font-size:18px}
+}
+
+/* ---------- print / Save as PDF ---------- */
+@page{size:A4;margin:14mm 12mm 16mm;@bottom-left{content:"GYMGEEK Analyse  ·  Powered by Athleek  ·  Report v6 · methods 2026-10";font:8pt 'Open Sans',sans-serif;color:#98A2B0}@bottom-right{content:counter(page) " / " counter(pages);font:8pt 'DM Mono',monospace;color:#98A2B0}}
+@page:first{@bottom-left{content:none}@bottom-right{content:none}}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{padding:0;background:#fff;font-size:12px}
+  .wrap{max-width:none;gap:12px}
+  .top,.share,.seg,.hero,.story{display:none!important}
+  .card{box-shadow:none;border:1px solid var(--line);border-radius:12px;padding:18px;break-inside:auto}
+  .sh{margin-bottom:14px;break-after:avoid}
+  .sh h2{font-size:20px}
+  .tile,.hl,.ov-row,.fvprof,.fvstats,.fvread,tr,.gloss div,.sum-cols>div{break-inside:avoid}
+  .tile{padding:14px;gap:10px}
+  .t-val .num{font-size:32px}.grid.three .t-val .num{font-size:26px}
+  .grid{gap:10px}
+  .card[data-sec]{break-before:page}
+  .card[data-sec="numbers"],.card[data-sec="progress"]{break-before:avoid}
+  .cover{display:flex;flex-direction:column;height:262mm;break-after:page;padding:6mm 4mm 0}
+  .cv-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .cv-top .logo{font-size:26px}
+  .cv-k{font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.7}
+  .cv-title{margin-top:34mm;font:500 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .cv-who{display:flex;align-items:center;gap:18px;margin-top:10px}
+  .cv-who .avatar{box-shadow:none;width:72px;height:72px;font-size:24px}
+  .cv-who h1{font:900 46px/1 var(--display);letter-spacing:-.035em}
+  .cv-who p{color:var(--muted);margin-top:8px}
+  .cv-score{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;margin-top:22mm;padding:24px;border:1px solid var(--line);border-radius:16px}
+  .cv-score .parts{grid-template-columns:1fr 1fr}
+  .cv-beat{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:12px;color:var(--muted)}
+  .cv-beat b{font:900 24px var(--display);color:var(--green)}
+  .cv-note{margin-top:14mm;font-size:12px;color:var(--muted);line-height:1.7;max-width:150mm}
+  .cv-note b{color:var(--text)}
+  .cv-foot{margin-top:auto;display:flex;justify-content:space-between;font-size:10px;color:var(--faint);border-top:1px solid var(--line);padding-top:10px}
+  footer{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const REPORT_VERSION = "Report v6 · methods 2026-10";
+const NORMS = {"norms":{"Active Males — Over 50":{"CMJ Height":{"mean":21.7,"sd":5.08},"RSI Modified":{"mean":0.32,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":4.5},"IMTP Peak Force":{"mean":2.1,"sd":0.38},"RFD @ 200ms":{"mean":2200.0,"sd":600.0},"Limb Asymmetry":{"mean":9.0,"sd":4.0},"Sway Velocity":{"mean":9.0,"sd":2.4}},"Active Females — Over 50":{"CMJ Height":{"mean":14.8,"sd":2.92},"RSI Modified":{"mean":0.22,"sd":0.06},"Peak Power (rel.)":{"mean":16.0,"sd":3.5},"IMTP Peak Force":{"mean":1.55,"sd":0.3},"RFD @ 200ms":{"mean":1600.0,"sd":500.0},"Limb Asymmetry":{"mean":9.0,"sd":4.0},"Sway Velocity":{"mean":8.5,"sd":2.2}},"Active Males — Under 40":{"CMJ Height":{"mean":36.5,"sd":8.31},"RSI Modified":{"mean":0.45,"sd":0.09},"Peak Power (rel.)":{"mean":31.0,"sd":5.0},"IMTP Peak Force":{"mean":2.9,"sd":0.4},"RFD @ 200ms":{"mean":3200.0,"sd":700.0},"Limb Asymmetry":{"mean":7.5,"sd":3.5},"Sway Velocity":{"mean":6.5,"sd":1.8}},"Active Females — Under 40":{"CMJ Height":{"mean":25.5,"sd":6.61},"RSI Modified":{"mean":0.32,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":4.0},"IMTP Peak Force":{"mean":2.1,"sd":0.3},"RFD @ 200ms":{"mean":2200.0,"sd":550.0},"Limb Asymmetry":{"mean":7.5,"sd":3.5},"Sway Velocity":{"mean":6.8,"sd":1.9}},"Active Males — Over 40":{"CMJ Height":{"mean":26.5,"sd":6.32},"RSI Modified":{"mean":0.38,"sd":0.08},"Peak Power (rel.)":{"mean":26.0,"sd":5.0},"IMTP Peak Force":{"mean":2.5,"sd":0.4},"RFD @ 200ms":{"mean":2700.0,"sd":650.0},"Limb Asymmetry":{"mean":8.0,"sd":4.0},"Sway Velocity":{"mean":7.5,"sd":2.2}},"Active Females — Over 40":{"CMJ Height":{"mean":18.2,"sd":4.28},"RSI Modified":{"mean":0.27,"sd":0.07},"Peak Power (rel.)":{"mean":19.0,"sd":4.0},"IMTP Peak Force":{"mean":1.8,"sd":0.3},"RFD @ 200ms":{"mean":1900.0,"sd":500.0},"Limb Asymmetry":{"mean":8.0,"sd":4.0},"Sway Velocity":{"mean":7.2,"sd":2.0}},"Active Males — Under 16":{"CMJ Height":{"mean":31.0,"sd":7.63},"RSI Modified":{"mean":0.38,"sd":0.08},"Peak Power (rel.)":{"mean":27.0,"sd":4.0},"IMTP Peak Force":{"mean":2.5,"sd":0.35},"RFD @ 200ms":{"mean":2600.0,"sd":600.0},"Limb Asymmetry":{"mean":8.0,"sd":3.5},"Sway Velocity":{"mean":6.5,"sd":1.8}},"Active Females — Under 16":{"CMJ Height":{"mean":24.4,"sd":4.85},"RSI Modified":{"mean":0.28,"sd":0.07},"Peak Power (rel.)":{"mean":20.0,"sd":3.5},"IMTP Peak Force":{"mean":1.9,"sd":0.3},"RFD @ 200ms":{"mean":1800.0,"sd":450.0},"Limb Asymmetry":{"mean":8.5,"sd":3.5},"Sway Velocity":{"mean":6.8,"sd":1.9}},"Elite Male — Academy U16 (PL/EFL Cat. 1)":{"CMJ Height":{"mean":36.5,"sd":4.5},"RSI Modified":{"mean":0.47,"sd":0.08},"Peak Power (rel.)":{"mean":31.0,"sd":5.0},"IMTP Peak Force":{"mean":2.47,"sd":0.38},"RFD @ 200ms":{"mean":3800.0,"sd":750.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Male — Academy U18 (PL/EFL Cat. 1)":{"CMJ Height":{"mean":38.5,"sd":4.5},"RSI Modified":{"mean":0.51,"sd":0.08},"Peak Power (rel.)":{"mean":34.0,"sd":5.0},"IMTP Peak Force":{"mean":2.74,"sd":0.38},"RFD @ 200ms":{"mean":4200.0,"sd":750.0},"Limb Asymmetry":{"mean":6.5,"sd":3.0},"Sway Velocity":{"mean":6.0,"sd":1.5}},"Elite Female — Academy U16 (WSL / FA WSL Academy)":{"CMJ Height":{"mean":25.5,"sd":4.0},"RSI Modified":{"mean":0.35,"sd":0.07},"Peak Power (rel.)":{"mean":20.0,"sd":3.5},"IMTP Peak Force":{"mean":1.85,"sd":0.3},"RFD @ 200ms":{"mean":2600.0,"sd":550.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.3,"sd":1.6}},"Elite Female — Academy U18 (WSL / FA WSL Academy)":{"CMJ Height":{"mean":28.0,"sd":4.0},"RSI Modified":{"mean":0.38,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":3.5},"IMTP Peak Force":{"mean":2.1,"sd":0.3},"RFD @ 200ms":{"mean":3000.0,"sd":600.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.1,"sd":1.5}},"Elite Male — Premier League / EFL Pro":{"CMJ Height":{"mean":43.0,"sd":5.5},"RSI Modified":{"mean":0.58,"sd":0.09},"Peak Power (rel.)":{"mean":38.0,"sd":5.0},"IMTP Peak Force":{"mean":3.55,"sd":0.45},"RFD @ 200ms":{"mean":5500.0,"sd":800.0},"Limb Asymmetry":{"mean":5.5,"sd":2.5},"Sway Velocity":{"mean":5.5,"sd":1.4}},"Competitive Male — Semi-Pro / National League":{"CMJ Height":{"mean":38.0,"sd":5.0},"RSI Modified":{"mean":0.48,"sd":0.09},"Peak Power (rel.)":{"mean":32.0,"sd":5.0},"IMTP Peak Force":{"mean":3.1,"sd":0.4},"RFD @ 200ms":{"mean":4500.0,"sd":750.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Female — WSL / FAWSL":{"CMJ Height":{"mean":31.0,"sd":4.5},"RSI Modified":{"mean":0.4,"sd":0.07},"Peak Power (rel.)":{"mean":26.0,"sd":4.0},"IMTP Peak Force":{"mean":2.6,"sd":0.35},"RFD @ 200ms":{"mean":3800.0,"sd":650.0},"Limb Asymmetry":{"mean":6.0,"sd":2.5},"Sway Velocity":{"mean":5.8,"sd":1.5}},"Competitive Female — Women's Championship / Tier 3":{"CMJ Height":{"mean":26.0,"sd":4.5},"RSI Modified":{"mean":0.33,"sd":0.07},"Peak Power (rel.)":{"mean":21.0,"sd":3.5},"IMTP Peak Force":{"mean":2.2,"sd":0.3},"RFD @ 200ms":{"mean":3100.0,"sd":600.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Tour Level — PGA Tour Bottom / DP World Tour":{"CMJ Height":{"mean":36.0,"sd":5.0},"RSI Modified":{"mean":0.47,"sd":0.09},"Peak Power (rel.)":{"mean":34.0,"sd":5.0},"IMTP Peak Force":{"mean":3.2,"sd":0.45},"RFD @ 200ms":{"mean":3800.0,"sd":700.0},"Limb Asymmetry":{"mean":5.5,"sd":2.5},"Sway Velocity":{"mean":5.2,"sd":1.5}},"Elite Amateur — Category 1 / Scratch (Handicap 0–5)":{"CMJ Height":{"mean":33.0,"sd":5.0},"RSI Modified":{"mean":0.44,"sd":0.09},"Peak Power (rel.)":{"mean":31.0,"sd":5.0},"IMTP Peak Force":{"mean":2.9,"sd":0.4},"RFD @ 200ms":{"mean":3400.0,"sd":650.0},"Limb Asymmetry":{"mean":6.0,"sd":2.8},"Sway Velocity":{"mean":5.5,"sd":1.6}},"Tour Level Female — LPGA / LET":{"CMJ Height":{"mean":27.0,"sd":4.5},"RSI Modified":{"mean":0.35,"sd":0.07},"Peak Power (rel.)":{"mean":24.0,"sd":3.5},"IMTP Peak Force":{"mean":2.4,"sd":0.35},"RFD @ 200ms":{"mean":2800.0,"sd":550.0},"Limb Asymmetry":{"mean":6.0,"sd":2.5},"Sway Velocity":{"mean":5.5,"sd":1.5}},"Elite Amateur Female — Category 1 (Handicap 0–5)":{"CMJ Height":{"mean":25.0,"sd":4.5},"RSI Modified":{"mean":0.32,"sd":0.07},"Peak Power (rel.)":{"mean":22.0,"sd":3.5},"IMTP Peak Force":{"mean":2.2,"sd":0.3},"RFD @ 200ms":{"mean":2400.0,"sd":500.0},"Limb Asymmetry":{"mean":6.5,"sd":3.0},"Sway Velocity":{"mean":5.8,"sd":1.6}},"Elite Male — International / GB Squad (800m–10,000m)":{"CMJ Height":{"mean":38.0,"sd":5.0},"RSI Modified":{"mean":0.58,"sd":0.1},"Peak Power (rel.)":{"mean":32.0,"sd":4.0},"IMTP Peak Force":{"mean":2.8,"sd":0.4},"RFD @ 200ms":{"mean":4800.0,"sd":700.0},"Limb Asymmetry":{"mean":6.0,"sd":2.5},"Sway Velocity":{"mean":5.8,"sd":1.5}},"Competitive Male — National / Regional (800m–10,000m)":{"CMJ Height":{"mean":34.0,"sd":5.0},"RSI Modified":{"mean":0.48,"sd":0.09},"Peak Power (rel.)":{"mean":28.0,"sd":4.0},"IMTP Peak Force":{"mean":2.5,"sd":0.4},"RFD @ 200ms":{"mean":4000.0,"sd":650.0},"Limb Asymmetry":{"mean":7.0,"sd":2.5},"Sway Velocity":{"mean":6.0,"sd":1.6}},"Elite Female — International / GB Squad (800m–10,000m)":{"CMJ Height":{"mean":27.0,"sd":4.5},"RSI Modified":{"mean":0.42,"sd":0.08},"Peak Power (rel.)":{"mean":22.0,"sd":3.5},"IMTP Peak Force":{"mean":2.0,"sd":0.3},"RFD @ 200ms":{"mean":3200.0,"sd":550.0},"Limb Asymmetry":{"mean":6.5,"sd":2.5},"Sway Velocity":{"mean":6.0,"sd":1.5}},"Competitive Female — National / Regional (800m–10,000m)":{"CMJ Height":{"mean":23.0,"sd":4.0},"RSI Modified":{"mean":0.34,"sd":0.08},"Peak Power (rel.)":{"mean":19.0,"sd":3.5},"IMTP Peak Force":{"mean":1.8,"sd":0.3},"RFD @ 200ms":{"mean":2700.0,"sd":500.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Male — ITU / PTO World Tour":{"CMJ Height":{"mean":37.0,"sd":5.0},"RSI Modified":{"mean":0.52,"sd":0.09},"Peak Power (rel.)":{"mean":30.0,"sd":4.5},"IMTP Peak Force":{"mean":2.9,"sd":0.4},"RFD @ 200ms":{"mean":4400.0,"sd":700.0},"Limb Asymmetry":{"mean":6.5,"sd":3.0},"Sway Velocity":{"mean":5.8,"sd":1.5}},"Competitive Male — Age-Group / National Level":{"CMJ Height":{"mean":33.0,"sd":5.0},"RSI Modified":{"mean":0.44,"sd":0.09},"Peak Power (rel.)":{"mean":27.0,"sd":4.5},"IMTP Peak Force":{"mean":2.6,"sd":0.4},"RFD @ 200ms":{"mean":3700.0,"sd":650.0},"Limb Asymmetry":{"mean":7.5,"sd":3.0},"Sway Velocity":{"mean":6.2,"sd":1.6}},"Elite Female — ITU / PTO World Tour":{"CMJ Height":{"mean":26.0,"sd":4.5},"RSI Modified":{"mean":0.36,"sd":0.07},"Peak Power (rel.)":{"mean":21.0,"sd":3.5},"IMTP Peak Force":{"mean":2.1,"sd":0.3},"RFD @ 200ms":{"mean":3100.0,"sd":550.0},"Limb Asymmetry":{"mean":7.0,"sd":3.0},"Sway Velocity":{"mean":6.0,"sd":1.5}},"Competitive Female — Age-Group / National Level":{"CMJ Height":{"mean":22.0,"sd":4.0},"RSI Modified":{"mean":0.3,"sd":0.07},"Peak Power (rel.)":{"mean":18.0,"sd":3.0},"IMTP Peak Force":{"mean":1.9,"sd":0.3},"RFD @ 200ms":{"mean":2600.0,"sd":500.0},"Limb Asymmetry":{"mean":8.0,"sd":3.0},"Sway Velocity":{"mean":6.4,"sd":1.7}}},"fv":{"Active Males — Under 40":{"f0":24.2,"v0":5.39},"Active Females — Under 40":{"f0":17.5,"v0":4.52},"Active Males — Over 40":{"f0":20.8,"v0":4.85},"Active Females — Over 40":{"f0":15.0,"v0":4.06},"Active Males — Under 16":{"f0":20.8,"v0":4.85},"Active Females — Under 16":{"f0":15.8,"v0":4.16},"Elite Male — Premier League / EFL Pro":{"f0":29.6,"v0":5.81},"Competitive Male — Semi-Pro / National League":{"f0":25.8,"v0":5.46},"Elite Female — WSL / FAWSL":{"f0":21.7,"v0":4.93},"Competitive Female — Women's Championship / Tier 3":{"f0":18.3,"v0":4.52},"Tour Level — PGA Tour / DP World Tour":{"f0":26.7,"v0":5.32},"Elite Amateur — Category 1 / Scratch":{"f0":24.2,"v0":5.09},"Tour Level Female — LPGA / LET":{"f0":20.0,"v0":4.6},"Elite Amateur Female — Category 1":{"f0":18.3,"v0":4.43},"Elite Male — International / GB Squad (800m–10,000m)":{"f0":23.3,"v0":5.46},"Competitive Male — National / Regional (800m–10,000m)":{"f0":20.8,"v0":5.17},"Elite Female — International / GB Squad (800m–10,000m)":{"f0":16.7,"v0":4.6},"Competitive Female — National / Regional (800m–10,000m)":{"f0":15.0,"v0":4.25},"Elite Male — ITU / PTO World Tour":{"f0":24.2,"v0":5.39},"Elite Male — Academy U16 (PL/EFL Cat. 1)":{"f0":20.6,"v0":5.35},"Elite Male — Academy U18 (PL/EFL Cat. 1)":{"f0":22.8,"v0":5.5},"Elite Female — Academy U16 (WSL Academy)":{"f0":15.4,"v0":4.47},"Elite Female — Academy U18 (WSL Academy)":{"f0":17.5,"v0":4.69},"Elite Female — Academy U16/U18 (WSL Academy)":{"f0":17.5,"v0":4.69},"Competitive Female — Age-Group / National Level":{"f0":15.8,"v0":4.16},"Active Males — Over 50":{"f0":17.5,"v0":4.52},"Active Females — Over 50":{"f0":12.9,"v0":3.65}}};
+// line icons (24 x 24), usable as inline SVG and on canvas via Path2D
+const IC = {
+  jump:"M12 18V5M6.5 10.5 12 5l5.5 5.5M4 21h16",
+  spring:"M3 17h3l2-10 3 14 3-14 3 14 2-4h2",
+  bolt:"M13 2 4 14h7l-1 8 9-12h-7l1-8z",
+  barbell:"M2 12h20M5.5 7.5v9M8.5 5.5v13M15.5 5.5v13M18.5 7.5v9",
+  watch:"M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 9.5V13l2.5 2M9.5 2h5M12 2v3",
+  scales:"M12 3v18M7.5 21h9M4.5 7h15M4.5 7 2 13a3 2 0 0 0 5 0L4.5 7zM19.5 7 17 13a3 2 0 0 0 5 0l-2.5-6z",
+  target:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM12 12.6a.6.6 0 1 0 0-1.2.6.6 0 0 0 0 1.2z",
+  tractor:"M7 20a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM18.5 20a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM4.5 12.8V5h6l1.6 7.4M12.1 12.4H20.5v4M11 18h5M15.5 12.4V8.5",
+  car:"M5.5 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM8 16h8M21 16h1.5v-2.5L16 12l-2.5-2.5h-3L8.5 12 3 12.5V16M1.5 12.5V8.5H5M11.5 9.5a1.5 1.5 0 0 1 3 0",
+  trend:"M3 3v18h18M7 15l4-4 3 3 6-6M15.5 8H20v4.5",
+  share:"M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13",
+  doc:"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 2v6h6M8 13h8M8 17h5",
+  story:"M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM10 18h4"
+};
+const icon = (n,cls="") => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
+const M = [
+  {k:"cmj",ic:"jump",name:"Jump Height",norm:"CMJ Height",unit:"cm",dp:1,desc:"How high you jumped from a dip-and-drive start."},
+  {k:"rsi",ic:"spring",name:"Reactive Strength",norm:"RSI Modified",unit:"RSI",dp:2,desc:"Jump height divided by time to take off. Rewards jumping high and fast."},
+  {k:"pwr",ic:"bolt",name:"Explosive Power",norm:"Peak Power (rel.)",unit:"W/kg",dp:1,desc:"Average power through the push-off phase of the jump, per kg of bodyweight. Tracked over time, not ranked."},
+  {k:"imtp",ic:"barbell",name:"Maximum Force",norm:"IMTP Peak Force",unit:"× BW",dp:2,desc:"Peak force in a maximal pull against a fixed bar, relative to bodyweight."},
+  {k:"rfd",ic:"watch",name:"Rate of Force Development",norm:"RFD @ 200ms",unit:"N/s",dp:0,desc:"How quickly force rises in the first 200 ms of the pull. Tracked over time, not ranked."},
+  {k:"asym",ic:"scales",name:"Leg Symmetry",norm:"Limb Asymmetry",unit:"% diff",dp:1,lower:true,desc:"Difference between left and right leg force. Under 10% is well balanced."},
+  {k:"sway",ic:"target",name:"Postural Stability",norm:"Sway Velocity",unit:"mm/s",dp:1,lower:true,desc:"How much you move while standing still. Lower is better. Tracked over time, not ranked."}
+];
+const FV_ALIAS = {"Tour Level — PGA Tour Bottom / DP World Tour":"Tour Level — PGA Tour / DP World Tour","Elite Amateur — Category 1 / Scratch (Handicap 0–5)":"Elite Amateur — Category 1 / Scratch","Elite Amateur Female — Category 1 (Handicap 0–5)":"Elite Amateur Female — Category 1","Elite Female — Academy U16 (WSL / FA WSL Academy)":"Elite Female — Academy U16 (WSL Academy)","Elite Female — Academy U18 (WSL / FA WSL Academy)":"Elite Female — Academy U18 (WSL Academy)"};
+const R = REPORT, S = R.sessions, G = R.groups, DESC = [...new Set(["rfd","sway","pwr"].concat((R.options && R.options.descriptive) || []))], SOFT = !R.options || R.options.softLowBands !== false;
+let cur = S.length - 1;
+// F-V estimate when not supplied: F0 = 0.85 x IMTP (N/kg), V0 = 2 x take-off velocity from CMJ height (same basis as the norm benchmarks)
+S.forEach(s=>{ if(!s.fv && s.imtp && s.cmj) s.fv = { f0: +(0.85*s.imtp*9.81).toFixed(1), v0: +(2*Math.sqrt(2*9.81*s.cmj/100)).toFixed(2) }; });
+
+const css = v => getComputedStyle(document.body).getPropertyValue(v).trim();
+const tint = (c,p) => c + Math.round(p*2.55).toString(16).padStart(2,"0");
+const gm = gi => `<i class="gm g${gi}"></i>`;
+const gline = gi => gi===0 ? {col:tint(css("--text"),75),dash:[6,4],w:1.6} : {col:css("--muted"),dash:[2,4],w:2};
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+0.3275911*x);return s*(1-((((1.061405429*t-1.453152027)*t+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x));}
+function pct(m,val,gi){const n=NORMS.norms[G[gi].key]; if(!n||!n[m.norm]||val==null) return null; let z=(val-n[m.norm].mean)/n[m.norm].sd; if(m.lower) z=-z; return Math.min(99,Math.max(1,50*(1+erf(z/Math.SQRT2))));}
+function band(p){
+  if(p==null) return {label:"No norm",cls:"a"};
+  if(p>=90) return {label:"Top 10%",cls:"g"};
+  if(p>=67) return {label:"Upper Third",cls:"g"};
+  if(p>=34) return {label:"Average",cls:"a"};
+  if(p>=10) return {label:SOFT?"Building":"Bottom Third",cls:SOFT?"a":"r"};
+  return {label:SOFT?"Building":"Bottom 10%",cls:SOFT?"a":"r"};
+}
+function descLabel(m,p){ if(p==null) return "Baseline"; if(p>=67) return "Strong"; if(p>=34) return "Typical"; return m.k==="sway"?"Elevated":"Developing"; }
+const colOf = c => c==="g"?css("--green"):c==="r"?css("--red"):css("--yellow");
+const fmt = (v,dp) => v==null?"–":Number(v).toLocaleString("en-GB",{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const isDesc = m => DESC.includes(m.k);
+const mk = k => M.find(m=>m.k===k);
+const initials = n => n.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+const avatar = () => `<div class="avatar">${R.athlete.photo?`<img src="${R.athlete.photo}" alt="">`:initials(R.athlete.name)}</div>`;
+const stamp = `<div class="stamp"><b>GYMGEEK</b> Analyse · Powered by <b>ATHLEEK</b> · gymgeekonline.co.uk · athleek.co.uk</div>`;
+const sh = (title,right="",share=true) => `<div class="sh"><div><div class="eyebrow sec-n"></div><h2>${title}</h2></div><div class="sh-r">${right}${share?`<button class="share" aria-label="Share this section" onclick="shareBlock(this)">${icon("share")}</button>`:""}</div></div>`;
+
+// Smallest worthwhile change: differences inside these limits are within normal test-to-test variation
+const SWC={cmj:{abs:2.0},rsi:{abs:0.03},pwr:{abs:1.5},imtp:{abs:0.15},rfd:{rel:0.15},asym:{abs:3.0},sway:{rel:0.15},score:{abs:3}};
+const swcOf=(k,base)=>{const t=SWC[k]; if(!t) return 0; return t.abs!=null?t.abs:Math.abs(base||0)*t.rel;};
+function deltaChip(df,lower,dp,suffix=" vs last",key,base){
+  if(df==null) return "";
+  const thr=swcOf(key,base), sign=df>0?"+":"";
+  if(Math.abs(df)<thr||Math.abs(df)<1e-9){const c=css("--muted"); return `<span class="delta" title="Within normal test-to-test variation" style="color:${c};background:${tint(c,14)}">≈ ${sign}${fmt(df,dp)} · no real change</span>`;}
+  const good=lower?df<0:df>0, c=good?css("--green"):css("--yellow");
+  return `<span class="delta" style="color:${c};background:${tint(c,14)}">${df>0?"▲ +":"▼ "}${fmt(df,dp)}${suffix}</span>`;
+}
+
+// Athleticism Score: 0-100, weighted percentiles vs Group 1 (same reference for every session so scores are comparable)
+const SCORE_W={cmj:45,imtp:30,rsi:15,asym:10};
+function athScore(s){let t=0,w=0;for(const k in SCORE_W){const p=pct(mk(k),s[k],0);if(p!=null){t+=p*SCORE_W[k];w+=SCORE_W[k];}}return w?Math.round(t/w):null;}
+const scoreLvl = sc => sc>=90?["Exceptional","g"]:sc>=67?["Strong","g"]:sc>=34?["Solid","a"]:["Building","a"];
+// Maturity offset (Moore et al. 2015). Boys: age x sitting height. Girls: age x standing height. Accurate to roughly +/- 1 year.
+function maturity(){
+  const A=R.athlete, age=A.ageDecimal||A.age; if(!age||age>=18||!A.sex) return null;
+  const male=/^m/i.test(A.sex);
+  if(male&&!A.sittingHeight) return null; if(!male&&!A.height) return null;
+  const mo = male ? -8.128741 + 0.0070346*(age*A.sittingHeight) : -7.709133 + 0.0042232*(age*A.height);
+  const status = mo < -1 ? ["Pre-PHV","Before your main growth spurt","Your biggest growth spurt is still ahead. Strength and power typically rise sharply through and after it, so today's numbers are an early marker, not a ceiling."]
+    : mo <= 1 ? ["Circa-PHV","Around your fastest growth","You are around your fastest period of growth. It is normal for coordination, jump scores and symmetry to wobble for a while as your limbs grow faster than your strength catches up."]
+    : ["Post-PHV","Past your fastest growth","Your fastest growth is behind you. This is the stage where strength training tends to produce its biggest gains."];
+  return {mo, aphv: age-mo, age, status};
+}
+function maturityCard(){
+  const m=maturity(); if(!m) return "";
+  const lo=9, hi=18, pos=v=>Math.min(100,Math.max(0,(v-lo)/(hi-lo)*100));
+  const ticks=[]; for(let a=lo;a<=hi;a++) ticks.push(`<span style="left:${pos(a)}%">${a}</span>`);
+  return `<section class="card" data-pdf data-sec="growth">${sh("Growth &amp; Maturity")}
+    <div class="mat"><div class="mat-l"><div class="mat-pill">${m.status[0]}</div><h3>${m.status[1]}</h3><p>${m.status[2]}</p>
+      <div class="mat-stats"><div><b class="num">${m.mo>0?"+":""}${fmt(m.mo,1)}</b><span>Years from peak growth</span></div><div><b class="num">${fmt(m.aphv,1)}</b><span>Estimated age at peak growth</span></div></div></div>
+      <div class="mat-r"><div class="mat-line"><div class="mat-win" style="left:${pos(m.aphv-1)}%;width:${pos(m.aphv+1)-pos(m.aphv-1)}%"></div><i class="mat-phv" style="left:${pos(m.aphv)}%"></i><i class="mat-now" style="left:${pos(m.age)}%"></i></div><div class="mat-ticks">${ticks.join("")}</div>
+      <div class="legend" style="margin-top:22px"><span><i class="mat-k now"></i>You now</span><span><i class="mat-k phv"></i>Estimated peak growth</span><span><i class="mat-k win"></i>Fastest growth window</span></div></div></div>
+    <p class="fine">Estimated from age, ${/^m/i.test(R.athlete.sex)?"sitting height":"height"} and sex (Moore et al. 2015). Accurate to roughly ± 1 year, so treat it as a guide. Comparison groups are by age, not maturity.</p>${stamp}</section>`;
+}
+function overall(gi,s){const ps=M.filter(m=>!isDesc(m)).map(m=>pct(m,s[m.k],gi)).filter(p=>p!=null); return ps.length?ps.reduce((a,b)=>a+b)/ps.length:null;}
+
+function autoNote(m){
+  if(R.notes && R.notes[m.k]) return R.notes[m.k];
+  if(m.k==="cmj" && R.athlete.height>185) return "Taller athletes often jump lower in absolute terms even with good power; the norms do not fully account for height.";
+  if(m.k==="rsi" && S.length===1) return "Technique sensitive: one of the metrics most likely to improve at retest.";
+  return "";
+}
+
+function spark(m){
+  const vals=S.map(s=>s[m.k]).filter(v=>v!=null); if(vals.length<2) return "";
+  const mn=Math.min(...vals), mx=Math.max(...vals), rg=(mx-mn)||1, w=240, h=28, n=S.length;
+  const pts=S.map((s,i)=>[6+i*(w-12)/(n-1), h-5-((s[m.k]-mn)/rg)*(h-10)]);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline fill="none" stroke="${css("--line2")}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${pts.map(p=>p.join(",")).join(" ")}" vector-effect="non-scaling-stroke"/>${pts.map((p,i)=>`<line x1="${p[0]}" y1="${p[1]}" x2="${p[0]}" y2="${p[1]}" stroke="${i===cur?css("--green"):css("--muted")}" stroke-width="${i===cur?9:5}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`).join("")}</svg>`;
+}
+
+function stripHTML(p,gi){
+  const segs=[10,24,33,23,10].map((w,j)=>{const c=j<2?(SOFT?css("--yellow"):css("--red")):j===2?css("--yellow"):css("--green"); return `<s style="width:calc(${w}% - 3px);background:${tint(c,j===2?28:22)}"></s>`;}).join("");
+  return `<div class="strip">${segs}${p!=null?`<i class="g${gi}" style="left:${Math.min(97,Math.max(3,p))}%"></i>`:""}</div>`;
+}
+
+function tile(m){
+  const s=S[cur], v=s[m.k], prev=cur>0?S[cur-1][m.k]:null, d=isDesc(m);
+  const delta = prev!=null&&v!=null ? deltaChip(v-prev,m.lower,m.dp," vs last",m.k,prev) : "";
+  const rows = G.map((g,gi)=>{
+    const p=pct(m,v,gi), n=NORMS.norms[g.key]&&NORMS.norms[g.key][m.norm];
+    const lab=`<span>${gm(gi)}vs ${g.short}</span>`;
+    if(d) return `<div class="cmp"><div class="cmp-l">${lab}<b>${descLabel(m,p)}</b></div><div class="davg">Group average <b>${n?fmt(n.mean,m.dp):"–"}</b> ${m.unit}</div></div>`;
+    const b=band(p);
+    return `<div class="cmp"><div class="cmp-l">${lab}<b style="color:${colOf(b.cls)}">${b.label}</b></div>${stripHTML(p,gi)}</div>`;
+  }).join("");
+  let note=autoNote(m);
+  if(m.k==="rsi" && s.ttt){const t=s.ttt, q=t<=0.75?["quick",css("--green")]:t<=0.95?["typical",css("--muted")]:["slower than typical (0.7–0.9 s), which lowers RSI",css("--yellow")];
+    note=`<span style="color:${q[1]};font-weight:600">Time to take-off ${fmt(t,2)} s: ${q[0]}.</span>${note?" "+note:""}`;}
+  if(m.k==="cmj" && s.cmjTrials>1 && s.cmjCV!=null){const cv=s.cmjCV, q=cv<=5?["consistent",css("--green")]:cv<=10?["a little variable",css("--yellow")]:["variable, retest advised",css("--yellow")];
+    note=`<span style="color:${q[1]};font-weight:600">Mean of best ${s.cmjTrials} jumps · ${fmt(cv,1)}% spread between jumps: ${q[0]}.</span>${note?" "+note:""}`;}
+  return `<div class="tile"><div class="t-top"><span class="t-name"><span class="ib">${icon(m.ic)}</span>${m.name}</span>${d?`<span class="tag">Monitor</span>`:""}</div><div class="t-val"><span class="num">${fmt(v,m.dp)}</span><span class="unit">${m.unit}</span>${delta}</div>${spark(m)}<div>${rows}${d?"":`<div class="sx"><span>Lower</span><span>Group average</span><span>Higher</span></div>`}</div>${note?`<div class="t-note">${note}</div>`:""}</div>`;
+}
+
+function pick(){
+  const s=S[cur], score=k=>pct(mk(k),s[k],0);
+  const strong=["asym","imtp","cmj","rsi"].filter(k=>!DESC.includes(k)&&s[k]!=null).sort((a,b)=>score(b)-score(a))[0];
+  const grow=["cmj","imtp","rsi"].filter(k=>!DESC.includes(k)&&s[k]!=null).sort((a,b)=>score(a)-score(b))[0];
+  return {strong:mk(strong), grow:mk(grow)};
+}
+
+function fvProfile(fv,b){
+  if(!b) return "";
+  const g=G[0].short, bal=Math.log((fv.f0/b.f0)/(fv.v0/b.v0)), size=(fv.f0*fv.v0)/(b.f0*b.v0);
+  const pos=Math.min(94,Math.max(6,50-bal*180));
+  const shape = bal>0.08 ? ["Tractor-leaning","You are relatively stronger than you are fast. More of your future power is likely to come from the speed side."]
+    : bal<-0.08 ? ["F1-leaning","You are relatively faster than you are strong. More of your future power is likely to come from the strength side."]
+    : ["Balanced","Your strength and speed are in a similar mix to the average for "+g+". Gains on either side will lift your power."];
+  const eng = size>1.07 ? ["Bigger engine","Your overall power is above the "+g+" average.",css("--green")]
+    : size<0.93 ? ["Engine still growing","Your overall power is below the "+g+" average for now: plenty of room to build.",css("--yellow")]
+    : ["Average engine","Your overall power is in line with the "+g+" average.",css("--yellow")];
+  return `<div class="fvprof"><div><div class="fvbal-top"><span>${icon("tractor")}Strength-led</span><span>Speed-led${icon("car")}</span></div><div class="fvtrack"><i class="bm" style="left:50%"></i><i class="me" style="left:${pos}%"></i></div><div class="fvbal-cap">Grey tick marks the ${g} average mix</div></div>
+  <div class="fvtxt"><p><b>${shape[0]}.</b> ${shape[1]}</p><p><b style="color:${eng[2]}">${eng[0]}.</b> ${eng[1]}</p></div></div>`;
+}
+
+function ringSVG(sc,size,stroke,track){
+  const r=(size-stroke)/2-2, C=2*Math.PI*r, arc=C*sc/100, col=colOf(scoreLvl(sc)[1]);
+  return `<svg viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/><circle class="arc" transform="rotate(-90 ${size/2} ${size/2})" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${arc} ${C}" style="--c:${arc}"/></svg>`;
+}
+function scoreParts(s){return Object.keys(SCORE_W).map(k=>{const m=mk(k),p=pct(m,s[k],0);return p==null?"":`<div class="part"><div class="pn"><span>${icon(m.ic)}${m.name}</span><b>${SCORE_W[k]}%</b></div><div class="pbar"><i style="width:${p}%"></i></div></div>`;}).join("");}
+const BASELINE_NOTE = `<b>This is your baseline.</b> First-time force plate scores are often a little below what you can really do, because the jump and pull both have a technique element. Treat today as your starting point; your next session will tell a fuller story.`;
+
+function hero(){
+  const A=R.athlete, s=S[cur], first=S.length===1, sc=athScore(s);
+  const prev=cur>0?athScore(S[cur-1]):null, best=Math.max(...S.slice(0,cur+1).map(athScore).filter(v=>v!=null));
+  const facts=[[A.position,""],[A.sport,""],[A.age," yrs"],[A.height," cm"],[s.weight," kg"]].filter(f=>f[0]!=null&&f[0]!=="").map(f=>`<span class="fact"><b>${f[0]}</b>${f[1]}</span>`).join("")+(maturity()?`<span class="fact"><b>${maturity().status[0]}</b></span>`:"");
+  const seg = S.length>1 ? `<div class="seg" role="tablist">${S.map((x,i)=>`<button role="tab" aria-selected="${i===cur}" class="${i===cur?"on":""}" onclick="cur=${i};render()">Session ${i+1}<small>${x.date}</small></button>`).join("")}</div>` : "";
+  const hist = S.length>1 ? `<div class="hist">${S.map((x,i)=>{const v=athScore(x);return `<div class="${i===cur?"on":""}"><small>${v}</small><span style="height:${Math.max(6,v*0.5)}px"></span><small>S${i+1}</small></div>`;}).join("")}</div>` : "";
+  const label = first ? "Baseline" : `Session ${cur+1}`, lv=sc!=null?scoreLvl(sc):null;
+  return `<section class="card hero" data-pdf>
+    <div class="hero-main">
+      <div><div class="eyebrow">Force Plate Report · ${label} · ${s.date}</div><div class="who">${avatar()}<h1>${A.name}</h1></div><div class="facts">${facts}</div>${seg}</div>
+      ${sc!=null?`<div class="ring">${ringSVG(sc,188,12,css("--line"))}<div class="ring-c"><span class="k">Athleticism</span><b class="num">${sc}</b><span class="lvl" style="color:${colOf(lv[1])}">${lv[0]}</span></div></div>`:""}
+    </div>
+    ${sc!=null?`<div class="hero-sub"><div class="parts">${scoreParts(s)}</div><div class="beat">${hist}${prev!=null?deltaChip(sc-prev,false,0,"","score"):""}<div class="t">${icon("target")}<span>Score to<br>beat next time</span></div><div class="v num">${best}</div></div></div>`:""}
+    ${first?`<div class="note"><span class="dot"></span><div>${BASELINE_NOTE}</div></div>`:""}
+    ${stamp}</section>`;
+}
+
+function cover(){
+  const A=R.athlete, s=S[cur], sc=athScore(s), lv=sc!=null?scoreLvl(sc):null, best=Math.max(...S.slice(0,cur+1).map(athScore).filter(v=>v!=null));
+  return `<section class="cover">
+    <div class="cv-top"><div><div class="logo">GYMGEEK<span>ANALYSE</span></div><div class="pby">Powered by <b>ATHLEEK</b></div></div><div class="cv-k">${S.length===1?"Baseline":"Session "+(cur+1)}<br>${s.date}</div></div>
+    <div class="cv-title">Force Plate Performance Report</div>
+    <div class="cv-who">${avatar()}<div><h1>${A.name}</h1><p>${[A.position,A.sport,A.age?A.age+" yrs":"",A.height?A.height+" cm":"",s.weight?s.weight+" kg":""].filter(Boolean).join("  ·  ")}</p></div></div>
+    ${sc!=null?`<div class="cv-score"><div class="ring">${ringSVG(sc,188,12,css("--line"))}<div class="ring-c"><span class="k">Athleticism</span><b class="num">${sc}</b><span class="lvl" style="color:${colOf(lv[1])}">${lv[0]}</span></div></div><div><div class="parts">${scoreParts(s)}</div><div class="cv-beat">${icon("target")} Score to beat next time <b>${best}</b></div></div></div>`:""}
+    ${S.length===1?`<p class="cv-note">${BASELINE_NOTE}</p>`:""}
+    <div class="cv-foot"><span>Prepared by GymGeek Dorset · gymgeekonline.co.uk</span><span>${REPORT_VERSION}</span></div>
+  </section>`;
+}
+
+function render(){
+  const A=R.athlete, s=S[cur];
+  const legend = G.map((g,gi)=>`<span>${gm(gi)}vs ${g.short}</span>`).join("");
+  const perf=M.filter(m=>!isDesc(m)), mon=M.filter(isDesc);
+  const ov = G.map((g,gi)=>{const p=overall(gi,s), b=band(p), c=colOf(b.cls);
+    return `<div class="ov-row"><div class="ov-band" style="background:${tint(c,14)};color:${c}"><b>${b.label}</b><small>Overall</small></div><div class="ov-txt"><b>${gm(gi)}vs ${g.short}</b><span>${g.blurb||""}</span></div></div>`;}).join("");
+  const pk=pick();
+  const hl=(m,t,k,cls)=>{ if(!m) return ""; const b=band(pct(m,s[m.k],0)); return `<div class="hl ${cls}"><div class="k">${k}</div><h3>${icon(m.ic)}${m.name}</h3><div class="v"><span class="num">${fmt(s[m.k],m.dp)} ${m.unit}</span> · <span style="color:${colOf(b.cls)}">${b.label}</span> vs ${G[0].short}</div>${t?`<p>${t}</p>`:""}</div>`;};
+  const fv=s.fv, fvB=gi=>NORMS.fv[G[gi].key]||NORMS.fv[FV_ALIAS[G[gi].key]];
+  const chartLegend = (showLast) => `<div class="legend"><span><i class="ln you"></i>You</span>${G.map((g,gi)=>`<span><i class="ln g${gi}"></i>${g.short} avg</span>`).join("")}${showLast?`<span><i class="ln last"></i>Last session</span>`:""}</div>`;
+  const progress = S.length>1 ? `<section class="card" data-pdf data-sec="progress">${sh("Your Progress")}<div class="tbl"><table><tr><th>Metric</th>${S.map((x,i)=>`<th>S${i+1} · ${x.date}</th>`).join("")}<th>Change</th></tr>${M.map(m=>{const a=S[0][m.k], z=S[S.length-1][m.k], df=(a!=null&&z!=null)?z-a:null; return `<tr><td>${icon(m.ic)}<b style="font-family:var(--display);font-size:13px">${m.name}</b> <span style="color:${css("--muted")};font-size:12px">${m.unit}</span></td>${S.map(x=>`<td>${fmt(x[m.k],m.dp)}</td>`).join("")}<td>${deltaChip(df,m.lower,m.dp,"",m.k,a)}</td></tr>`;}).join("")}</table></div>${stamp}</section>` : "";
+
+  document.getElementById("app").innerHTML = `
+  <div class="top"><div><div class="logo">GYMGEEK<span>ANALYSE</span></div><div class="pby">Powered by <b>ATHLEEK</b></div></div>
+    <div class="btns"><button class="btn pri" onclick="shareStory()">${icon("story")}<span id="story-l">Story card</span></button><button class="btn" onclick="window.print()">${icon("doc")}<span>Save PDF</span></button><button class="btn" onclick="toggleLight()">${document.body.classList.contains("light")?"Dark mode":"Light mode"}</button></div></div>
+  ${cover()}
+  ${hero()}
+  <section class="card" data-pdf data-sec="numbers">${sh("Your Numbers",`<div class="legend">${legend}</div>`)}
+    <div class="sub">Performance</div><div class="grid">${perf.map(tile).join("")}</div>
+    ${mon.length?`<div class="sub">Monitoring · tracked over time, not ranked</div><div class="grid three">${mon.map(tile).join("")}</div>`:""}${stamp}</section>
+  ${maturityCard()}
+  <section class="card" data-pdf data-sec="stack">${sh("Where You Stack Up")}<div class="two"><div class="ov">${ov}</div><div><canvas id="radar" data-w="380" data-h="300"></canvas><div style="display:flex;justify-content:center;margin-top:10px">${chartLegend(cur>0)}</div><p class="cap">Further out is better on every axis · scaled against ${G[0].short}</p></div></div>${stamp}</section>
+  <section class="card" data-pdf>${sh("Standout &amp; Area to Grow")}<div class="two" style="align-items:stretch">${hl(pk.strong,R.highlights.strength,"Your standout","s")}${hl(pk.grow,R.highlights.grow,"Most room to grow","g")}</div>${stamp}</section>
+  ${progress}
+  ${fv?`<section class="card" data-pdf data-sec="fv">${sh("Force-Velocity Profile",chartLegend(cur>0&&S[cur-1].fv))}
+    <div class="fvread"><div><b>${icon("tractor")}Force end</b>Where the line meets the left axis: your strength, like a tractor pulling a heavy load.</div><div><b>${icon("car")}Speed end</b>Where the line meets the bottom axis: how fast you can move with no load, like an F1 car.</div><div><b>${icon("trend")}Is my line good?</b>Further out from the corner is better. A line above the dashed averages means more total power.</div></div>
+    <canvas id="fv" data-h="300"></canvas>
+    ${fvProfile(fv,fvB(0))}
+    <div class="fvstats"><div><b class="num" style="color:${css("--green")}">${fmt(fv.f0,1)}</b><span>${icon("tractor")}Max force · N/kg</span></div><div><b class="num" style="color:${css("--green")}">${fmt(fv.v0,2)}</b><span>${icon("car")}Max speed · m/s</span></div><div><b class="num">${fmt(fv.f0*fv.v0/4,1)}</b><span>${icon("bolt")}Peak power · W/kg</span></div><div><b class="num">${fmt(-fv.f0/fv.v0,2)}</b><span>Slope</span></div></div>
+    <p class="fine">Estimated from your pull and jump: a directional guide, not a precision measurement.</p>${stamp}</section>`:""}
+  <section class="card summary" data-pdf data-sec="summary">${sh("Your Summary")}<p class="lead">${A.first}, here's how you got on.</p><div class="sum-cols"><div><h3><i style="background:${css("--green")}"></i>What went well</h3><p>${R.summary.strengths}</p></div><div><h3><i style="background:${css("--yellow")}"></i>What is developing</h3><p>${R.summary.developing}</p></div></div><p class="fine">Retest recommended in 3–6 months.</p>${stamp}</section>
+  <section class="card" data-pdf>${sh("What We Measured","",false)}<div class="gloss">${M.map(m=>`<div><b>${icon(m.ic)}${m.name}</b>${m.desc}</div>`).join("")}<div><b>${icon("target")}Athleticism Score</b>One 0–100 number combining jump height (45%), maximum force (30%), reactive strength (15%) and leg symmetry (10%), each scored against your first comparison group. 50 is the group average.</div><div><b>${icon("trend")}Real change</b>Differences smaller than normal test-to-test variation are shown in grey as "no real change": about 2 cm for jump height, 0.03 RSI, 0.15 × BW for maximum force, 3 points for the Athleticism Score.</div><div><b>Bands</b>Top 10%, Upper Third, Average, Building. Banded rather than exact percentiles because norm data varies between equipment and protocols.</div></div></section>
+  <footer><div class="logo">GYMGEEK<span>ANALYSE</span></div><div class="pby">Powered by <b>ATHLEEK</b> · gymgeekonline.co.uk · athleek.co.uk</div><div class="pby">${REPORT_VERSION}</div><p>Beta software. For performance monitoring only, not medical advice. Bands are calibrated against published normative data and are not precise percentile ranks. RFD, explosive power and postural sway are descriptive only. F-V values are modelled estimates. © ${new Date().getFullYear()} GymGeek Dorset.</p></footer>`;
+  document.title=fstem();
+  document.querySelectorAll(".sec-n").forEach((e,i)=>e.textContent=String(i+1).padStart(2,"0"));
+  drawRadar(); drawFV();
+}
+
+function hiDPI(c,w,h){const k=document.body.classList.contains("print")?3:(window.devicePixelRatio||1); c.width=Math.round(w*k); c.height=Math.round(h*k); c.style.width=w+"px"; const x=c.getContext("2d"); x.setTransform(k,0,0,k,0,0); return x;}
+const FONT = w => `${w||500} 11px Open Sans, system-ui, sans-serif`;
+function canvasIcon(x,name,cx,cy,size,col){x.save();x.translate(cx-size/2,cy-size/2);x.scale(size/24,size/24);x.strokeStyle=col;x.lineWidth=1.8;x.lineCap="round";x.lineJoin="round";x.stroke(new Path2D(IC[name]));x.restore();}
+
+function drawRadar(){
+  const c=document.getElementById("radar"); if(!c) return;
+  const W=Math.min(+c.dataset.w, c.parentElement.clientWidth||380), H=+c.dataset.h, x=hiDPI(c,W,H);
+  const cx=W/2, cy=H/2+2, r=Math.min(W,H)/2-48, N=M.length, ang=i=>Math.PI*2*i/N-Math.PI/2, pt=(i,rr)=>[cx+rr*Math.cos(ang(i)),cy+rr*Math.sin(ang(i))];
+  const lab=["Jump","Reactive","Power","Max Force","RFD","Symmetry","Stability"];
+  x.strokeStyle=css("--line"); x.lineWidth=1;
+  [.25,.5,.75,1].forEach(f=>{x.beginPath();for(let i=0;i<=N;i++){const p=pt(i%N,r*f);i?x.lineTo(...p):x.moveTo(...p);}x.stroke();});
+  for(let i=0;i<N;i++){x.beginPath();x.moveTo(cx,cy);x.lineTo(...pt(i,r));x.stroke();}
+  const poly=(vals,st,fill)=>{x.beginPath();x.setLineDash(st.dash||[]);vals.forEach((v,i)=>{const p=pt(i,r*v/100);i?x.lineTo(...p):x.moveTo(...p);});x.closePath();if(fill){const g=x.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,tint(st.col,6));g.addColorStop(1,tint(st.col,33));x.fillStyle=g;x.fill();}x.strokeStyle=st.col;x.lineWidth=st.w;x.lineJoin="round";x.stroke();x.setLineDash([]);};
+  G.forEach((g,gi)=>{const n=NORMS.norms[g.key]; poly(M.map(m=>gi===0?50:(n&&n[m.norm]?pct(m,n[m.norm].mean,0):50)),gline(gi),false);});
+  if(cur>0) poly(M.map(m=>pct(m,S[cur-1][m.k],0)||0),{col:tint(css("--green"),55),dash:[6,4],w:1.6},false);
+  const me=M.map(m=>pct(m,S[cur][m.k],0)||0); poly(me,{col:css("--green"),w:2.5},true);
+  me.forEach((v,i)=>{const p=pt(i,r*v/100);x.beginPath();x.arc(...p,4,0,Math.PI*2);x.fillStyle=css("--card");x.fill();x.lineWidth=2.5;x.strokeStyle=css("--green");x.stroke();});
+  x.fillStyle=css("--muted"); x.font=FONT(600); x.textBaseline="middle";
+  lab.forEach((l,i)=>{const [px,py]=pt(i,r+20); x.textAlign=px<cx-5?"right":px>cx+5?"left":"center"; x.fillText(l,px,py);});
+}
+
+function drawFV(){
+  const c=document.getElementById("fv"); if(!c) return;
+  const W=document.body.classList.contains("print")?660:Math.max(300,c.parentElement.clientWidth-56), H=+c.dataset.h, x=hiDPI(c,W,H);
+  const lines=[]; G.forEach((g,gi)=>{const b=NORMS.fv[g.key]||NORMS.fv[FV_ALIAS[g.key]]; if(b) lines.push({f0:b.f0,v0:b.v0,...gline(gi)});});
+  if(cur>0&&S[cur-1].fv) lines.push({f0:S[cur-1].fv.f0,v0:S[cur-1].fv.v0,col:tint(css("--green"),55),dash:[6,4],w:1.6});
+  const me=S[cur].fv; lines.push({f0:me.f0,v0:me.v0,col:css("--green"),w:3});
+  const pad={l:48,r:20,t:18,b:40}, pw=W-pad.l-pad.r, ph=H-pad.t-pad.b, mV=Math.ceil(Math.max(...lines.map(l=>l.v0))*1.15), mF=Math.ceil(Math.max(...lines.map(l=>l.f0))*1.15/5)*5;
+  const fx=v=>pad.l+v/mV*pw, fy=f=>pad.t+ph-f/mF*ph;
+  x.font=FONT(); x.fillStyle=css("--muted"); x.strokeStyle=css("--line"); x.lineWidth=1;
+  for(let i=0;i<=5;i++){const f=i*mF/5; x.beginPath();x.moveTo(pad.l,fy(f));x.lineTo(pad.l+pw,fy(f));x.stroke(); x.textAlign="right";x.fillText(f.toFixed(0),pad.l-10,fy(f)+4);}
+  for(let v=0;v<=mV;v++){x.textAlign="center";x.fillText(v,fx(v),pad.t+ph+18);}
+  x.font=FONT(600); x.textAlign="center"; x.fillText("Speed (m/s)",pad.l+pw/2,H-4);
+  x.save();x.translate(12,pad.t+ph/2);x.rotate(-Math.PI/2);x.fillText("Force (N/kg)",0,0);x.restore();
+  x.beginPath();x.moveTo(fx(0),fy(0));x.lineTo(fx(0),fy(me.f0));x.lineTo(fx(me.v0),fy(0));x.closePath();
+  const gr=x.createLinearGradient(0,fy(me.f0),0,fy(0)); gr.addColorStop(0,tint(css("--green"),19)); gr.addColorStop(1,tint(css("--green"),2)); x.fillStyle=gr; x.fill();
+  lines.forEach(l=>{x.beginPath();x.setLineDash(l.dash||[]);x.strokeStyle=l.col;x.lineWidth=l.w;x.lineCap="round";x.moveTo(fx(0),fy(l.f0));x.lineTo(fx(l.v0),fy(0));x.stroke();x.setLineDash([]);});
+  canvasIcon(x,"tractor",pad.l+20,pad.t+12,24,css("--muted")); canvasIcon(x,"car",pad.l+pw-16,pad.t+ph-16,26,css("--muted"));
+  const px=fx(me.v0/2), py=fy(me.f0/2);
+  x.beginPath();x.arc(px,py,10,0,Math.PI*2);x.fillStyle=tint(css("--green"),20);x.fill();
+  x.beginPath();x.arc(px,py,5.5,0,Math.PI*2);x.fillStyle=css("--green");x.fill();
+  x.font=FONT(700); x.textAlign="left"; x.fillStyle=css("--text"); x.fillText("Your peak power point",px+16,py+4);
+}
+
+function toggleLight(){document.body.classList.toggle("light");render();}
+function isoDate(d){const t=new Date(d); return isNaN(t)?String(d).replace(/\s+/g,"-"):t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");}
+function fstem(){return "GymGeek_Analyse_"+R.athlete.name.trim().replace(/\s+/g,"_").replace(/[^\w]/g,"")+"_"+isoDate(S[cur].date);}
+function fname(ext,suffix=""){return fstem()+suffix+"."+ext;}
+function deliver(canvas,name){
+  canvas.toBlob(b=>{const f=new File([b],name,{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[f]})) navigator.share({files:[f],title:"My GymGeek results",text:"Just got my force plate results at GymGeek Dorset! #GymGeekDorset"}).catch(()=>{});
+    else{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click();}},"image/png");
+}
+async function shareBlock(btn){
+  const el=btn.closest("[data-pdf]"); document.body.classList.add("capturing","static");
+  try{ deliver(await html2canvas(el,{scale:2,useCORS:true,backgroundColor:css("--bg"),logging:false}),fname("png","_"+(el.querySelector("h2")?el.querySelector("h2").textContent.replace(/[^A-Za-z]+/g,"_").replace(/_+$/,""):"Card"))); }
+  finally{ document.body.classList.remove("capturing","static"); }
+}
+
+// Instagram story card, 1080 x 1920, always dark
+function storyHTML(){
+  const A=R.athlete, s=S[cur], sc=athScore(s), lv=scoreLvl(sc||0), prev=cur>0?athScore(S[cur-1]):null;
+  const best=pick().strong, lvCol=lv[1]==="g"?"#61C599":"#FFC11E", r=262, C=2*Math.PI*r, arc=C*(sc||0)/100;
+  const stat=(k)=>{const m=mk(k); return s[k]==null?"":`<div>${icon(m.ic)}<b>${fmt(s[k],m.dp)}<small>${m.unit}</small></b><span>${m.name}</span></div>`;};
+  const d=prev!=null?sc-prev:null, dTxt=d==null?"":Math.abs(d)<SWC.score.abs?`<span style="color:#8B97AB">Holding steady since last test</span>`:d>0?`<span style="color:#61C599">▲ +${d} since last test</span>`:`<span style="color:#FFC11E">▼ ${d} since last test</span>`;
+  return `<div class="story" id="story">
+    <div class="st-top"><div><div class="logo">GYMGEEK<span>ANALYSE</span></div><div class="pby">Powered by <b>ATHLEEK</b></div></div><div class="st-date">${S.length===1?"Baseline":"Session "+(cur+1)}<br>${s.date}</div></div>
+    <div class="st-who">${avatar()}<div><h1>${A.name}</h1><p>${[A.position,A.sport].filter(Boolean).join(" · ")}</p></div></div>
+    ${sc!=null?`<div class="st-ring"><svg viewBox="0 0 560 560"><circle cx="280" cy="280" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="28"/><circle transform="rotate(-90 280 280)" cx="280" cy="280" r="${r}" fill="none" stroke="${lvCol}" stroke-width="28" stroke-linecap="round" stroke-dasharray="${arc} ${C}"/></svg><div class="c"><span class="k">Athleticism Score</span><b>${sc}</b><span class="lvl" style="color:${lvCol}">${lv[0]}</span></div></div><div class="st-delta">${dTxt}</div>`:""}
+    ${best?`<div class="st-best">${icon(best.ic)}<span>Standout: <b>${best.name}</b> · ${band(pct(best,s[best.k],0)).label}</span></div>`:""}
+    <div class="st-stats">${stat("cmj")}${stat("imtp")}${stat("asym")}</div>
+    <div class="st-foot"><span>Tested at <b>GymGeek Dorset</b></span><span>gymgeekonline.co.uk</span></div>
+  </div>`;
+}
+async function shareStory(){
+  const l=document.getElementById("story-l"); l.textContent="Creating…";
+  document.body.insertAdjacentHTML("beforeend",storyHTML()); const el=document.getElementById("story");
+  try{ await document.fonts.ready; deliver(await html2canvas(el,{scale:1,width:1080,height:1920,backgroundColor:"#141618",useCORS:true,logging:false}),fname("png","_Story")); }
+  finally{ el.remove(); l.textContent="Story card"; }
+}
+
+// Save PDF: browser print with light theme, cover page and crisp vector text
+let wasLight=false;
+window.addEventListener("beforeprint",()=>{wasLight=document.body.classList.contains("light");document.body.classList.add("print","static");render();});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("print","static");if(wasLight)document.body.classList.add("light");render();});
+
+window.addEventListener("load",render);
+let rz; window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{drawRadar();drawFV();},120);});
+</script>
+</body>
+</html>
